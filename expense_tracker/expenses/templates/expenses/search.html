@@ -1,0 +1,95 @@
+{% extends 'expenses/base.html' %}
+{% block content %}
+<div class="row g-4">
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
+                <h4 class="mb-0">Search Expenses</h4>
+                <small class="text-muted">Search by note, category, amount, or date (YYYY-MM-DD)</small>
+            </div>
+            <div class="card-body">
+                <form method="get" class="row g-2 g-md-3">
+                    <div class="col-12 col-md-4">
+                        <input
+                            type="text"
+                            name="q"
+                            value="{{ query }}"
+                            class="form-control"
+                            placeholder="Try: food, rent, 500, 2026-03-25"
+                        >
+                    </div>
+                    <div class="col-12 col-md-3">
+                        <select name="category" class="form-select">
+                            <option value="">All categories</option>
+                            {% for cat in categories %}
+                                <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:'s' %}selected{% endif %}>
+                                    {{ cat.icon }} {{ cat.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <input type="date" name="start_date" value="{{ start_date }}" class="form-control" title="Start date">
+                    </div>
+                    <div class="col-6 col-md-2">
+                        <input type="date" name="end_date" value="{{ end_date }}" class="form-control" title="End date">
+                    </div>
+                    <div class="col-6 col-md-1 d-grid">
+                        <button type="submit" class="btn btn-primary">Search</button>
+                    </div>
+                    <div class="col-6 col-md-12 d-grid d-md-flex justify-content-md-end">
+                        <a href="{% url 'search' %}" class="btn btn-outline-secondary">Clear Filters</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-12">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Results</h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped align-middle">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Category</th>
+                                <th>Amount</th>
+                                <th>Note</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for expense in expenses %}
+                            <tr>
+                                <td>{{ expense.date|date:'d-m-Y' }}</td>
+                                <td>{{ expense.category.icon }} {{ expense.category.name }}</td>
+                                <td>₹{{ expense.amount|floatformat:2 }}</td>
+                                <td>{{ expense.note|default:'-' }}</td>
+                                <td>
+                                    <a href="{% url 'edit_expense' expense.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                    <a href="{% url 'delete_expense' expense.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this expense?')">Delete</a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">
+                                    {% if query or selected_category or start_date or end_date %}
+                                        No expenses found for selected filters.
+                                    {% else %}
+                                        Use filters above and click Search.
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

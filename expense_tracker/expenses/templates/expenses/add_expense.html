@@ -1,0 +1,65 @@
+{% extends 'expenses/base.html' %}
+{% block content %}
+
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow">
+            <div class="card-header">
+                <h4>Add New Expense</h4>
+            </div>
+
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- Amount -->
+                    <div class="mb-3">
+                        <label class="form-label">Amount</label>
+                        <input type="number" step="0.01" name="amount" value="{{ form_data.amount }}" class="form-control" required>
+                    </div>
+
+                    <!-- Category (FIXED ✅) -->
+                    <div class="mb-3">
+                        <label class="form-label">Category</label>
+                        <select name="category" class="form-control" required>
+                            {% for cat in categories %}
+                                <option value="{{ cat.id }}" {% if form_data.category == cat.id|stringformat:'s' %}selected{% endif %}>
+                                    {{ cat.icon }} {{ cat.name }}
+                                </option>
+                            {% empty %}
+                                <option disabled>No categories found</option>
+                            {% endfor %}
+                        </select>
+
+                        <small>
+                            <a href="{% url 'manage_categories' %}">
+                                ➕ Manage Categories
+                            </a>
+                        </small>
+                    </div>
+
+                    <!-- Date -->
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <input type="date" name="date" value="{{ form_data.date }}" min="{{ min_date|date:'Y-m-d' }}" max="{{ max_date|date:'Y-m-d' }}" class="form-control" required>
+                        <small class="text-muted">Allowed range: {{ min_date|date:'d-m-Y' }} to {{ max_date|date:'d-m-Y' }}</small>
+                    </div>
+
+                    <!-- Note -->
+                    <div class="mb-3">
+                        <label class="form-label">Note (Optional)</label>
+                        <textarea name="note" class="form-control" rows="3">{{ form_data.note }}</textarea>
+                    </div>
+
+                    <!-- Submit -->
+                    <button type="submit" class="btn btn-success w-100">
+                        Add Expense
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,294 @@
+{% extends 'expenses/base.html' %}
+{% block content %}
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap');
+
+.sb-shell { font-family: 'Manrope', 'Segoe UI', sans-serif; }
+.sb-hero { border: 0; border-radius: 18px; background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%); color: #fff; }
+.sb-panel { border: 0; border-radius: 16px; box-shadow: 0 8px 24px rgba(16,24,40,0.08); }
+.sb-metric { border: 0; border-radius: 14px; box-shadow: 0 8px 22px rgba(13,110,253,0.08); }
+.sb-ring-card { border: 0; border-radius: 16px; box-shadow: 0 8px 22px rgba(16,24,40,0.08); }
+.sb-ring {
+    width: 120px;
+    height: 120px;
+    position: relative;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    margin: 0 auto;
+    color: #0f172a;
+    font-weight: 800;
+    background: conic-gradient(#3b82f6 0deg, #3b82f6 270deg, #dbeafe 270deg 360deg);
+}
+.sb-ring::before {
+    content: '';
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    background: #fff;
+    position: absolute;
+}
+.sb-ring > span {
+    position: relative;
+    z-index: 1;
+    font-size: 0.8rem;
+    text-align: center;
+    line-height: 1.1;
+}
+.sb-ring--green {
+    background: conic-gradient(#10b981 0deg, #10b981 300deg, #d1fae5 300deg 360deg);
+}
+.sb-ring--violet {
+    background: conic-gradient(#8b5cf6 0deg, #8b5cf6 240deg, #ede9fe 240deg 360deg);
+}
+.sb-ring-wrap { position: relative; }
+</style>
+
+<div class="sb-shell">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
+        <h2 class="mb-0">Budget Studio</h2>
+        <a href="{% url 'dashboard' %}" class="btn btn-outline-primary btn-sm">Back to Dashboard</a>
+    </div>
+
+    <div class="card sb-hero mb-4">
+        <div class="card-body d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+            <div>
+                <div class="small text-uppercase" style="opacity:.9">Pocket Money Manager</div>
+                <h4 class="mb-1">Set Monthly & Category Budgets</h4>
+                {% if current_month_budget %}
+                    <div style="opacity:.9">This month budget active. Daily limit live track ho raha hai.</div>
+                {% else %}
+                    <div style="opacity:.9">Start with monthly budget, then category wise split set karo.</div>
+                {% endif %}
+            </div>
+            <div class="text-lg-end">
+                <div class="small" style="opacity:.9">Current Daily Limit</div>
+                <div class="h2 mb-0">₹{{ current_month_daily_limit|floatformat:2 }}</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card sb-metric h-100">
+                <div class="card-body">
+                    <div class="small text-muted">Current Month Budget</div>
+                    <div class="h5 mb-0">₹{{ current_month_budget.amount|default:0|floatformat:2 }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card sb-metric h-100">
+                <div class="card-body">
+                    <div class="small text-muted">Category Assigned</div>
+                    <div class="h5 mb-0">₹{{ current_month_category_total|floatformat:2 }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card sb-metric h-100">
+                <div class="card-body">
+                    <div class="small text-muted">Unallocated</div>
+                    <div class="h5 mb-0 {% if monthly_unallocated < 0 %}text-danger{% else %}text-primary{% endif %}">₹{{ monthly_unallocated|floatformat:2 }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card sb-ring-card h-100">
+                <div class="card-body text-center">
+                    <div class="sb-ring-wrap mb-3">
+                        <div class="sb-ring">
+                            <span>₹{{ current_month_budget.amount|default:0|floatformat:0 }}</span>
+                        </div>
+                    </div>
+                    <div class="fw-semibold">Monthly Budget Ring</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card sb-ring-card h-100">
+                <div class="card-body text-center">
+                    <div class="sb-ring-wrap mb-3">
+                        <div class="sb-ring sb-ring--green">
+                            <span>₹{{ current_month_category_total|floatformat:0 }}</span>
+                        </div>
+                    </div>
+                    <div class="fw-semibold">Assigned Budget Ring</div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card sb-ring-card h-100">
+                <div class="card-body text-center">
+                    <div class="sb-ring-wrap mb-3">
+                        <div class="sb-ring sb-ring--violet">
+                            <span>₹{{ monthly_unallocated|floatformat:0 }}</span>
+                        </div>
+                    </div>
+                    <div class="fw-semibold">Unallocated Ring</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if monthly_unallocated < 0 %}
+    <div class="alert alert-danger" role="alert">Allocated category budgets monthly budget se zyada hain. Please adjust.</div>
+    {% endif %}
+
+    <div class="row g-4">
+        <div class="col-xl-5">
+            <div class="card sb-panel mb-4">
+                <div class="card-header bg-white border-0"><h5 class="mb-0">Set Monthly Budget</h5></div>
+                <div class="card-body">
+                    <form method="post" class="row g-3 align-items-end">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="set_monthly_budget">
+                        <div class="col-12">
+                            <label class="form-label">Month</label>
+                            <input type="month" name="monthly_month" value="{{ monthly_form_month }}" class="form-control" required>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label">Monthly Budget (₹)</label>
+                            <input id="monthlyBudgetInput" type="number" name="monthly_amount" value="{{ monthly_form_amount }}" step="0.01" min="0" class="form-control" placeholder="3000" required>
+                            <small id="dailyLimitPreview" class="text-muted">Daily limit: ₹0.00</small>
+                        </div>
+                        <div class="col-12 d-grid">
+                            <button type="submit" class="btn btn-primary">Save Monthly Budget</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card sb-panel h-100">
+                <div class="card-header bg-white border-0"><h5 class="mb-0">Set Category Budget</h5></div>
+                <div class="card-body">
+                    <form method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="set_category_budget">
+                        <div class="mb-3">
+                            <label class="form-label">Category</label>
+                            <select name="category" class="form-select" required>
+                                <option value="" disabled {% if not category_form_id %}selected{% endif %}>Select category</option>
+                                {% for cat in categories %}
+                                    <option value="{{ cat.id }}" {% if category_form_id == cat.id|stringformat:'s' %}selected{% endif %}>{{ cat.icon }} {{ cat.name }}</option>
+                                {% empty %}
+                                    <option value="" disabled>No categories found</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Month</label>
+                            <input type="month" name="month" value="{{ category_form_month }}" class="form-control" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Budget Amount</label>
+                            <input type="number" name="amount" value="{{ category_form_amount }}" step="0.01" min="0" class="form-control" placeholder="0.00" required>
+                        </div>
+                        <button type="submit" class="btn btn-outline-primary w-100">Save Category Budget</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-7">
+            <div class="card sb-panel mb-4">
+                <div class="card-header bg-white border-0"><h5 class="mb-0">Monthly Budget Records</h5></div>
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Budget</th>
+                                    <th>Daily Limit</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for row in monthly_budget_rows %}
+                                <tr class="{% if row.month|date:'Y-m' == default_month %}table-primary{% endif %}">
+                                    <td>{{ row.month|date:'M Y' }}</td>
+                                    <td>₹{{ row.amount|floatformat:2 }}</td>
+                                    <td>₹{{ row.daily_limit|floatformat:2 }}</td>
+                                    <td class="d-flex gap-2">
+                                        <a href="{% url 'set_budget' %}?monthly_month={{ row.month|date:'Y-m' }}&monthly_amount={{ row.amount }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <form method="post" class="d-inline">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete_monthly_budget">
+                                            <input type="hidden" name="monthly_budget_id" value="{{ row.id }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete monthly budget for {{ row.month|date:'M Y' }}?')">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="4" class="text-center text-muted py-4">No monthly budget set yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card sb-panel h-100">
+                <div class="card-header bg-white border-0"><h5 class="mb-0">Category Budget Records</h5></div>
+                <div class="card-body pt-0">
+                    <div class="table-responsive">
+                        <table class="table align-middle mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Month</th>
+                                    <th>Category</th>
+                                    <th>Budget</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for budget in budgets %}
+                                <tr>
+                                    <td>{{ budget.month|date:'M Y' }}</td>
+                                    <td>{{ budget.category.icon }} {{ budget.category.name }}</td>
+                                    <td>₹{{ budget.amount|floatformat:2 }}</td>
+                                    <td class="d-flex gap-2">
+                                        <a href="{% url 'set_budget' %}?category_id={{ budget.category.id }}&category_month={{ budget.month|date:'Y-m' }}&category_amount={{ budget.amount }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <form method="post" class="d-inline">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="action" value="delete_category_budget">
+                                            <input type="hidden" name="category_budget_id" value="{{ budget.id }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete category budget?')">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                {% empty %}
+                                <tr><td colspan="4" class="text-center text-muted py-4">No category budgets set yet.</td></tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const budgetInput = document.getElementById('monthlyBudgetInput');
+        const preview = document.getElementById('dailyLimitPreview');
+        if (!budgetInput || !preview) {
+            return;
+        }
+
+        function updatePreview() {
+            const value = parseFloat(budgetInput.value || '0');
+            const daily = value > 0 ? (value / 30) : 0;
+            preview.textContent = `Daily limit: ₹${daily.toFixed(2)}`;
+        }
+
+        budgetInput.addEventListener('input', updatePreview);
+        updatePreview();
+    })();
+</script>
+{% endblock %}

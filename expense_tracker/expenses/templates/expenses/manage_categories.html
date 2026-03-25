@@ -1,0 +1,61 @@
+{% extends 'expenses/base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between">
+                <h4>📂 Manage Categories</h4>
+                <a href="{% url 'add_expense' %}" class="btn btn-primary">➕ Add Expense</a>
+            </div>
+            <div class="card-body">
+
+                <!-- Add New Category Form -->
+                <form method="post" class="mb-4 p-3 border rounded">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-md-8">
+                            <input type="text" name="name" placeholder="Category Name" class="form-control" required>
+                        </div>
+                        <div class="col-md-3">
+                            <button type="submit" class="btn btn-success w-100">➕ Add</button>
+                        </div>
+                    </div>
+                </form>
+
+                <!-- Categories List -->
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Category Name</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for category in categories %}
+                            <tr>
+                                <td>{{ category.name }}</td>
+                                <td>
+                                    <a href="{% url 'delete_category' category.id %}" 
+                                       class="btn btn-sm btn-danger" 
+                                       onclick="return confirm('Delete {{ category.name }}?')">
+                                       🗑️ Delete
+                                    </a>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="2" class="text-center">
+                                    No custom categories. Create one!
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
