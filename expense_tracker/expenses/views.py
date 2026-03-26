@@ -6,7 +6,7 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.db.models import Sum, Q
 from django.utils import timezone
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.http import HttpResponse
 from django.db.models.functions import TruncMonth
 from decimal import Decimal, InvalidOperation
@@ -15,7 +15,7 @@ import calendar
 import json
 import csv
 
-from .models import Expense, Budget, CustomCategory, MonthlyBudget
+from .models import Expense, Budget, CustomCategory, MonthlyBudget, RecurringExpense
 
 
 # ---------------- AUTH ---------------- #
@@ -46,6 +46,53 @@ def _parse_month_input(month_input):
         return datetime.strptime(month_input, '%Y-%m').date().replace(day=1), None
     except ValueError:
         return None, 'Please select a valid month.'
+
+
+def _next_occurrence(date_value, frequency):
+    if frequency == RecurringExpense.DAILY:
+        return date_value + timedelta(days=1)
+    if frequency == RecurringExpense.WEEKLY:
+        return date_value + timedelta(days=7)
+
+    year = date_value.year
+    month = date_value.month + 1
+    if month > 12:
+        month = 1
+        year += 1
+    day = min(date_value.day, calendar.monthrange(year, month)[1])
+    return date_value.replace(year=year, month=month, day=day)
+
+
+def _sync_recurring_expenses(user):
+    today = timezone.localdate()
+    recurring_qs = RecurringExpense.objects.filter(user=user, is_active=True).select_related('category')
+
+    generated_count = 0
+    for recurring in recurring_qs:
+        while recurring.next_run_date <= today and (
+            recurring.end_date is None or recurring.next_run_date <= recurring.end_date
+        ):
+            _, created = Expense.objects.get_or_create(
+                user=user,
+                source_recurring=recurring,
+                date=recurring.next_run_date,
+                defaults={
+                    'category': recurring.category,
+                    'amount': recurring.amount,
+                    'note': recurring.note,
+                },
+            )
+            if created:
+                generated_count += 1
+
+            recurring.next_run_date = _next_occurrence(recurring.next_run_date, recurring.frequency)
+
+        if recurring.end_date and recurring.next_run_date > recurring.end_date:
+            recurring.is_active = False
+
+        recurring.save(update_fields=['next_run_date', 'is_active'])
+
+    return generated_count
 
 def signup(request):
     if request.method == 'POST':
@@ -96,6 +143,8 @@ def logout_view(request):
 
 @login_required
 def dashboard(request):
+    _sync_recurring_expenses(request.user)
+
     all_user_expenses = Expense.objects.filter(user=request.user)
     expenses = all_user_expenses.select_related('category').order_by('-date')[:10]
     total_expense = all_user_expenses.aggregate(Sum('amount'))['amount__sum'] or Decimal('0.00')
@@ -188,6 +237,8 @@ def dashboard(request):
 
 @login_required
 def add_expense(request):
+    _sync_recurring_expenses(request.user)
+
     categories = CustomCategory.objects.filter(user=request.user)
     min_date, max_date = _expense_date_bounds()
 
@@ -196,6 +247,9 @@ def add_expense(request):
         category_id = request.POST.get('category')
         date_input = request.POST.get('date')
         note = request.POST.get('note', '')
+        is_recurring = request.POST.get('is_recurring') == 'on'
+        frequency = request.POST.get('frequency', RecurringExpense.MONTHLY)
+        recurring_end_date_input = (request.POST.get('recurring_end_date') or '').strip()
         selected_date, date_error = _validate_expense_date(date_input)
 
         if date_error:
@@ -209,12 +263,60 @@ def add_expense(request):
 
         category = get_object_or_404(CustomCategory, id=category_id, user=request.user)
 
+        recurring_rule = None
+        if is_recurring:
+            if frequency not in dict(RecurringExpense.FREQUENCY_CHOICES):
+                messages.error(request, 'Please select a valid recurring frequency.')
+                return render(request, 'expenses/add_expense.html', {
+                    'categories': categories,
+                    'min_date': min_date,
+                    'max_date': max_date,
+                    'form_data': request.POST,
+                    'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
+                })
+
+            recurring_end_date = None
+            if recurring_end_date_input:
+                try:
+                    recurring_end_date = datetime.strptime(recurring_end_date_input, '%Y-%m-%d').date()
+                except ValueError:
+                    messages.error(request, 'Please select a valid recurring end date.')
+                    return render(request, 'expenses/add_expense.html', {
+                        'categories': categories,
+                        'min_date': min_date,
+                        'max_date': max_date,
+                        'form_data': request.POST,
+                        'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
+                    })
+
+                if recurring_end_date < selected_date:
+                    messages.error(request, 'Recurring end date must be on or after expense date.')
+                    return render(request, 'expenses/add_expense.html', {
+                        'categories': categories,
+                        'min_date': min_date,
+                        'max_date': max_date,
+                        'form_data': request.POST,
+                        'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
+                    })
+
+            recurring_rule = RecurringExpense.objects.create(
+                user=request.user,
+                category=category,
+                amount=amount,
+                note=note,
+                frequency=frequency,
+                start_date=selected_date,
+                end_date=recurring_end_date,
+                next_run_date=_next_occurrence(selected_date, frequency),
+            )
+
         Expense.objects.create(
             user=request.user,
             amount=amount,
             category=category,
             date=selected_date,
-            note=note
+            note=note,
+            source_recurring=recurring_rule,
         )
 
         current_month_start = selected_date.replace(day=1)
@@ -228,13 +330,17 @@ def add_expense(request):
             else:
                 messages.success(request, '✅ Aap daily limit ke andar ho. Good job!')
 
-        messages.success(request, 'Expense added successfully!')
+        if recurring_rule:
+            messages.success(request, 'Recurring expense created successfully! Future entries will be auto-added.')
+        else:
+            messages.success(request, 'Expense added successfully!')
         return redirect('dashboard')
 
     return render(request, 'expenses/add_expense.html', {
         'categories': categories,
         'min_date': min_date,
         'max_date': max_date,
+        'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
     })
 
 
@@ -242,6 +348,8 @@ def add_expense(request):
 
 @login_required
 def report(request):
+    _sync_recurring_expenses(request.user)
+
     expenses = Expense.objects.filter(user=request.user)
     total_expense = expenses.aggregate(Sum('amount'))['amount__sum'] or Decimal('0.00')
 
@@ -333,6 +441,8 @@ def delete_expense(request, id):
 
 @login_required
 def search_expenses(request):
+    _sync_recurring_expenses(request.user)
+
     query = request.GET.get('q', '').strip()
     category_id = request.GET.get('category', '').strip()
     start_date = request.GET.get('start_date', '').strip()
@@ -385,6 +495,8 @@ def search_expenses(request):
 
 @login_required
 def export_csv(request):
+    _sync_recurring_expenses(request.user)
+
     response = HttpResponse(content_type='text/csv; charset=utf-8')
     response['Content-Disposition'] = 'attachment; filename="expenses.csv"'
     response.write('\ufeff')
@@ -431,6 +543,24 @@ def delete_category(request, id):
     cat.delete()
     messages.success(request, 'Category deleted!')
     return redirect('manage_categories')
+
+
+@login_required
+def recurring_expenses(request):
+    _sync_recurring_expenses(request.user)
+    recurring_rules = RecurringExpense.objects.filter(user=request.user).select_related('category').order_by('-created_at')
+    return render(request, 'expenses/recurring_expenses.html', {
+        'recurring_rules': recurring_rules,
+    })
+
+
+@login_required
+def delete_recurring_expense(request, id):
+    recurring_rule = get_object_or_404(RecurringExpense, id=id, user=request.user)
+    recurring_rule.is_active = False
+    recurring_rule.save(update_fields=['is_active'])
+    messages.success(request, 'Recurring expense stopped. Past entries are preserved.')
+    return redirect('recurring_expenses')
 
 
 # ---------------- BUDGET ---------------- #
@@ -559,3 +689,8 @@ def analyze_expense(expenses):
         f"⚠️ Tumhara sabse zyada kharcha {max_category['category__name']} me ho raha hai.",
         "💡 Suggestion: Is category ka monthly budget 10% increase karo ya spending limit set karo.",
     ]
+
+
+@login_required
+def about_me(request):
+    return render(request, 'expenses/about_me.html')

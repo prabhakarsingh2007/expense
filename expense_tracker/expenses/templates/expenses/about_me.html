@@ -1,0 +1,111 @@
+{% extends 'expenses/base.html' %}
+{% load static %}
+
+{% block content %}
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+<div class="min-h-screen bg-gray-30 py-10 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
+        
+        <div class="bg-white rounded-3xl shadow-xl overflow-hidden mb-8 border border-gray-100">
+            <div class="md:flex items-center p-8 md:p-12 gap-10">
+                <div class="md:w-1/3 flex justify-center mb-6 md:mb-0">
+                    <div class="relative">
+                        <img src="{% static 'images/prabhakar-profile.jpg' %}" 
+                             onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=Prabhakar+Singh&background=3B82F6&color=fff&size=300';"
+                             alt="Prabhakar Kr Singh"
+                             class="w-48 h-48 rounded-full object-cover border-4 border-white shadow-2xl">
+                        <div class="absolute bottom-2 right-2 bg-green-500 w-6 h-6 rounded-full border-4 border-white"></div>
+                    </div>
+                </div>
+                <div class="md:w-2/3 text-center md:text-left">
+                    <span class="inline-block px-4 py-1 rounded-full bg-blue-100 text-blue-600 text-sm font-semibold uppercase tracking-wide mb-3">
+                         Developer By 
+                    </span>
+                    <h1 class="text-4xl md:text-5xl font-extrabold text-gray-900 mb-2">Prabhakar Kr Singh</h1>
+                    <p class="text-xl text-blue-600 font-medium mb-4 text-pretty">Full-Stack Web Developer</p>
+                    <p class="text-gray-600 leading-relaxed text-lg">
+                        I am a passionate developer focused on building real-world web applications using 
+                        <span class="font-bold text-gray-800">Python & Django</span>. I specialize in creating 
+                        clean, user-friendly solutions that simplify daily life through modern technology.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="md:col-span-2 space-y-8">
+                <div class="bg-white p-8 rounded-3xl shadow-lg border border-gray-100 h-full">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center">
+                        <span class="w-2 h-8 bg-blue-600 rounded-full mr-3"></span>
+                        Featured Project
+                    </h2>
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold text-blue-600 mb-2">Expense Tracker Application</h3>
+                        <p class="text-gray-600 leading-relaxed">
+                            A robust web-based application designed to help users track their daily spending, 
+                            organize budgets, and analyze financial habits securely.
+                        </p>
+                    </div>
+                    
+                    <h4 class="font-bold text-gray-800 mb-4">Key Features:</h4>
+                    <ul class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <li class="flex items-center text-gray-600">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i> Secure Authentication
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i> CRUD Operations
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i> Category Analytics
+                        </li>
+                        <li class="flex items-center text-gray-600">
+                            <i class="fas fa-check-circle text-green-500 mr-2"></i> Monthly Summaries
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="space-y-8">
+                <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
+                    <h2 class="text-xl font-bold text-gray-800 mb-5">Connect</h2>
+                    <div class="flex flex-col gap-3">
+                        <a href="mailto:prabhakarkumarsingh578@gmail.com" class="flex items-center p-3 rounded-xl bg-gray-50 hover:bg-blue-600 hover:text-white transition-all duration-300 group">
+                            <i class="fas fa-envelope mr-3 text-red-500 group-hover:text-white"></i>
+                            <span class="font-medium">Email Me</span>
+                        </a>
+                        <a href="https://github.com/prabhakarsingh2007" target="_blank" class="flex items-center p-3 rounded-xl bg-gray-50 hover:bg-gray-900 hover:text-white transition-all duration-300 group">
+                            <i class="fab fa-github mr-3 text-gray-900 group-hover:text-white"></i>
+                            <span class="font-medium">GitHub</span>
+                        </a>
+                        <a href="https://in.linkedin.com/in/prabhakar-singh-7880b9323" target="_blank" class="flex items-center p-3 rounded-xl bg-gray-50 hover:bg-blue-700 hover:text-white transition-all duration-300 group">
+                            <i class="fab fa-linkedin mr-3 text-blue-600 group-hover:text-white"></i>
+                            <span class="font-medium">LinkedIn</span>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white p-6 rounded-3xl shadow-lg border border-gray-100">
+                    <h2 class="text-xl font-bold text-gray-800 mb-4">Mentor</h2>
+                    <div class="flex items-center gap-4">
+                        <img src="{% static 'images/sadique-mentor.jpg' %}" 
+                             onerror="this.onerror=null;this.src='https://ui-avatars.com/api/?name=Sadique+Hussain&background=eee';"
+                             class="w-14 h-14 rounded-full border-2 border-blue-100 p-0.5">
+                        <div>
+                            <p class="font-bold text-gray-900 text-sm">Sadique Hussain</p>
+                            <a href="https://www.linkedin.com/in/sadique-hussain" target="_blank" class="text-blue-500 text-xs hover:underline">View Profile</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-12 text-center text-gray-500 text-sm">
+            <div class="w-16 h-1 bg-blue-200 mx-auto mb-4 rounded-full"></div>
+            <p>© 2026 Designed & Developed by <span class="font-bold text-gray-700">Prabhakar Kr Singh</span></p>
+            <p class="uppercase tracking-widest mt-1 text-[10px]">Crafted with Tailwind CSS & Django</p>
+        </footer>
+    </div>
+</div>
+{% endblock %}

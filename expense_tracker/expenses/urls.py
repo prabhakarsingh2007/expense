@@ -14,6 +14,9 @@ urlpatterns = [
     path('budget/', views.set_budget, name='set_budget'),
     path('search/', views.search_expenses, name='search'),
     path('export/', views.export_csv, name='export_csv'),
+    path('about/', views.about_me, name='about_me'),
+    path('recurring/', views.recurring_expenses, name='recurring_expenses'),
+    path('recurring/delete/<int:id>/', views.delete_recurring_expense, name='delete_recurring_expense'),
 
 
     path('categories/', views.manage_categories, name='manage_categories'),

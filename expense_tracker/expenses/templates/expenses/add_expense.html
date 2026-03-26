@@ -51,6 +51,30 @@
                         <textarea name="note" class="form-control" rows="3">{{ form_data.note }}</textarea>
                     </div>
 
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="isRecurring" name="is_recurring" {% if form_data.is_recurring %}checked{% endif %}>
+                        <label class="form-check-label" for="isRecurring">
+                            Make this a recurring expense
+                        </label>
+                    </div>
+
+                    <div id="recurringFields" class="border rounded p-3 mb-3" style="display: none;">
+                        <div class="mb-3">
+                            <label class="form-label">Repeat</label>
+                            <select name="frequency" class="form-control">
+                                {% for value, label in frequency_choices %}
+                                    <option value="{{ value }}" {% if form_data.frequency == value %}selected{% elif not form_data.frequency and value == 'monthly' %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="mb-0">
+                            <label class="form-label">End Date (Optional)</label>
+                            <input type="date" name="recurring_end_date" value="{{ form_data.recurring_end_date }}" class="form-control">
+                            <small class="text-muted">Leave blank to continue until you stop it.</small>
+                        </div>
+                    </div>
+
                     <!-- Submit -->
                     <button type="submit" class="btn btn-success w-100">
                         Add Expense
@@ -61,5 +85,19 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function () {
+        const checkbox = document.getElementById('isRecurring');
+        const fields = document.getElementById('recurringFields');
+
+        function toggleRecurringFields() {
+            fields.style.display = checkbox.checked ? 'block' : 'none';
+        }
+
+        checkbox.addEventListener('change', toggleRecurringFields);
+        toggleRecurringFields();
+    })();
+</script>
 
 {% endblock %}
