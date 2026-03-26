@@ -1,18 +1,109 @@
 {% extends 'expenses/base.html' %}
+{% load static %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title text-center">Sign Up</h3>
-                <form method="post">
+<div class="min-h-[85vh] flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-[480px] relative group">
+        
+        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-sky-500 rounded-[3rem] blur opacity-15 group-hover:opacity-30 transition duration-1000"></div>
+        
+        <div class="relative bg-white border border-slate-100 rounded-[2.5rem] shadow-2xl shadow-indigo-100/50 overflow-hidden">
+            
+            <div class="h-2 bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-400"></div>
+
+            <div class="p-8 md:p-12">
+                <div class="text-center mb-10">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-slate-50 text-indigo-600 rounded-3xl mb-6 shadow-inner border border-slate-100/50">
+                        <i class="fas fa-user-plus text-3xl"></i>
+                    </div>
+                    <h3 class="text-3xl font-black text-slate-800 tracking-tight">Create Account</h3>
+                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mt-3">Join the Budget Studio</p>
+                </div>
+
+                {% if form.non_field_errors %}
+                <div class="mb-6 p-4 bg-rose-50 border border-rose-100 rounded-2xl">
+                    {% for error in form.non_field_errors %}
+                        <p class="text-xs font-bold text-rose-600 flex items-center gap-2">
+                            <i class="fas fa-circle-exclamation"></i> {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
+                <form method="post" class="space-y-5">
                     {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit" class="btn btn-success w-100">Sign Up</button>
+                    
+                    <div class="space-y-4 auth-form-custom">
+                        {% for field in form %}
+                            <div class="relative">
+                                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 ml-1">
+                                    {{ field.label }}
+                                </label>
+                                
+                                {{ field }}
+                                
+                                {% if field.errors %}
+                                    <div class="flex items-center gap-1.5 mt-2 ml-1 text-rose-500">
+                                        <i class="fas fa-circle-exclamation text-[10px]"></i>
+                                        <p class="text-[10px] font-bold">{{ field.errors.0 }}</p>
+                                    </div>
+                                {% endif %}
+
+                                {% if field.help_text %}
+                                    <div class="mt-2 px-1 text-slate-400 text-[9px] leading-relaxed italic font-medium opacity-80">
+                                        {{ field.help_text|safe }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-slate-200 hover:bg-black transition-all transform active:scale-[0.97] mt-6">
+                        Start Your Journey
+                    </button>
                 </form>
-                <p class="text-center mt-3">Already have account? <a href="{% url 'login' %}">Login</a></p>
+
+                <div class="mt-10 pt-8 border-t border-slate-50 text-center">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                        Already have an account? 
+                        <a href="{% url 'login' %}" class="text-indigo-600 hover:text-indigo-800 transition-all ml-1 underline underline-offset-4 decoration-2 decoration-indigo-100 hover:decoration-indigo-500">
+                            Login here
+                        </a>
+                    </p>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    /* Premium Input Styling for Django Form Fields */
+    .auth-form-custom input, 
+    .auth-form-custom select, 
+    .auth-form-custom textarea {
+        width: 100% !important;
+        padding: 1rem 1.25rem !important;
+        background-color: #f8fafc !important; /* slate-50 */
+        border: 2px solid #f1f5f9 !important; /* slate-100 */
+        border-radius: 1.25rem !important;
+        font-size: 0.875rem !important;
+        font-weight: 700 !important;
+        color: #1e293b !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .auth-form-custom input:focus {
+        background-color: #ffffff !important;
+        border-color: #e0e7ff !important; /* indigo-100 */
+        outline: none !important;
+        box-shadow: 0 0 0 4px rgba(238, 242, 255, 0.8) !important;
+    }
+
+    /* Clean up Django help text lists if they appear */
+    .auth-form-custom ul {
+        margin-top: 0.5rem;
+        padding-left: 0.5rem;
+        list-style-type: none;
+    }
+</style>
 {% endblock %}

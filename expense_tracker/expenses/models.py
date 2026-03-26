@@ -53,6 +53,13 @@ class MonthlyBudget(models.Model):
 
 
 class Expense(models.Model):
+    CASH = 'cash'
+    ONLINE = 'online'
+    PAYMENT_TYPE_CHOICES = [
+        (CASH, 'Cash'),
+        (ONLINE, 'Online'),
+    ]
+
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="expenses")
     category = models.ForeignKey(CustomCategory, on_delete=models.CASCADE, related_name="expenses")
     amount = models.DecimalField(
@@ -61,6 +68,8 @@ class Expense(models.Model):
         validators=[MinValueValidator(0)]
     )
     date = models.DateField()
+    description = models.TextField(blank=True)
+    payment_type = models.CharField(max_length=10, choices=PAYMENT_TYPE_CHOICES, default=CASH)
     note = models.TextField(blank=True)
     source_recurring = models.ForeignKey(
         'RecurringExpense',
@@ -102,6 +111,7 @@ class RecurringExpense(models.Model):
         validators=[MinValueValidator(0)]
     )
     note = models.TextField(blank=True)
+    payment_type = models.CharField(max_length=10, choices=Expense.PAYMENT_TYPE_CHOICES, default=Expense.CASH)
     frequency = models.CharField(max_length=10, choices=FREQUENCY_CHOICES)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)

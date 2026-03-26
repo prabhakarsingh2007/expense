@@ -1,95 +1,136 @@
 {% extends 'expenses/base.html' %}
+{% load static %}
+
 {% block content %}
-<div class="row g-4">
-    <div class="col-12">
-        <div class="card shadow-sm">
-            <div class="card-header d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2">
-                <h4 class="mb-0">Search Expenses</h4>
-                <small class="text-muted">Search by note, category, amount, or date (YYYY-MM-DD)</small>
-            </div>
-            <div class="card-body">
-                <form method="get" class="row g-2 g-md-3">
-                    <div class="col-12 col-md-4">
-                        <input
-                            type="text"
-                            name="q"
-                            value="{{ query }}"
-                            class="form-control"
-                            placeholder="Try: food, rent, 500, 2026-03-25"
-                        >
+<div class="max-w-7xl mx-auto py-8 px-4 space-y-8">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div>
+            <h2 class="text-3xl font-black text-slate-800 tracking-tight">Search Vault</h2>
+            <p class="text-slate-500 text-sm font-medium italic">Filter through your financial history</p>
+        </div>
+        {% if query or selected_category or start_date or end_date %}
+        <a href="{% url 'search' %}" class="inline-flex items-center gap-2 text-rose-500 bg-rose-50 px-4 py-2 rounded-xl text-xs font-bold hover:bg-rose-100 transition-all">
+            <i class="fas fa-times-circle"></i> Reset All Filters
+        </a>
+        {% endif %}
+    </div>
+
+    <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden">
+        <div class="p-6 md:p-8 bg-slate-50/50 border-b border-slate-100">
+            <form method="get" class="grid grid-cols-1 md:grid-cols-12 gap-4">
+                <div class="md:col-span-4 relative group">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Keyword</label>
+                    <div class="absolute mt-9 ml-4 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                        <i class="fas fa-search text-sm"></i>
                     </div>
-                    <div class="col-12 col-md-3">
-                        <select name="category" class="form-select">
-                            <option value="">All categories</option>
-                            {% for cat in categories %}
-                                <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:'s' %}selected{% endif %}>
-                                    {{ cat.icon }} {{ cat.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
-                    </div>
-                    <div class="col-6 col-md-2">
-                        <input type="date" name="start_date" value="{{ start_date }}" class="form-control" title="Start date">
-                    </div>
-                    <div class="col-6 col-md-2">
-                        <input type="date" name="end_date" value="{{ end_date }}" class="form-control" title="End date">
-                    </div>
-                    <div class="col-6 col-md-1 d-grid">
-                        <button type="submit" class="btn btn-primary">Search</button>
-                    </div>
-                    <div class="col-6 col-md-12 d-grid d-md-flex justify-content-md-end">
-                        <a href="{% url 'search' %}" class="btn btn-outline-secondary">Clear Filters</a>
-                    </div>
-                </form>
-            </div>
+                    <input type="text" name="q" value="{{ query }}" placeholder="Food, Rent, 500..."
+                           class="w-full pl-11 pr-4 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-semibold focus:ring-4 focus:ring-indigo-50 outline-none transition-all">
+                </div>
+
+                <div class="md:col-span-3">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Category</label>
+                    <select name="category" class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-semibold focus:ring-4 focus:ring-indigo-50 outline-none appearance-none cursor-pointer">
+                        <option value="">All Categories</option>
+                        {% for cat in categories %}
+                            <option value="{{ cat.id }}" {% if selected_category == cat.id|stringformat:'s' %}selected{% endif %}>
+                                {{ cat.icon }} {{ cat.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">From</label>
+                    <input type="date" name="start_date" value="{{ start_date }}" 
+                           class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-semibold focus:ring-4 focus:ring-indigo-50 outline-none">
+                </div>
+
+                <div class="md:col-span-2">
+                    <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">To</label>
+                    <input type="date" name="end_date" value="{{ end_date }}" 
+                           class="w-full px-4 py-3.5 bg-white border border-slate-200 rounded-2xl text-sm font-semibold focus:ring-4 focus:ring-indigo-50 outline-none">
+                </div>
+
+                <div class="md:col-span-1 flex items-end">
+                    <button type="submit" class="w-full h-[52px] bg-slate-900 text-white rounded-2xl hover:bg-indigo-600 transition-all shadow-lg shadow-slate-200 flex items-center justify-center">
+                        <i class="fas fa-filter"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
+                <thead>
+                    <tr class="bg-white border-b border-slate-50">
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Transaction Date</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Category</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Amount</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Payment</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Description</th>
+                        <th class="px-8 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-50">
+                    {% for expense in expenses %}
+                    <tr class="group hover:bg-slate-50/50 transition-colors">
+                        <td class="px-8 py-5">
+                            <span class="text-sm font-bold text-slate-500">{{ expense.date|date:'d M, Y' }}</span>
+                        </td>
+                        <td class="px-8 py-5">
+                            <div class="flex items-center gap-2">
+                                <span class="w-8 h-8 rounded-lg bg-slate-100 flex items-center justify-center text-sm">{{ expense.category.icon }}</span>
+                                <span class="text-sm font-bold text-slate-700">{{ expense.category.name }}</span>
+                            </div>
+                        </td>
+                        <td class="px-8 py-5">
+                            <span class="text-base font-black text-slate-900">₹{{ expense.amount|floatformat:2 }}</span>
+                        </td>
+                        <td class="px-8 py-5">
+                            <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold bg-indigo-50 text-indigo-700 uppercase">{{ expense.get_payment_type_display }}</span>
+                        </td>
+                        <td class="px-8 py-5">
+                            <p class="text-sm text-slate-500 max-w-xs truncate font-medium">{{ expense.description|default:expense.note|default:'—' }}</p>
+                        </td>
+                        <td class="px-8 py-5 text-right">
+                            <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                                <a href="{% url 'edit_expense' expense.id %}" class="w-9 h-9 flex items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white transition-all">
+                                    <i class="fas fa-edit text-xs"></i>
+                                </a>
+                                <a href="{% url 'delete_expense' expense.id %}" onclick="return confirm('Delete this record?')" 
+                                   class="w-9 h-9 flex items-center justify-center rounded-xl bg-rose-50 text-rose-500 hover:bg-rose-500 hover:text-white transition-all">
+                                    <i class="fas fa-trash-alt text-xs"></i>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="6" class="px-8 py-24 text-center">
+                            <div class="flex flex-col items-center">
+                                <div class="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 text-3xl mb-4">
+                                    <i class="fas fa-search-minus"></i>
+                                </div>
+                                <h4 class="text-slate-400 font-bold tracking-tight">No results found</h4>
+                                <p class="text-slate-400 text-xs mt-1">Try adjusting your filters or keywords.</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 
-    <div class="col-12">
-        <div class="card shadow-sm">
-            <div class="card-header">
-                <h5 class="mb-0">Results</h5>
+    <div class="flex items-center gap-4 px-8 py-4 bg-indigo-900 rounded-[2rem] text-white overflow-hidden relative shadow-lg shadow-indigo-100">
+        <div class="relative z-10 flex items-center gap-3">
+            <div class="w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-xs">
+                <i class="fas fa-lightbulb"></i>
             </div>
-            <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-striped align-middle">
-                        <thead>
-                            <tr>
-                                <th>Date</th>
-                                <th>Category</th>
-                                <th>Amount</th>
-                                <th>Note</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for expense in expenses %}
-                            <tr>
-                                <td>{{ expense.date|date:'d-m-Y' }}</td>
-                                <td>{{ expense.category.icon }} {{ expense.category.name }}</td>
-                                <td>₹{{ expense.amount|floatformat:2 }}</td>
-                                <td>{{ expense.note|default:'-' }}</td>
-                                <td>
-                                    <a href="{% url 'edit_expense' expense.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    <a href="{% url 'delete_expense' expense.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this expense?')">Delete</a>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="5" class="text-center text-muted">
-                                    {% if query or selected_category or start_date or end_date %}
-                                        No expenses found for selected filters.
-                                    {% else %}
-                                        Use filters above and click Search.
-                                    {% endif %}
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+            <p class="text-[11px] font-bold uppercase tracking-widest opacity-80">Pro Tip: Search for "2026-03" to see all expenses from this month!</p>
         </div>
+        <div class="absolute -right-4 top-0 h-full w-32 bg-gradient-to-l from-white/10 to-transparent skew-x-12"></div>
     </div>
 </div>
 {% endblock %}

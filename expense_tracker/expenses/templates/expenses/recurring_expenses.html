@@ -1,60 +1,118 @@
 {% extends 'expenses/base.html' %}
+{% load static %}
+
 {% block content %}
+<div class="max-w-6xl mx-auto py-8 px-4">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h2 class="text-3xl font-black text-slate-800 tracking-tight">Recurring Expenses</h2>
+            <p class="text-slate-500 text-sm font-medium italic">Manage your automated subscriptions and bills</p>
+        </div>
+        <a href="{% url 'add_expense' %}" class="inline-flex items-center justify-center gap-2 bg-indigo-600 text-white px-6 py-3 rounded-2xl font-bold text-sm shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all transform active:scale-95">
+            <i class="fas fa-plus text-xs"></i> Create New Rule
+        </a>
+    </div>
 
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <h3 class="mb-0">Recurring Expenses</h3>
-    <a href="{% url 'add_expense' %}" class="btn btn-primary btn-sm">Add New</a>
-</div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white p-6 rounded-[2rem] border border-slate-100 shadow-sm">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Active Rules</p>
+            <h3 class="text-2xl font-bold text-slate-800">{{ recurring_rules|length }}</h3>
+        </div>
+    </div>
 
-<div class="card">
-    <div class="card-body">
-        <div class="table-responsive">
-            <table class="table align-middle mb-0">
+    <div class="bg-white rounded-[2.5rem] shadow-xl shadow-slate-100 border border-slate-100 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full text-left border-collapse">
                 <thead>
-                    <tr>
-                        <th>Category</th>
-                        <th>Amount</th>
-                        <th>Frequency</th>
-                        <th>Start</th>
-                        <th>End</th>
-                        <th>Next Run</th>
-                        <th>Status</th>
-                        <th>Action</th>
+                    <tr class="bg-slate-50/50 border-b border-slate-100">
+                        <th class="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Category & Details</th>
+                        <th class="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Amount</th>
+                        <th class="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Cycle</th>
+                        <th class="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Schedule</th>
+                        <th class="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em]">Status</th>
+                        <th class="px-6 py-5 text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] text-right">Actions</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody class="divide-y divide-slate-50">
                     {% for rule in recurring_rules %}
-                    <tr>
-                        <td>{{ rule.category.icon }} {{ rule.category.name }}</td>
-                        <td>₹{{ rule.amount|floatformat:2 }}</td>
-                        <td class="text-capitalize">{{ rule.frequency }}</td>
-                        <td>{{ rule.start_date|date:'d M Y' }}</td>
-                        <td>{% if rule.end_date %}{{ rule.end_date|date:'d M Y' }}{% else %}-{% endif %}</td>
-                        <td>{{ rule.next_run_date|date:'d M Y' }}</td>
-                        <td>
+                    <tr class="group hover:bg-slate-50/50 transition-colors">
+                        <td class="px-6 py-5">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
+                                    <span class="text-lg">{{ rule.category.icon|default:"📂" }}</span>
+                                </div>
+                                <span class="font-bold text-slate-700">{{ rule.category.name }}</span>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-5">
+                            <span class="text-base font-black text-slate-800">₹{{ rule.amount|floatformat:2 }}</span>
+                        </td>
+
+                        <td class="px-6 py-5">
+                            <span class="px-3 py-1 bg-slate-100 text-slate-600 rounded-full text-[10px] font-black uppercase tracking-tighter">
+                                {{ rule.frequency }}
+                            </span>
+                        </td>
+
+                        <td class="px-6 py-5">
+                            <div class="space-y-1">
+                                <div class="flex items-center gap-2 text-xs font-bold text-slate-600">
+                                    <i class="fas fa-calendar-alt text-[10px] text-slate-300"></i> 
+                                    <span>Next: {{ rule.next_run_date|date:'d M Y' }}</span>
+                                </div>
+                                <p class="text-[10px] text-slate-400 font-medium">Started: {{ rule.start_date|date:'d M Y' }}</p>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-5">
                             {% if rule.is_active %}
-                                <span class="badge bg-success">Active</span>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-50 text-emerald-600 rounded-lg text-[10px] font-black uppercase tracking-widest">
+                                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active
+                                </span>
                             {% else %}
-                                <span class="badge bg-secondary">Stopped</span>
+                                <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-100 text-slate-400 rounded-lg text-[10px] font-black uppercase tracking-widest">
+                                    Stopped
+                                </span>
                             {% endif %}
                         </td>
-                        <td>
+
+                        <td class="px-6 py-5 text-right">
                             {% if rule.is_active %}
-                                <a href="{% url 'delete_recurring_expense' rule.id %}" class="btn btn-sm btn-outline-danger" onclick="return confirm('Stop this recurring expense?')">Stop</a>
+                                <a href="{% url 'delete_recurring_expense' rule.id %}" 
+                                   onclick="return confirm('Stop this recurring expense?')"
+                                   class="inline-flex items-center gap-2 text-xs font-bold text-rose-400 hover:text-rose-600 hover:bg-rose-50 px-3 py-2 rounded-xl transition-all">
+                                    <i class="fas fa-stop-circle"></i> Stop
+                                </a>
                             {% else %}
-                                -
+                                <span class="text-slate-300 text-xs italic font-medium">No actions</span>
                             {% endif %}
                         </td>
                     </tr>
                     {% empty %}
                     <tr>
-                        <td colspan="8" class="text-center py-4">No recurring expenses yet. Create one from Add Expense page.</td>
+                        <td colspan="6" class="px-6 py-20 text-center">
+                            <div class="flex flex-col items-center">
+                                <div class="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center text-slate-200 text-2xl mb-4">
+                                    <i class="fas fa-clock-rotate-left"></i>
+                                </div>
+                                <h4 class="text-slate-400 font-bold tracking-tight">No Recurring Rules Found</h4>
+                                <p class="text-slate-400 text-xs mt-1">Add recurring details when creating a new expense.</p>
+                            </div>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
-</div>
 
+    <div class="mt-8 flex items-start gap-4 p-5 bg-amber-50 rounded-2xl border border-amber-100">
+        <div class="text-amber-500 pt-0.5"><i class="fas fa-lightbulb"></i></div>
+        <p class="text-xs text-amber-700 font-medium leading-relaxed">
+            <b>Note:</b> Recurring expenses are automatically added to your dashboard on their "Next Run" date. You can stop them anytime by clicking the stop button above.
+        </p>
+    </div>
+</div>
 {% endblock %}

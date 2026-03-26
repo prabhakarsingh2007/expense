@@ -1,59 +1,83 @@
 {% extends 'expenses/base.html' %}
+{% load static %}
+
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h4>Edit Expense</h4>
+<div class="min-h-[85vh] flex items-center justify-center py-8 px-4">
+    <div class="max-w-xl w-full">
+        
+        <div class="mb-8 flex items-center justify-between">
+            <div>
+                <h2 class="text-2xl font-extrabold text-slate-800 tracking-tight">Edit Transaction</h2>
+                <p class="text-slate-500 text-xs font-medium">Update your expense details below</p>
             </div>
-            <div class="card-body">
-                <form method="post">
+            <a href="{% url 'dashboard' %}" class="w-10 h-10 bg-white border border-slate-100 rounded-xl flex items-center justify-center text-slate-400 hover:text-indigo-600 shadow-sm transition-all">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+        </div>
+
+        <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200/50 border border-slate-100 overflow-hidden">
+            <div class="h-2 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"></div>
+            
+            <div class="p-8 sm:p-10">
+                <form method="post" class="space-y-6">
                     {% csrf_token %}
 
-                    <!-- Amount -->
-                    <div class="mb-3">
-                        <label class="form-label">Amount</label>
-                        <input type="number" step="0.01" name="amount"
-                               value="{{ expense.amount }}"
-                               class="form-control" required>
+                    <div class="bg-slate-50 rounded-3xl p-6 border border-slate-100 focus-within:border-indigo-300 focus-within:ring-4 focus-within:ring-indigo-50 transition-all">
+                        <label class="block text-[10px] font-black text-slate-400 uppercase tracking-widest mb-2 ml-1">Amount to Update</label>
+                        <div class="relative flex items-center">
+                            <span class="text-3xl font-bold text-slate-300 mr-3">₹</span>
+                            <input type="number" step="0.01" name="amount" value="{{ expense.amount }}" 
+                                   class="w-full text-4xl font-black text-slate-800 bg-transparent border-none outline-none focus:ring-0 p-0" 
+                                   placeholder="0.00" required>
+                        </div>
                     </div>
 
-                    <!-- Category FIX -->
-                    <div class="mb-3">
-                        <label class="form-label">Category</label>
-                        <select name="category" class="form-control" required>
-                            {% for cat in categories %}
-                                <option value="{{ cat.id }}"
-                                    {% if expense.category.id == cat.id %}selected{% endif %}>
-                                    {{ cat.icon }} {{ cat.name }}
-                                </option>
-                            {% endfor %}
-                        </select>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-slate-500 uppercase ml-1">Category</label>
+                            <div class="relative group">
+                                <select name="category" class="w-full pl-4 pr-10 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-700 font-semibold appearance-none focus:ring-2 focus:ring-indigo-500 outline-none transition-all cursor-pointer" required>
+                                    {% for cat in categories %}
+                                        <option value="{{ cat.id }}" {% if expense.category.id == cat.id %}selected{% endif %}>
+                                            {{ cat.icon }} {{ cat.name }}
+                                        </option>
+                                    {% endfor %}
+                                </select>
+                                <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400 group-hover:text-indigo-500 transition-colors">
+                                    <i class="fas fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-xs font-bold text-slate-500 uppercase ml-1">Date</label>
+                            <input type="date" name="date" value="{{ expense.date|date:'Y-m-d' }}" 
+                                   class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-700 font-semibold focus:ring-2 focus:ring-indigo-500 outline-none transition-all" required>
+                        </div>
                     </div>
 
-                    <!-- Date -->
-                    <div class="mb-3">
-                        <label class="form-label">Date</label>
-                        <input type="date" name="date"
-                               value="{{ expense.date|date:'Y-m-d' }}"
-                               class="form-control" required>
+                    <div class="space-y-2">
+                        <label class="block text-xs font-bold text-slate-500 uppercase ml-1">Note (Optional)</label>
+                        <textarea name="note" rows="3" 
+                                  class="w-full px-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-700 font-medium focus:ring-2 focus:ring-indigo-500 outline-none transition-all resize-none" 
+                                  placeholder="Add details about this expense...">{{ expense.note }}</textarea>
                     </div>
 
-                    <!-- Note -->
-                    <div class="mb-3">
-                        <label class="form-label">Note (Optional)</label>
-                        <textarea name="note" class="form-control" rows="3">{{ expense.note }}</textarea>
+                    <div class="pt-6 flex flex-col md:flex-row gap-4">
+                        <a href="{% url 'dashboard' %}" class="order-2 md:order-1 flex-1 text-center py-4 text-sm font-bold text-slate-400 hover:text-slate-600 hover:bg-slate-50 rounded-2xl transition-all uppercase tracking-widest">
+                            Cancel
+                        </a>
+                        <button type="submit" class="order-1 md:order-2 flex-[2] bg-indigo-600 text-white text-sm font-black uppercase tracking-[0.2em] py-4 rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 transform active:scale-[0.98] transition-all">
+                            Update Transaction
+                        </button>
                     </div>
-
-                    <!-- Buttons -->
-                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                        <a href="{% url 'dashboard' %}" class="btn btn-secondary me-md-2">Cancel</a>
-                        <button type="submit" class="btn btn-primary">Update Expense</button>
-                    </div>
-
                 </form>
             </div>
         </div>
+
+        <p class="text-center mt-10 text-[10px] font-bold text-slate-300 uppercase tracking-[0.3em]">
+            Secure Financial Records
+        </p>
     </div>
 </div>
 {% endblock %}

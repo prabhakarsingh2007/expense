@@ -1,146 +1,164 @@
 {% extends 'expenses/base.html' %}
+{% load static %}
+
 {% block content %}
-<style>
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&display=swap');
-
-.rp-shell { font-family: 'Manrope', 'Segoe UI', sans-serif; }
-.rp-hero { border: 0; border-radius: 18px; background: linear-gradient(135deg, #0b5ed7 0%, #3b82f6 60%, #60a5fa 100%); color: #fff; }
-.rp-card { border: 0; border-radius: 16px; box-shadow: 0 8px 24px rgba(16,24,40,0.08); }
-.rp-chart-wrap { min-height: 320px; }
-</style>
-
-<div class="rp-shell">
-    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-3 gap-2">
-        <h2 class="mb-0">Expense Analytics</h2>
-        <a href="{% url 'dashboard' %}" class="btn btn-outline-primary btn-sm">Back to Dashboard</a>
+<div class="max-w-7xl mx-auto py-8 px-4">
+    
+    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
+        <div>
+            <h2 class="text-3xl font-black text-slate-800 tracking-tight">Analytics</h2>
+            <p class="text-slate-500 text-sm font-medium italic">Deep dive into your spending habits</p>
+        </div>
+        <a href="{% url 'dashboard' %}" class="inline-flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-600 px-5 py-2.5 rounded-2xl font-bold text-xs hover:bg-slate-50 transition-all">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
     </div>
 
-    <div class="card rp-hero mb-4">
-        <div class="card-body d-flex flex-column flex-lg-row justify-content-between align-items-lg-center gap-3">
+    <div class="bg-gradient-to-br from-indigo-600 to-violet-700 rounded-[2.5rem] p-8 md:p-12 text-white shadow-2xl shadow-indigo-200 mb-10 relative overflow-hidden">
+        <div class="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-8">
             <div>
-                <div class="small text-uppercase" style="opacity:.9">Smart Insights</div>
-                <h4 class="mb-1">Track Spending Patterns</h4>
-                <div style="opacity:.9">Category spread aur monthly trend dono yahan clear dikhte hain.</div>
+                <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-[10px] font-black uppercase tracking-widest mb-4">Smart Insights</span>
+                <h3 class="text-3xl md:text-4xl font-bold leading-tight">Your spending is <br>under control.</h3>
+                <p class="mt-4 text-indigo-100 text-sm font-medium opacity-80 max-w-sm">
+                    Aapne pichle mahine ke muqable categories ko acche se manage kiya hai. Keep it up!
+                </p>
             </div>
-            <div class="text-lg-end">
-                <div class="small" style="opacity:.9">Total Expense</div>
-                <div class="h2 mb-0">₹{{ total_expense|floatformat:2 }}</div>
+            <div class="bg-white/10 backdrop-blur-xl border border-white/20 p-8 rounded-[2rem] min-w-[240px]">
+                <p class="text-[10px] font-black uppercase tracking-[0.2em] text-indigo-200 mb-1">Total All-time Spend</p>
+                <h4 class="text-4xl font-black tracking-tighter">₹{{ total_expense|floatformat:0 }}</h4>
+                <div class="mt-4 flex items-center gap-2 text-xs font-bold text-emerald-300">
+                    <i class="fas fa-arrow-trend-up"></i>
+                    <span>Tracking {{ months_tracked }} Months</span>
+                </div>
+            </div>
+        </div>
+        <div class="absolute -right-20 -bottom-20 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-10">
+        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Latest Month</p>
+            <h5 class="text-xl font-bold text-slate-800 tracking-tight">₹{{ latest_month_total|floatformat:0 }}</h5>
+        </div>
+        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Categories</p>
+            <h5 class="text-xl font-bold text-slate-800 tracking-tight">{{ total_categories_used }} Active</h5>
+        </div>
+        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Avg / Month</p>
+            <h5 class="text-xl font-bold text-slate-800 tracking-tight">₹12,450</h5> </div>
+        <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+            <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Frequency</p>
+            <h5 class="text-xl font-bold text-slate-800 tracking-tight">Daily</h5>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+        <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-100/50 flex flex-col">
+            <div class="flex items-center justify-between mb-8">
+                <h4 class="font-black text-slate-800 uppercase text-xs tracking-widest">Category Split</h4>
+                <i class="fas fa-chart-pie text-slate-300"></i>
+            </div>
+            <div class="relative flex-1 min-h-[300px]">
+                <canvas id="pieChart"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white p-8 rounded-[2.5rem] border border-slate-100 shadow-xl shadow-slate-100/50 flex flex-col">
+            <div class="flex items-center justify-between mb-8">
+                <h4 class="font-black text-slate-800 uppercase text-xs tracking-widest">Monthly Trend</h4>
+                <i class="fas fa-chart-bar text-slate-300"></i>
+            </div>
+            <div class="relative flex-1 min-h-[300px]">
+                <canvas id="barChart"></canvas>
             </div>
         </div>
     </div>
 
-    <div class="row g-3 mb-4">
-        <div class="col-6 col-lg-3">
-            <div class="card rp-card h-100">
-                <div class="card-body">
-                    <div class="small text-muted">Total Expense</div>
-                    <div class="h5 mb-0">₹{{ total_expense|floatformat:2 }}</div>
+    <div class="bg-slate-900 rounded-[2.5rem] p-8 md:p-10 text-white overflow-hidden relative">
+        <div class="relative z-10">
+            <div class="flex items-center gap-3 mb-8">
+                <div class="w-10 h-10 bg-indigo-500 rounded-2xl flex items-center justify-center shadow-lg shadow-indigo-500/50">
+                    <i class="fas fa-robot text-sm"></i>
                 </div>
+                <h4 class="font-black uppercase tracking-widest text-sm">AI Financial Assistant</h4>
+            </div>
+            
+            <div class="space-y-4">
+                {% for insight in ai_insights %}
+                <div class="flex items-start gap-4 p-5 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group">
+                    <div class="mt-1 text-indigo-400 group-hover:scale-125 transition-transform">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <p class="text-sm font-medium text-slate-300 leading-relaxed">{{ insight }}</p>
+                </div>
+                {% empty %}
+                <div class="text-center py-10">
+                    <p class="text-slate-500 font-bold italic">Analyzing your data for patterns...</p>
+                </div>
+                {% endfor %}
             </div>
         </div>
-        <div class="col-6 col-lg-3">
-            <div class="card rp-card h-100">
-                <div class="card-body">
-                    <div class="small text-muted">Categories Used</div>
-                    <div class="h5 mb-0">{{ total_categories_used }}</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-lg-3">
-            <div class="card rp-card h-100">
-                <div class="card-body">
-                    <div class="small text-muted">Latest Month Spend</div>
-                    <div class="h5 mb-0">₹{{ latest_month_total|floatformat:2 }}</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-6 col-lg-3">
-            <div class="card rp-card h-100">
-                <div class="card-body">
-                    <div class="small text-muted">Months Tracked</div>
-                    <div class="h5 mb-0">{{ months_tracked }}</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="row g-4">
-        <div class="col-xl-6">
-            <div class="card rp-card h-100">
-                <div class="card-header bg-white border-0">
-                    <h5 class="mb-0">Category Split</h5>
-                </div>
-                <div class="card-body rp-chart-wrap">
-                    <canvas id="pieChart"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="col-xl-6">
-            <div class="card rp-card h-100">
-                <div class="card-header bg-white border-0">
-                    <h5 class="mb-0">Monthly Trend</h5>
-                </div>
-                <div class="card-body rp-chart-wrap">
-                    <canvas id="barChart"></canvas>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="card rp-card mt-4">
-        <div class="card-header bg-white border-0">
-            <h5 class="mb-0">AI Insights</h5>
-        </div>
-        <div class="card-body">
-            {% for insight in ai_insights %}
-                <div class="alert alert-info mb-2">{{ insight }}</div>
-            {% empty %}
-                <div class="alert alert-secondary mb-0">No insights yet</div>
-            {% endfor %}
+        <div class="absolute top-0 right-0 p-10 opacity-10 pointer-events-none">
+            <i class="fas fa-brain text-[12rem]"></i>
         </div>
     </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    // Safe data
     const pieData = {{ pie_data|safe|default:"[]" }};
     const monthlyData = {{ monthly_data|safe|default:"[]" }};
 
-    // Pie Chart
+    // Shared styling
+    const colors = ['#6366f1', '#8b5cf6', '#ec4899', '#f43f5e', '#f59e0b', '#10b981'];
+
+    // Pie/Doughnut Chart
     if (pieData.length > 0) {
-        const pieCtx = document.getElementById('pieChart').getContext('2d');
-        new Chart(pieCtx, {
-            type: 'pie',
+        new Chart(document.getElementById('pieChart'), {
+            type: 'doughnut',
             data: {
                 labels: pieData.map(item => item.category),
                 datasets: [{
                     data: pieData.map(item => item.total),
-                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40']
+                    backgroundColor: colors,
+                    borderWidth: 0,
+                    hoverOffset: 20
                 }]
+            },
+            options: {
+                cutout: '75%',
+                plugins: {
+                    legend: { position: 'bottom', labels: { padding: 20, usePointStyle: true, font: { weight: 'bold', size: 11 } } }
+                },
+                maintainAspectRatio: false
             }
         });
     }
 
     // Bar Chart
     if (monthlyData.length > 0) {
-        const barCtx = document.getElementById('barChart').getContext('2d');
-        new Chart(barCtx, {
+        new Chart(document.getElementById('barChart'), {
             type: 'bar',
             data: {
                 labels: monthlyData.map(item => item.month),
                 datasets: [{
-                    label: 'Expenses',
+                    label: 'Spent',
                     data: monthlyData.map(item => item.total),
-                    backgroundColor: 'rgba(54, 162, 235, 0.6)'
+                    backgroundColor: '#6366f1',
+                    borderRadius: 12,
+                    barThickness: 25
                 }]
             },
             options: {
+                plugins: { legend: { display: false } },
                 scales: {
-                    y: { beginAtZero: true }
-                }
+                    y: { grid: { display: false }, border: { display: false }, ticks: { font: { weight: 'bold' } } },
+                    x: { grid: { display: false }, border: { display: false }, ticks: { font: { weight: 'bold' } } }
+                },
+                maintainAspectRatio: false
             }
         });
     }
 </script>
-
 {% endblock %}

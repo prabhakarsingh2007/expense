@@ -23,6 +23,6 @@ class MonthlyBudgetAdmin(admin.ModelAdmin):
 
 @admin.register(Expense)
 class ExpenseAdmin(admin.ModelAdmin):
-    list_display = ['user', 'amount', 'category', 'date', 'note']
-    list_filter = ['category', 'date']
-    search_fields = ['user__username', 'note']
+    list_display = ['user', 'amount', 'category', 'payment_type', 'date', 'description']
+    list_filter = ['category', 'payment_type', 'date']
+    search_fields = ['user__username', 'description', 'note']

@@ -79,6 +79,8 @@ def _sync_recurring_expenses(user):
                 defaults={
                     'category': recurring.category,
                     'amount': recurring.amount,
+                    'description': recurring.note,
+                    'payment_type': recurring.payment_type,
                     'note': recurring.note,
                 },
             )
@@ -156,7 +158,11 @@ def dashboard(request):
     )
     monthly_actual = monthly_expenses_qs.aggregate(Sum('amount'))['amount__sum'] or Decimal('0.00')
 
-    monthly_budgets_qs = Budget.objects.filter(user=request.user, month=current_month_start).select_related('category')
+    monthly_budgets_qs = Budget.objects.filter(
+        user=request.user,
+        month__year=current_month_start.year,
+        month__month=current_month_start.month,
+    ).select_related('category')
     monthly_budget = monthly_budgets_qs.aggregate(Sum('amount'))['amount__sum'] or Decimal('0.00')
 
     spent_by_category = {
@@ -219,6 +225,7 @@ def dashboard(request):
         'monthly_remaining': monthly_remaining,
         'is_overspent': is_overspent,
         'budget_vs_actual': budget_vs_actual,
+        'active_allocations_count': len(budget_vs_actual),
         'ai_insights': ai_insights,
         'pocket_monthly_budget': pocket_monthly_budget,
         'has_monthly_budget': has_monthly_budget,
@@ -246,11 +253,23 @@ def add_expense(request):
         amount = request.POST.get('amount')
         category_id = request.POST.get('category')
         date_input = request.POST.get('date')
-        note = request.POST.get('note', '')
+        description = (request.POST.get('description') or request.POST.get('note') or '').strip()
+        payment_type = (request.POST.get('payment_type') or Expense.CASH).strip().lower()
         is_recurring = request.POST.get('is_recurring') == 'on'
         frequency = request.POST.get('frequency', RecurringExpense.MONTHLY)
         recurring_end_date_input = (request.POST.get('recurring_end_date') or '').strip()
         selected_date, date_error = _validate_expense_date(date_input)
+
+        if payment_type not in dict(Expense.PAYMENT_TYPE_CHOICES):
+            messages.error(request, 'Please select a valid payment type.')
+            return render(request, 'expenses/add_expense.html', {
+                'categories': categories,
+                'min_date': min_date,
+                'max_date': max_date,
+                'form_data': request.POST,
+                'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
+                'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
+            })
 
         if date_error:
             messages.error(request, date_error)
@@ -259,6 +278,19 @@ def add_expense(request):
                 'min_date': min_date,
                 'max_date': max_date,
                 'form_data': request.POST,
+                'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
+                'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
+            })
+
+        if not description:
+            messages.error(request, 'Description is required.')
+            return render(request, 'expenses/add_expense.html', {
+                'categories': categories,
+                'min_date': min_date,
+                'max_date': max_date,
+                'form_data': request.POST,
+                'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
+                'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
             })
 
         category = get_object_or_404(CustomCategory, id=category_id, user=request.user)
@@ -273,6 +305,7 @@ def add_expense(request):
                     'max_date': max_date,
                     'form_data': request.POST,
                     'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
+                    'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
                 })
 
             recurring_end_date = None
@@ -287,6 +320,7 @@ def add_expense(request):
                         'max_date': max_date,
                         'form_data': request.POST,
                         'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
+                        'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
                     })
 
                 if recurring_end_date < selected_date:
@@ -297,13 +331,15 @@ def add_expense(request):
                         'max_date': max_date,
                         'form_data': request.POST,
                         'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
+                        'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
                     })
 
             recurring_rule = RecurringExpense.objects.create(
                 user=request.user,
                 category=category,
                 amount=amount,
-                note=note,
+                note=description,
+                payment_type=payment_type,
                 frequency=frequency,
                 start_date=selected_date,
                 end_date=recurring_end_date,
@@ -315,7 +351,9 @@ def add_expense(request):
             amount=amount,
             category=category,
             date=selected_date,
-            note=note,
+            description=description,
+            payment_type=payment_type,
+            note=description,
             source_recurring=recurring_rule,
         )
 
@@ -341,6 +379,17 @@ def add_expense(request):
         'min_date': min_date,
         'max_date': max_date,
         'frequency_choices': RecurringExpense.FREQUENCY_CHOICES,
+        'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
+        'form_data': {
+            'amount': '',
+            'category': '',
+            'date': '',
+            'description': '',
+            'payment_type': Expense.CASH,
+            'is_recurring': '',
+            'frequency': RecurringExpense.MONTHLY,
+            'recurring_end_date': '',
+        },
     })
 
 
@@ -407,10 +456,32 @@ def edit_expense(request, id):
                 'categories': categories,
                 'min_date': min_date,
                 'max_date': max_date,
+                'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
             })
 
         expense.date = selected_date
-        expense.note = request.POST.get('note', '')
+        expense.description = (request.POST.get('description') or request.POST.get('note') or '').strip()
+        if not expense.description:
+            messages.error(request, 'Description is required.')
+            return render(request, 'expenses/edit_expense.html', {
+                'expense': expense,
+                'categories': categories,
+                'min_date': min_date,
+                'max_date': max_date,
+                'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
+            })
+        expense.note = expense.description
+        payment_type = (request.POST.get('payment_type') or Expense.CASH).strip().lower()
+        if payment_type not in dict(Expense.PAYMENT_TYPE_CHOICES):
+            messages.error(request, 'Please select a valid payment type.')
+            return render(request, 'expenses/edit_expense.html', {
+                'expense': expense,
+                'categories': categories,
+                'min_date': min_date,
+                'max_date': max_date,
+                'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
+            })
+        expense.payment_type = payment_type
 
         category_id = request.POST.get('category')
         expense.category = get_object_or_404(CustomCategory, id=category_id, user=request.user)
@@ -424,6 +495,7 @@ def edit_expense(request, id):
         'categories': categories,
         'min_date': min_date,
         'max_date': max_date,
+        'payment_type_choices': Expense.PAYMENT_TYPE_CHOICES,
     })
 
 
@@ -454,7 +526,9 @@ def search_expenses(request):
 
     if query:
         search_filter = (
+            Q(description__icontains=query) |
             Q(note__icontains=query) |
+            Q(payment_type__icontains=query) |
             Q(category__name__icontains=query)
         )
         try:
@@ -502,7 +576,7 @@ def export_csv(request):
     response.write('\ufeff')
 
     writer = csv.writer(response)
-    writer.writerow(['S.No', 'Date', 'Category', 'Amount (INR)', 'Note'])
+    writer.writerow(['S.No', 'Date', 'Category', 'Amount (INR)', 'Description', 'Payment Type'])
 
     expenses = Expense.objects.filter(user=request.user).select_related('category').order_by('-date', '-created_at')
 
@@ -512,7 +586,8 @@ def export_csv(request):
             expense.date.strftime('%d-%m-%Y'),
             f"{expense.category.icon} {expense.category.name}",
             format(expense.amount, '.2f'),
-            expense.note,
+            expense.description or expense.note,
+            expense.get_payment_type_display(),
         ])
 
     return response

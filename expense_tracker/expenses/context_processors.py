@@ -25,7 +25,11 @@ def budget_alerts(request):
         for row in monthly_expenses.values('category_id').annotate(spent=Sum('amount'))
     }
 
-    monthly_budgets = Budget.objects.filter(user=request.user, month=current_month_start)
+    monthly_budgets = Budget.objects.filter(
+        user=request.user,
+        month__year=current_month_start.year,
+        month__month=current_month_start.month,
+    )
     overspent_categories_count = sum(
         1
         for budget in monthly_budgets
