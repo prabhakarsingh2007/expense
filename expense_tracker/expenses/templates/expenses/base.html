@@ -60,6 +60,7 @@
                 <a href="{% url 'dashboard' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">Dashboard</a>
                 <a href="{% url 'search' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">History</a>
                 <a href="{% url 'report' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">Analytics</a>
+                <a href="{% url 'manage_categories' %}" class="px-4 py-2 text-sm font-bold {% if request.resolver_match.url_name == 'manage_categories' %}text-emerald-600 bg-emerald-50{% else %}text-slate-600 hover:bg-slate-50{% endif %} rounded-xl no-underline">Categories</a>
                 
                 <a href="{% url 'about_me' %}" class="px-4 py-2 text-sm font-bold {% if request.resolver_match.url_name == 'about_me' %}text-emerald-600 bg-emerald-50{% else %}text-slate-600 hover:bg-slate-50{% endif %} rounded-xl no-underline inline-flex items-center gap-2">
                     <i class="fas fa-circle-info"></i>
