@@ -1,0 +1,77 @@
+{% extends 'expenses/base.html' %}
+
+{% block content %}
+<section class="relative overflow-hidden rounded-3xl border border-slate-100 bg-gradient-to-br from-indigo-50 via-white to-cyan-50 p-6 md:p-10 mb-8">
+    <div class="absolute -top-14 -right-10 w-40 h-40 rounded-full bg-indigo-100/70 blur-2xl"></div>
+    <div class="absolute -bottom-14 -left-10 w-40 h-40 rounded-full bg-cyan-100/70 blur-2xl"></div>
+
+    <div class="relative max-w-3xl">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wide">KharchaGraph Platform</span>
+        <h1 class="mt-4 text-3xl md:text-5xl font-black tracking-tight text-slate-900 leading-tight">
+            Smart Expense Tracker for Daily Kharcha, Budget, and Savings Planning.
+        </h1>
+        <p class="mt-4 text-slate-600 text-sm md:text-lg leading-relaxed">
+            KharchaGraph ek complete personal finance website hai jahan aap daily expenses add kar sakte ho, monthly budget set kar sakte ho, recurring bills manage kar sakte ho, aur reports ke through spending habits samajh sakte ho.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+            <a href="{% url 'login' %}" class="px-5 py-2.5 rounded-xl bg-slate-900 text-white text-sm font-bold no-underline hover:bg-slate-800">Login</a>
+            <a href="{% url 'signup' %}" class="px-5 py-2.5 rounded-xl bg-indigo-600 text-white text-sm font-bold no-underline hover:bg-indigo-500">Create Account</a>
+            <a href="{% url 'about_me' %}" class="px-5 py-2.5 rounded-xl border border-slate-300 text-slate-700 text-sm font-bold no-underline hover:bg-slate-50">About</a>
+        </div>
+    </div>
+</section>
+
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mb-8">
+    <article class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+        <h2 class="text-lg font-extrabold text-slate-900">Expense Entry</h2>
+        <p class="mt-2 text-sm text-slate-600">Date, category, payment type, note ke saath fast entry. Daily tracking easy aur clear hota hai.</p>
+    </article>
+
+    <article class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+        <h2 class="text-lg font-extrabold text-slate-900">Monthly Budget</h2>
+        <p class="mt-2 text-sm text-slate-600">Category-wise budget aur monthly cap set karke overspending alerts ke saath control maintain karo.</p>
+    </article>
+
+    <article class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+        <h2 class="text-lg font-extrabold text-slate-900">Recurring Expenses</h2>
+        <p class="mt-2 text-sm text-slate-600">Rent, EMI, subscriptions jaise recurring kharch auto-manage karo taaki koi payment miss na ho.</p>
+    </article>
+
+    <article class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+        <h2 class="text-lg font-extrabold text-slate-900">Reports and Analytics</h2>
+        <p class="mt-2 text-sm text-slate-600">Charts, monthly summaries, aur category trends ke through smart financial decisions lo.</p>
+    </article>
+
+    <article class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+        <h2 class="text-lg font-extrabold text-slate-900">Search and History</h2>
+        <p class="mt-2 text-sm text-slate-600">Past transactions ko filter, search, aur verify karke accurate spending record maintain karo.</p>
+    </article>
+
+    <article class="bg-white border border-slate-100 rounded-2xl p-5 shadow-sm">
+        <h2 class="text-lg font-extrabold text-slate-900">CSV Export</h2>
+        <p class="mt-2 text-sm text-slate-600">Expense data ko export karke backup, sharing, aur external analysis ke liye use kar sakte ho.</p>
+    </article>
+</section>
+
+<section class="bg-slate-900 text-white rounded-3xl p-6 md:p-8">
+    <h2 class="text-2xl font-black tracking-tight">Website Detail Snapshot</h2>
+    <div class="mt-5 grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <div class="rounded-xl bg-white/10 p-4">
+            <p class="text-slate-200">Platform</p>
+            <p class="font-bold">Python + Django Based Web App</p>
+        </div>
+        <div class="rounded-xl bg-white/10 p-4">
+            <p class="text-slate-200">Target Users</p>
+            <p class="font-bold">Students, Working Professionals, Families</p>
+        </div>
+        <div class="rounded-xl bg-white/10 p-4">
+            <p class="text-slate-200">Main Goal</p>
+            <p class="font-bold">Track spending and improve savings habits</p>
+        </div>
+        <div class="rounded-xl bg-white/10 p-4">
+            <p class="text-slate-200">Security</p>
+            <p class="font-bold">Account-based access and personal data isolation</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

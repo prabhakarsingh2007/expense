@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>
         {% block meta_title %}
-            {% if request.resolver_match.url_name == 'dashboard' %}Dashboard | KharchaGraph
+            {% if request.resolver_match.url_name == 'home' %}KharchaGraph | Smart Expense Tracker
+            {% elif request.resolver_match.url_name == 'dashboard' %}Dashboard | KharchaGraph
             {% elif request.resolver_match.url_name == 'add_expense' %}Add Expense | KharchaGraph
             {% elif request.resolver_match.url_name == 'edit_expense' %}Edit Expense | KharchaGraph
             {% elif request.resolver_match.url_name == 'search' %}Expense History | KharchaGraph
@@ -21,7 +22,7 @@
             {% endif %}
         {% endblock %}
     </title>
-    <meta name="description" content="{% block meta_description %}{% if request.resolver_match.url_name == 'dashboard' %}Track daily spending, view monthly summaries, and stay in control of your budget with KharchaGraph dashboard.{% elif request.resolver_match.url_name == 'add_expense' %}Add your daily expenses quickly with category and payment details in KharchaGraph to improve money management.{% elif request.resolver_match.url_name == 'edit_expense' %}Update your expense records anytime to keep your personal finance data accurate in KharchaGraph.{% elif request.resolver_match.url_name == 'search' %}Search and filter expense history by date, category, and amount to understand where your money goes.{% elif request.resolver_match.url_name == 'report' %}Analyze spending trends with smart charts and reports to plan savings and improve financial habits.{% elif request.resolver_match.url_name == 'set_budget' %}Set a monthly budget and monitor progress so you can avoid overspending and save more every month.{% elif request.resolver_match.url_name == 'manage_categories' %}Create and manage expense categories for better organization and faster tracking of personal and family spending.{% elif request.resolver_match.url_name == 'recurring_expenses' %}Manage recurring expenses like rent, subscriptions, and bills so no important payment is missed.{% elif request.resolver_match.url_name == 'about_me' %}Learn about KharchaGraph and how it helps users track expenses, plan budgets, and improve savings.{% elif request.resolver_match.url_name == 'login' %}Login to your KharchaGraph account to manage your budget, expenses, and reports securely.{% elif request.resolver_match.url_name == 'signup' %}Create a free KharchaGraph account and start tracking expenses, budgets, and savings goals today.{% else %}KharchaGraph helps you manage expenses, track budgets, and analyze spending with simple personal finance tools.{% endif %}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph is a smart expense tracker to manage daily kharcha, monthly budgets, recurring bills, and spending insights in one place.{% elif request.resolver_match.url_name == 'dashboard' %}Track daily spending, view monthly summaries, and stay in control of your budget with KharchaGraph dashboard.{% elif request.resolver_match.url_name == 'add_expense' %}Add your daily expenses quickly with category and payment details in KharchaGraph to improve money management.{% elif request.resolver_match.url_name == 'edit_expense' %}Update your expense records anytime to keep your personal finance data accurate in KharchaGraph.{% elif request.resolver_match.url_name == 'search' %}Search and filter expense history by date, category, and amount to understand where your money goes.{% elif request.resolver_match.url_name == 'report' %}Analyze spending trends with smart charts and reports to plan savings and improve financial habits.{% elif request.resolver_match.url_name == 'set_budget' %}Set a monthly budget and monitor progress so you can avoid overspending and save more every month.{% elif request.resolver_match.url_name == 'manage_categories' %}Create and manage expense categories for better organization and faster tracking of personal and family spending.{% elif request.resolver_match.url_name == 'recurring_expenses' %}Manage recurring expenses like rent, subscriptions, and bills so no important payment is missed.{% elif request.resolver_match.url_name == 'about_me' %}Learn about KharchaGraph and how it helps users track expenses, plan budgets, and improve savings.{% elif request.resolver_match.url_name == 'login' %}Login to your KharchaGraph account to manage your budget, expenses, and reports securely.{% elif request.resolver_match.url_name == 'signup' %}Create a free KharchaGraph account and start tracking expenses, budgets, and savings goals today.{% else %}KharchaGraph helps you manage expenses, track budgets, and analyze spending with simple personal finance tools.{% endif %}{% endblock %}">
     <meta name="author" content="KharchaGraph Team">
     <meta name="creator" content="KharchaGraph Team">
     <meta name="keywords" content="{% block meta_keywords %}expense tracker, budget planner, personal finance, money management, spending tracker, monthly budget, recurring expenses, expense report, savings planner{% endblock %}">
@@ -52,9 +53,10 @@
 
     <header class="hidden lg:block glass-effect sticky top-0 z-50 border-b border-slate-100 px-8 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="{% url 'dashboard' %}" class="text-2xl font-black text-indigo-600 tracking-tighter italic no-underline">KharchaGraph</a>
+            <a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}" class="text-2xl font-black text-indigo-600 tracking-tighter italic no-underline">KharchaGraph</a>
             
             <nav class="flex items-center gap-2">
+                {% if request.user.is_authenticated %}
                 <a href="{% url 'dashboard' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">Dashboard</a>
                 <a href="{% url 'search' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">History</a>
                 
@@ -66,6 +68,9 @@
                 <a href="{% url 'about_me' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">About</a>
                 <div class="h-6 w-[1px] bg-slate-200 mx-2"></div>
                 <a href="{% url 'logout' %}" class="text-rose-500 font-bold text-sm no-underline">Logout</a>
+                {% else %}
+                <a href="{% url 'about_me' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">About</a>
+                {% endif %}
             </nav>
         </div>
     </header>
@@ -73,11 +78,15 @@
     <header class="lg:hidden glass-effect sticky top-0 z-50 border-b border-slate-100 px-5 py-4 flex justify-between items-center">
         <span class="text-xl font-black text-indigo-600 italic">KharchaGraph</span>
         <div class="flex items-center gap-5">
+            {% if request.user.is_authenticated %}
             <a href="{% url 'export_csv' %}" class="text-emerald-500 no-underline flex items-center gap-1">
                 <i class="fas fa-file-arrow-down text-xl"></i>
                 <span class="text-[10px] font-bold">CSV</span>
             </a>
             <a href="{% url 'logout' %}" class="text-slate-400 text-lg"><i class="fas fa-sign-out-alt"></i></a>
+            {% else %}
+            <a href="{% url 'about_me' %}" class="text-slate-600 text-sm font-bold no-underline">About</a>
+            {% endif %}
         </div>
     </header>
 
@@ -95,6 +104,7 @@
         {% block content %}{% endblock %}
     </main>
 
+    {% if request.user.is_authenticated %}
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 glass-effect border-t border-slate-100 px-1 py-3 z-[100] pb-safe">
         <div class="flex justify-around items-end">
             <a href="{% url 'dashboard' %}" class="flex flex-col items-center gap-1 w-14 transition-all {% if request.resolver_match.url_name == 'dashboard' %}text-indigo-600{% else %}text-slate-400{% endif %} no-underline">
@@ -124,6 +134,7 @@
             </a>
         </div>
     </nav>
+    {% endif %}
 
     <style>
         .pb-safe { padding-bottom: calc(0.75rem + env(safe-area-inset-bottom)); }

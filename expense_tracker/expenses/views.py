@@ -108,6 +108,10 @@ def signup(request):
     return render(request, 'expenses/signup.html', {'form': form})
 
 
+def home(request):
+    return render(request, 'expenses/home.html')
+
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect('dashboard')
@@ -138,7 +142,7 @@ def login_view(request):
 
 def logout_view(request):
     logout(request)
-    return redirect('login')
+    return redirect('home')
 
 
 # ---------------- DASHBOARD ---------------- #
@@ -766,6 +770,5 @@ def analyze_expense(expenses):
     ]
 
 
-@login_required
 def about_me(request):
     return render(request, 'expenses/about_me.html')
