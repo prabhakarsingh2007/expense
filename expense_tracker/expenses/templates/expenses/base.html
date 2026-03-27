@@ -4,7 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pocket | Expense Tracker</title>
+    <title>
+        {% block meta_title %}
+            {% if request.resolver_match.url_name == 'dashboard' %}Dashboard | KharchaGraph
+            {% elif request.resolver_match.url_name == 'add_expense' %}Add Expense | KharchaGraph
+            {% elif request.resolver_match.url_name == 'edit_expense' %}Edit Expense | KharchaGraph
+            {% elif request.resolver_match.url_name == 'search' %}Expense History | KharchaGraph
+            {% elif request.resolver_match.url_name == 'report' %}Expense Reports & Analytics | KharchaGraph
+            {% elif request.resolver_match.url_name == 'set_budget' %}Set Monthly Budget | KharchaGraph
+            {% elif request.resolver_match.url_name == 'manage_categories' %}Manage Categories | KharchaGraph
+            {% elif request.resolver_match.url_name == 'recurring_expenses' %}Recurring Expenses | KharchaGraph
+            {% elif request.resolver_match.url_name == 'about_me' %}About KharchaGraph
+            {% elif request.resolver_match.url_name == 'login' %}Login | KharchaGraph
+            {% elif request.resolver_match.url_name == 'signup' %}Sign Up | KharchaGraph
+            {% else %}KharchaGraph | Budget & Spending Manager
+            {% endif %}
+        {% endblock %}
+    </title>
+    <meta name="description" content="{% block meta_description %}{% if request.resolver_match.url_name == 'dashboard' %}Track daily spending, view monthly summaries, and stay in control of your budget with KharchaGraph dashboard.{% elif request.resolver_match.url_name == 'add_expense' %}Add your daily expenses quickly with category and payment details in KharchaGraph to improve money management.{% elif request.resolver_match.url_name == 'edit_expense' %}Update your expense records anytime to keep your personal finance data accurate in KharchaGraph.{% elif request.resolver_match.url_name == 'search' %}Search and filter expense history by date, category, and amount to understand where your money goes.{% elif request.resolver_match.url_name == 'report' %}Analyze spending trends with smart charts and reports to plan savings and improve financial habits.{% elif request.resolver_match.url_name == 'set_budget' %}Set a monthly budget and monitor progress so you can avoid overspending and save more every month.{% elif request.resolver_match.url_name == 'manage_categories' %}Create and manage expense categories for better organization and faster tracking of personal and family spending.{% elif request.resolver_match.url_name == 'recurring_expenses' %}Manage recurring expenses like rent, subscriptions, and bills so no important payment is missed.{% elif request.resolver_match.url_name == 'about_me' %}Learn about KharchaGraph and how it helps users track expenses, plan budgets, and improve savings.{% elif request.resolver_match.url_name == 'login' %}Login to your KharchaGraph account to manage your budget, expenses, and reports securely.{% elif request.resolver_match.url_name == 'signup' %}Create a free KharchaGraph account and start tracking expenses, budgets, and savings goals today.{% else %}KharchaGraph helps you manage expenses, track budgets, and analyze spending with simple personal finance tools.{% endif %}{% endblock %}">
+    <meta name="author" content="KharchaGraph Team">
+    <meta name="creator" content="KharchaGraph Team">
+    <meta name="keywords" content="{% block meta_keywords %}expense tracker, budget planner, personal finance, money management, spending tracker, monthly budget, recurring expenses, expense report, savings planner{% endblock %}">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="KharchaGraph">
+    <meta property="og:title" content="{% block og_title %}{% if request.resolver_match.url_name == 'dashboard' %}Dashboard | KharchaGraph{% elif request.resolver_match.url_name == 'report' %}Expense Reports & Analytics | KharchaGraph{% elif request.resolver_match.url_name == 'search' %}Expense History | KharchaGraph{% else %}KharchaGraph | Budget & Spending Manager{% endif %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{% if request.resolver_match.url_name == 'report' %}See visual expense analytics and spending trends to make smarter budget decisions.{% else %}Track expenses, manage budgets, and improve savings with KharchaGraph.{% endif %}{% endblock %}">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -27,7 +52,7 @@
 
     <header class="hidden lg:block glass-effect sticky top-0 z-50 border-b border-slate-100 px-8 py-4">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
-            <a href="{% url 'dashboard' %}" class="text-2xl font-black text-indigo-600 tracking-tighter italic no-underline">Pocket.</a>
+            <a href="{% url 'dashboard' %}" class="text-2xl font-black text-indigo-600 tracking-tighter italic no-underline">KharchaGraph</a>
             
             <nav class="flex items-center gap-2">
                 <a href="{% url 'dashboard' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">Dashboard</a>
@@ -46,7 +71,7 @@
     </header>
 
     <header class="lg:hidden glass-effect sticky top-0 z-50 border-b border-slate-100 px-5 py-4 flex justify-between items-center">
-        <span class="text-xl font-black text-indigo-600 italic">Pocket.</span>
+        <span class="text-xl font-black text-indigo-600 italic">KharchaGraph</span>
         <div class="flex items-center gap-5">
             <a href="{% url 'export_csv' %}" class="text-emerald-500 no-underline flex items-center gap-1">
                 <i class="fas fa-file-arrow-down text-xl"></i>
