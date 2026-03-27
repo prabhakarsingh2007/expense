@@ -1,4 +1,5 @@
 {% extends 'expenses/base.html' %}
+{% load static %}
 
 {% block content %}
 <section class="relative overflow-hidden rounded-3xl border border-slate-100 bg-gradient-to-br from-indigo-50 via-white to-cyan-50 p-6 md:p-10 mb-8">
@@ -6,6 +7,15 @@
     <div class="absolute -bottom-14 -left-10 w-40 h-40 rounded-full bg-cyan-100/70 blur-2xl"></div>
 
     <div class="relative max-w-3xl">
+        <div class="inline-flex items-center gap-3 bg-white/70 border border-indigo-100 rounded-2xl px-4 py-2">
+            <img
+                src="{% static 'expenses_tracker/images/logo.png' %}"
+                alt="KharchaBook logo"
+                class="h-8 w-auto"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+            >
+            <span class="text-lg font-black text-emerald-700" style="display:none;">KharchaBook</span>
+        </div>
         <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wide">KharchaGraph Platform</span>
         <h1 class="mt-4 text-3xl md:text-5xl font-black tracking-tight text-slate-900 leading-tight">
             Smart Expense Tracker for Daily Kharcha, Budget, and Savings Planning.
