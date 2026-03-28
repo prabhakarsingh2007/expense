@@ -138,9 +138,9 @@
                 <span class="text-[8px] font-black uppercase tracking-tighter">Stats</span>
             </a>
 
-            <a href="{% url 'about_me' %}" class="flex flex-col items-center gap-1 w-12 transition-all {% if request.resolver_match.url_name == 'about_me' %}text-emerald-600{% else %}text-slate-400{% endif %} no-underline">
-                <i class="fas fa-circle-info text-xl"></i>
-                <span class="text-[8px] font-black uppercase tracking-tighter">About</span>
+            <a href="{% url 'manage_categories' %}" class="flex flex-col items-center gap-1 w-12 transition-all {% if request.resolver_match.url_name == 'manage_categories' %}text-emerald-600{% else %}text-slate-400{% endif %} no-underline">
+                <i class="fas fa-tags text-xl"></i>
+                <span class="text-[8px] font-black uppercase tracking-tighter">Category</span>
             </a>
         </div>
     </nav>

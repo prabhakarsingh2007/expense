@@ -18,6 +18,24 @@ import csv
 from .models import Expense, Budget, CustomCategory, MonthlyBudget, RecurringExpense
 
 
+DEFAULT_CATEGORIES = [
+    ('Food', '🍔'),
+    ('Transport', '🚕'),
+    ('Phone', '📱'),
+    ('Shopping', '🛍️'),
+    ('Bills', '💡'),
+]
+
+
+def _ensure_default_categories(user):
+    for name, icon in DEFAULT_CATEGORIES:
+        CustomCategory.objects.get_or_create(
+            user=user,
+            name=name,
+            defaults={'icon': icon},
+        )
+
+
 # ---------------- AUTH ---------------- #
 
 def _expense_date_bounds():
@@ -100,7 +118,8 @@ def signup(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            _ensure_default_categories(user)
             messages.success(request, 'Account created!')
             return redirect('login')
     else:
@@ -150,6 +169,7 @@ def logout_view(request):
 @login_required
 def dashboard(request):
     _sync_recurring_expenses(request.user)
+    _ensure_default_categories(request.user)
 
     all_user_expenses = Expense.objects.filter(user=request.user)
     expenses = all_user_expenses.select_related('category').order_by('-date')[:10]
@@ -249,8 +269,9 @@ def dashboard(request):
 @login_required
 def add_expense(request):
     _sync_recurring_expenses(request.user)
+    _ensure_default_categories(request.user)
 
-    categories = CustomCategory.objects.filter(user=request.user)
+    categories = CustomCategory.objects.filter(user=request.user).order_by('name')
     min_date, max_date = _expense_date_bounds()
 
     if request.method == 'POST':
@@ -445,8 +466,9 @@ def report(request):
 
 @login_required
 def edit_expense(request, id):
+    _ensure_default_categories(request.user)
     expense = get_object_or_404(Expense, id=id, user=request.user)
-    categories = CustomCategory.objects.filter(user=request.user)
+    categories = CustomCategory.objects.filter(user=request.user).order_by('name')
     min_date, max_date = _expense_date_bounds()
 
     if request.method == 'POST':
@@ -518,6 +540,7 @@ def delete_expense(request, id):
 @login_required
 def search_expenses(request):
     _sync_recurring_expenses(request.user)
+    _ensure_default_categories(request.user)
 
     query = request.GET.get('q', '').strip()
     category_id = request.GET.get('category', '').strip()
@@ -601,7 +624,8 @@ def export_csv(request):
 
 @login_required
 def manage_categories(request):
-    categories = CustomCategory.objects.filter(user=request.user)
+    _ensure_default_categories(request.user)
+    categories = CustomCategory.objects.filter(user=request.user).order_by('name')
 
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -646,7 +670,8 @@ def delete_recurring_expense(request, id):
 
 @login_required
 def set_budget(request):
-    categories = CustomCategory.objects.filter(user=request.user)
+    _ensure_default_categories(request.user)
+    categories = CustomCategory.objects.filter(user=request.user).order_by('name')
     budgets = Budget.objects.filter(user=request.user).select_related('category').order_by('-month')
     monthly_budgets = MonthlyBudget.objects.filter(user=request.user).order_by('-month')
     monthly_budget_rows = [
