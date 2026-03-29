@@ -11,7 +11,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-^ren1#t_zegg@28s(ae!dvczpcpe%rr313q7x212q2gh)1!w82'
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'  # ✅ ENVIRONMENT VARIABLE
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    'expense-18lc.onrender.com', 
+    '.onrender.com', 
+    '127.0.0.1', 
+    'localhost'
+]
 
 # Application definition
 INSTALLED_APPS = [
@@ -100,3 +105,8 @@ LOGOUT_REDIRECT_URL = '/'
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Isse Instagram aur Render ke beech ka connection secure ho jayega
+CSRF_TRUSTED_ORIGINS = [
+    'https://expense-18lc.onrender.com',
+]
