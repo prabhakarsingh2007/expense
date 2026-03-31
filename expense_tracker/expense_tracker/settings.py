@@ -63,11 +63,14 @@ TEMPLATES = [
 WSGI_APPLICATION = 'expense_tracker.wsgi.application'
 
 # Database
+import dj_database_url
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default='postgresql://neondb_owner:npg_i5KBcJNkROh2@ep-old-breeze-a10mhw3w-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+        conn_max_age=600,
+        ssl_require=True
+    )
 }
 
 # Password validation
@@ -113,7 +116,11 @@ CSRF_TRUSTED_ORIGINS = [
 
 
 # Force HTTPS for Instagram and other external browsers
-SECURE_SSL_REDIRECT = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
+if not DEBUG:
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+else:
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
