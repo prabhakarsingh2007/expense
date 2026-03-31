@@ -12,10 +12,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^ren1#t_zegg@28s(ae!dvczpcpe%rr313q7x212q2gh)1!w82'
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'  # ✅ ENVIRONMENT VARIABLE
 ALLOWED_HOSTS = [
-    'expense-18lc.onrender.com', 
-    '.onrender.com', 
-    '127.0.0.1', 
-    'localhost'
+    "kharchagraph.in",
+    "www.kharchagraph.in",
+    "expense-18lc.onrender.com"
 ]
 
 # Application definition
@@ -101,6 +100,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]  # ✅ Static folder
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'  # ✅ WHITENOISE STORAGE
 
+
 # Login Settings
 LOGIN_URL = '/'
 LOGIN_REDIRECT_URL = '/dashboard/'
@@ -112,6 +112,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Isse Instagram aur Render ke beech ka connection secure ho jayega
 CSRF_TRUSTED_ORIGINS = [
     'https://expense-18lc.onrender.com',
+    'https://kharchagraph.in',
+    'https://www.kharchagraph.in',
 ]
 
 
