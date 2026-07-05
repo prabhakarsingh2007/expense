@@ -4,18 +4,15 @@ Django settings for expense_tracker project.
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-^ren1#t_zegg@28s(ae!dvczpcpe%rr313q7x212q2gh)1!w82'
-DEBUG = os.environ.get('DEBUG', 'True') == 'True'  # ✅ ENVIRONMENT VARIABLE
-ALLOWED_HOSTS = [
-    "kharchagraph.in",
-    "www.kharchagraph.in",
-    "expense-18lc.onrender.com"
-]
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=True, cast=bool)
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='').split(',')
 
 # Application definition
 INSTALLED_APPS = [
@@ -62,15 +59,21 @@ TEMPLATES = [
 WSGI_APPLICATION = 'expense_tracker.wsgi.application'
 
 # Database
-import dj_database_url
-
-DATABASES = {
-    'default': dj_database_url.config(
-        default='postgresql://neondb_owner:npg_i5KBcJNkROh2@ep-old-breeze-a10mhw3w-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
-        conn_max_age=600,
-        ssl_require=True
-    )
-}
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+else:
+    DATABASES = {
+        'default': dj_database_url.config(
+            default='postgresql://neondb_owner:npg_i5KBcJNkROh2@ep-old-breeze-a10mhw3w-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require',
+            conn_max_age=600,
+            ssl_require=True,
+        )
+    }
 
 # Password validation
 AUTH_PASSWORD_VALIDATORS = [
@@ -122,6 +125,7 @@ if not DEBUG:
     SECURE_SSL_REDIRECT = True
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
 else:
     SECURE_SSL_REDIRECT = False
     SESSION_COOKIE_SECURE = False

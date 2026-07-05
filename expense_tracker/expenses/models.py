@@ -28,10 +28,18 @@ class Budget(models.Model):
         decimal_places=2,
         validators=[MinValueValidator(0)]
     )
-    month = models.DateField()   # ✅ better than CharField
+    month = models.DateField()   #  better than CharField
 
     def __str__(self):
         return f"{self.user} - {self.category.name} - ₹{self.amount}"
+
+    class Meta:
+        unique_together = ("user", "category", "month")
+        indexes = [
+            models.Index(fields=["user"]),
+            models.Index(fields=["category"]),
+            models.Index(fields=["month"]),
+        ]
 
 
 class MonthlyBudget(models.Model):
@@ -92,6 +100,12 @@ class Expense(models.Model):
     def __str__(self):
         return f"{self.category.name} - ₹{self.amount}"
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["date"]),
+            models.Index(fields=["user"]),
+        ]
+
 
 class RecurringExpense(models.Model):
     DAILY = 'daily'
@@ -121,3 +135,8 @@ class RecurringExpense(models.Model):
 
     def __str__(self):
         return f"{self.category.name} - ₹{self.amount} ({self.frequency})"
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["next_run_date"]),
+        ]
