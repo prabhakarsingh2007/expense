@@ -2,114 +2,108 @@
 {% load static %}
 
 {% block content %}
-<div style="min-height:78vh;display:flex;align-items:center;justify-content:center;padding:1.5rem 1rem;">
-<div class="animate-in" style="width:100%;max-width:480px;">
+<div class="min-h-[85vh] flex items-center justify-center px-4 py-12">
+    <div class="w-full max-w-[480px] relative group">
+        
+        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-sky-500 rounded-[3rem] blur opacity-15 group-hover:opacity-30 transition duration-1000"></div>
+        
+        <div class="relative bg-white border border-slate-100 rounded-[2.5rem] shadow-2xl shadow-indigo-100/50 overflow-hidden">
+            
+            <div class="h-2 bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-400"></div>
 
-    <!-- Logo + Heading -->
-    <div style="text-align:center;margin-bottom:2rem;">
-        <img src="https://googleusercontent.com/image_generation_content/3"
-             alt="KharchaGraph"
-             style="height:60px;width:auto;margin:0 auto 1rem;display:block;"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-        <div style="display:none;width:60px;height:60px;background:var(--grad-brand);border-radius:18px;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:var(--sh-brand);">
-            <i class="fas fa-chart-line" style="color:white;font-size:1.5rem;"></i>
-        </div>
-        <h1 style="font-size:1.7rem;font-weight:800;color:var(--text-h);letter-spacing:-0.025em;margin-bottom:0.3rem;">Create Your Account ✨</h1>
-        <p style="color:var(--text-m);font-size:0.88rem;font-weight:500;">Free mein join karo aur tracking shuru karo</p>
-    </div>
-
-    <!-- Card -->
-    <div style="background:var(--surface);border-radius:var(--r-2xl);border:1.5px solid var(--border-soft);box-shadow:var(--sh-xl);overflow:hidden;">
-        <!-- Accent top bar -->
-        <div style="height:4px;background:var(--grad-brand);"></div>
-
-        <div style="padding:2rem 2rem 1.75rem;">
-
-            {% if form.non_field_errors %}
-            <div class="kc-alert error" style="margin-bottom:1.25rem;">
-                <i class="fas fa-circle-xmark"></i>
-                {% for err in form.non_field_errors %}{{ err }}{% endfor %}
-            </div>
-            {% endif %}
-
-            <form method="post" autocomplete="off" class="signup-form">
-                {% csrf_token %}
-
-                <div style="display:flex;flex-direction:column;gap:1.1rem;">
-                    {% for field in form %}
-                    <div>
-                        <label class="kc-label">{{ field.label }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                        <p style="color:var(--r-500);font-size:0.75rem;font-weight:600;margin-top:4px;">
-                            <i class="fas fa-triangle-exclamation"></i> {{ field.errors.0 }}
-                        </p>
-                        {% endif %}
-                        {% if field.help_text %}
-                        <p style="color:var(--text-m);font-size:0.72rem;margin-top:4px;line-height:1.5;font-style:italic;">{{ field.help_text|safe }}</p>
-                        {% endif %}
+            <div class="p-8 md:p-12">
+                <div class="text-center mb-10">
+                    <div class="inline-flex items-center justify-center w-20 h-20 bg-slate-50 text-indigo-600 rounded-3xl mb-6 shadow-inner border border-slate-100/50">
+                        <i class="fas fa-user-plus text-3xl"></i>
                     </div>
-                    {% endfor %}
+                    <h3 class="text-3xl font-black text-slate-800 tracking-tight">Create Account</h3>
+                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mt-3">Join the Budget Studio</p>
                 </div>
 
-                <!-- Submit -->
-                <button type="submit"
-                    style="width:100%;margin-top:1.75rem;padding:0.9rem;background:var(--grad-brand);color:white;font-weight:800;font-size:0.95rem;letter-spacing:0.03em;border:none;border-radius:var(--r-md);cursor:pointer;box-shadow:var(--sh-brand);transition:all var(--t-base) var(--ease);display:flex;align-items:center;justify-content:center;gap:0.5rem;"
-                    onmouseover="this.style.filter='brightness(1.1)';this.style.transform='translateY(-1px)';this.style.boxShadow='0 14px 36px rgba(99,102,241,0.45)';"
-                    onmouseout="this.style.filter='';this.style.transform='';this.style.boxShadow='var(--sh-brand)';"
-                    onmousedown="this.style.transform='scale(0.97)';"
-                    onmouseup="this.style.transform='translateY(-1px)';">
-                    <i class="fas fa-rocket"></i> Start Your Journey
-                </button>
-            </form>
+                {% if form.non_field_errors %}
+                <div class="mb-6 p-4 bg-rose-50 border border-rose-100 rounded-2xl">
+                    {% for error in form.non_field_errors %}
+                        <p class="text-xs font-bold text-rose-600 flex items-center gap-2">
+                            <i class="fas fa-circle-exclamation"></i> {{ error }}
+                        </p>
+                    {% endfor %}
+                </div>
+                {% endif %}
 
-            <!-- Divider -->
-            <div style="display:flex;align-items:center;gap:0.75rem;margin:1.5rem 0 1.25rem;">
-                <div style="flex:1;height:1px;background:var(--border-soft);"></div>
-                <span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-m);">ya</span>
-                <div style="flex:1;height:1px;background:var(--border-soft);"></div>
+                <form method="post" class="space-y-5">
+                    {% csrf_token %}
+                    
+                    <div class="space-y-4 auth-form-custom">
+                        {% for field in form %}
+                            <div class="relative">
+                                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 ml-1">
+                                    {{ field.label }}
+                                </label>
+                                
+                                {{ field }}
+                                
+                                {% if field.errors %}
+                                    <div class="flex items-center gap-1.5 mt-2 ml-1 text-rose-500">
+                                        <i class="fas fa-circle-exclamation text-[10px]"></i>
+                                        <p class="text-[10px] font-bold">{{ field.errors.0 }}</p>
+                                    </div>
+                                {% endif %}
+
+                                {% if field.help_text %}
+                                    <div class="mt-2 px-1 text-slate-400 text-[9px] leading-relaxed italic font-medium opacity-80">
+                                        {{ field.help_text|safe }}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-slate-200 hover:bg-black transition-all transform active:scale-[0.97] mt-6">
+                        Start Your Journey
+                    </button>
+                </form>
+
+                <div class="mt-10 pt-8 border-t border-slate-50 text-center">
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                        Already have an account? 
+                        <a href="{% url 'login' %}" class="text-indigo-600 hover:text-indigo-800 transition-all ml-1 underline underline-offset-4 decoration-2 decoration-indigo-100 hover:decoration-indigo-500">
+                            Login here
+                        </a>
+                    </p>
+                </div>
             </div>
-
-            <p style="text-align:center;font-size:0.875rem;color:var(--text-s);">
-                Pehle se account hai?&nbsp;
-                <a href="{% url 'login' %}" style="color:var(--p-500);font-weight:700;text-decoration:none;" onmouseover="this.style.color='var(--p-700)'" onmouseout="this.style.color='var(--p-500)'">Login karo →</a>
-            </p>
         </div>
     </div>
-
-    <p style="text-align:center;margin-top:1.25rem;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-m);opacity:0.5;">
-        KharchaGraph &mdash; Smart Finance
-    </p>
-</div>
 </div>
 
 <style>
-/* Django form field styling – consistent with design system */
-.signup-form input,
-.signup-form select,
-.signup-form textarea {
-    width: 100% !important;
-    padding: 0.78rem 1rem !important;
-    border: 1.5px solid var(--border) !important;
-    border-radius: var(--r-md) !important;
-    font-size: 0.9rem !important;
-    font-weight: 500 !important;
-    color: var(--text-h) !important;
-    background: var(--surface) !important;
-    outline: none !important;
-    font-family: 'Plus Jakarta Sans', system-ui, sans-serif !important;
-    transition: all 0.22s !important;
-    appearance: none;
-    box-sizing: border-box !important;
-}
-.signup-form input:focus,
-.signup-form select:focus,
-.signup-form textarea:focus {
-    border-color: var(--p-500) !important;
-    box-shadow: 0 0 0 3px rgba(99,102,241,0.14) !important;
-    background: #fff !important;
-}
-.signup-form input::placeholder { color: var(--n-300) !important; }
-.signup-form ul { list-style: none !important; margin: 0 !important; padding: 0 !important; }
+    /* Premium Input Styling for Django Form Fields */
+    .auth-form-custom input, 
+    .auth-form-custom select, 
+    .auth-form-custom textarea {
+        width: 100% !important;
+        padding: 1rem 1.25rem !important;
+        background-color: #f8fafc !important; /* slate-50 */
+        border: 2px solid #f1f5f9 !important; /* slate-100 */
+        border-radius: 1.25rem !important;
+        font-size: 0.875rem !important;
+        font-weight: 700 !important;
+        color: #1e293b !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    }
+
+    .auth-form-custom input:focus {
+        background-color: #ffffff !important;
+        border-color: #e0e7ff !important; /* indigo-100 */
+        outline: none !important;
+        box-shadow: 0 0 0 4px rgba(238, 242, 255, 0.8) !important;
+    }
+
+    /* Clean up Django help text lists if they appear */
+    .auth-form-custom ul {
+        margin-top: 0.5rem;
+        padding-left: 0.5rem;
+        list-style-type: none;
+    }
 </style>
 {% endblock %}

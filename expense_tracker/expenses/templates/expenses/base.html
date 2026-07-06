@@ -4,106 +4,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>{% block meta_title %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph | Smart Expense Tracker{% elif request.resolver_match.url_name == 'dashboard' %}Dashboard | KharchaGraph{% elif request.resolver_match.url_name == 'add_expense' %}Add Expense | KharchaGraph{% elif request.resolver_match.url_name == 'edit_expense' %}Edit Expense | KharchaGraph{% elif request.resolver_match.url_name == 'search' %}History | KharchaGraph{% elif request.resolver_match.url_name == 'report' %}Analytics | KharchaGraph{% elif request.resolver_match.url_name == 'set_budget' %}Set Budget | KharchaGraph{% elif request.resolver_match.url_name == 'manage_categories' %}Categories | KharchaGraph{% elif request.resolver_match.url_name == 'recurring_expenses' %}Recurring | KharchaGraph{% elif request.resolver_match.url_name == 'about_me' %}About | KharchaGraph{% elif request.resolver_match.url_name == 'login' %}Login | KharchaGraph{% elif request.resolver_match.url_name == 'signup' %}Sign Up | KharchaGraph{% else %}KharchaGraph{% endif %}{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}KharchaGraph – Smart personal finance tracker for daily expenses, budget management and savings.{% endblock %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="{% static 'css/base.css' %}">
-    {% block extra_head %}{% endblock %}
-</head>
-<body>
-
-<!-- ══ DESKTOP HEADER ════════════════════════════════════ -->
-<header class="hidden lg:block glass sticky top-0 z-50">
-    <div style="max-width:1280px;margin:0 auto;padding:0.85rem 2rem;display:flex;justify-content:space-between;align-items:center;">
-
-        <!-- Brand -->
-        <a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}"
-           style="display:flex;align-items:center;gap:0.65rem;text-decoration:none;">
-            <img src="https://googleusercontent.com/image_generation_content/3"
-                 alt="KharchaGraph"
-                 style="height:38px;width:auto;"
-                 onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
-            <span style="display:none;font-size:1.4rem;font-weight:900;background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-0.03em;font-style:italic;">KharchaGraph</span>
-        </a>
-
-        <!-- Nav -->
-        <nav style="display:flex;align-items:center;gap:0.25rem;">
-            {% if request.user.is_authenticated %}
-            <a href="{% url 'dashboard' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}"><i class="fas fa-house-chimney"></i> Dashboard</a>
-            <a href="{% url 'search' %}"    class="nav-link {% if request.resolver_match.url_name == 'search' %}active{% endif %}"><i class="fas fa-receipt"></i> History</a>
-            <a href="{% url 'report' %}"    class="nav-link {% if request.resolver_match.url_name == 'report' %}active{% endif %}"><i class="fas fa-chart-pie"></i> Analytics</a>
-            <a href="{% url 'manage_categories' %}" class="nav-link {% if request.resolver_match.url_name == 'manage_categories' %}active{% endif %}"><i class="fas fa-tags"></i> Categories</a>
-            <a href="{% url 'about_me' %}"  class="nav-link {% if request.resolver_match.url_name == 'about_me' %}active{% endif %}"><i class="fas fa-circle-info"></i> About</a>
-            <div style="width:1px;height:22px;background:var(--border);margin:0 0.5rem;"></div>
-            <a href="{% url 'add_expense' %}" class="btn btn-primary" style="padding:0.5rem 1.1rem;font-size:0.82rem;"><i class="fas fa-plus"></i> Add</a>
-            <a href="{% url 'logout' %}" class="btn btn-ghost" style="padding:0.5rem 1rem;font-size:0.82rem;margin-left:4px;"><i class="fas fa-sign-out-alt"></i> Logout</a>
-            {% else %}
-            <a href="{% url 'about_me' %}" class="nav-link">About</a>
-            <a href="{% url 'login' %}"  class="btn btn-ghost"   style="padding:0.5rem 1rem;font-size:0.82rem;">Login</a>
-            <a href="{% url 'signup' %}" class="btn btn-primary" style="padding:0.5rem 1.1rem;font-size:0.82rem;">Sign Up</a>
+    <title>
+        {% block meta_title %}
+            {% if request.resolver_match.url_name == 'home' %}KharchaGraph | Smart Expense Tracker
+            {% elif request.resolver_match.url_name == 'dashboard' %}Dashboard | KharchaGraph
+            {% elif request.resolver_match.url_name == 'add_expense' %}Add Expense | KharchaGraph
+            {% elif request.resolver_match.url_name == 'edit_expense' %}Edit Expense | KharchaGraph
+            {% elif request.resolver_match.url_name == 'search' %}Expense History | KharchaGraph
+            {% elif request.resolver_match.url_name == 'report' %}Expense Reports & Analytics | KharchaGraph
+            {% elif request.resolver_match.url_name == 'set_budget' %}Set Monthly Budget | KharchaGraph
+            {% elif request.resolver_match.url_name == 'manage_categories' %}Manage Categories | KharchaGraph
+            {% elif request.resolver_match.url_name == 'recurring_expenses' %}Recurring Expenses | KharchaGraph
+            {% elif request.resolver_match.url_name == 'about_me' %}About KharchaGraph
+            {% elif request.resolver_match.url_name == 'login' %}Login | KharchaGraph
+            {% elif request.resolver_match.url_name == 'signup' %}Sign Up | KharchaGraph
+            {% else %}KharchaGraph | Budget & Spending Manager
             {% endif %}
-        </nav>
-    </div>
-</header>
+        {% endblock %}
+    </title>
+    <meta name="description" content="{% block meta_description %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph is a smart expense tracker to manage daily kharcha, monthly budgets, recurring bills, and spending insights in one place.{% elif request.resolver_match.url_name == 'dashboard' %}Track daily spending, view monthly summaries, and stay in control of your budget with KharchaGraph dashboard.{% elif request.resolver_match.url_name == 'add_expense' %}Add your daily expenses quickly with category and payment details in KharchaGraph to improve money management.{% elif request.resolver_match.url_name == 'edit_expense' %}Update your expense records anytime to keep your personal finance data accurate in KharchaGraph.{% elif request.resolver_match.url_name == 'search' %}Search and filter expense history by date, category, and amount to understand where your money goes.{% elif request.resolver_match.url_name == 'report' %}Analyze spending trends with smart charts and reports to plan savings and improve financial habits.{% elif request.resolver_match.url_name == 'set_budget' %}Set a monthly budget and monitor progress so you can avoid overspending and save more every month.{% elif request.resolver_match.url_name == 'manage_categories' %}Create and manage expense categories for better organization and faster tracking of personal and family spending.{% elif request.resolver_match.url_name == 'recurring_expenses' %}Manage recurring expenses like rent, subscriptions, and bills so no important payment is missed.{% elif request.resolver_match.url_name == 'about_me' %}Learn about KharchaGraph and how it helps users track expenses, plan budgets, and improve savings.{% elif request.resolver_match.url_name == 'login' %}Login to your KharchaGraph account to manage your budget, expenses, and reports securely.{% elif request.resolver_match.url_name == 'signup' %}Create a free KharchaGraph account and start tracking expenses, budgets, and savings goals today.{% else %}KharchaGraph helps you manage expenses, track budgets, and analyze spending with simple personal finance tools.{% endif %}{% endblock %}">
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-<!-- ══ MOBILE HEADER ═════════════════════════════════════ -->
-<header class="lg:hidden glass sticky top-0 z-50" style="padding:0.85rem 1.25rem;display:flex;justify-content:space-between;align-items:center;">
-    <a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}"
-       style="display:flex;align-items:center;gap:0.5rem;text-decoration:none;">
-        <img src="https://googleusercontent.com/image_generation_content/3"
-             alt="KharchaGraph"
-             style="height:32px;width:auto;"
-             onerror="this.style.display='none';this.nextElementSibling.style.display='inline';">
-        <span style="display:none;font-size:1.1rem;font-weight:900;background:var(--grad-brand);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;font-style:italic;">KharchaGraph</span>
-    </a>
-    <div style="display:flex;align-items:center;gap:0.75rem;">
-        <a href="{% url 'about_me' %}" class="nav-link {% if request.resolver_match.url_name == 'about_me' %}active{% endif %}" style="padding:0.4rem 0.65rem;font-size:0.82rem;"><i class="fas fa-circle-info"></i></a>
-        {% if request.user.is_authenticated %}
-        <a href="{% url 'logout' %}" style="color:var(--text-m);font-size:1.1rem;text-decoration:none;padding:0.3rem;"><i class="fas fa-sign-out-alt"></i></a>
-        {% endif %}
-    </div>
-</header>
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+<style>
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            -webkit-tap-highlight-color: transparent;
+        }
+        .glass-effect { 
+            background: rgba(255, 255, 255, 0.9); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+        }
+    </style>
+</head>
 
-<!-- ══ MAIN ═══════════════════════════════════════════════ -->
-<main style="max-width:1280px;margin:0 auto;padding:1.75rem 1.25rem 2.5rem;">
-    {% if messages %}
-    <div style="margin-bottom:1.5rem;" class="animate-up">
-        {% for message in messages %}
-        <div class="kc-alert {% if message.tags == 'error' %}error{% elif message.tags == 'warning' %}warning{% elif message.tags == 'info' %}info{% else %}success{% endif %}" style="margin-bottom:0.5rem;">
-            <i class="fas {% if message.tags == 'error' %}fa-circle-xmark{% elif message.tags == 'warning' %}fa-triangle-exclamation{% else %}fa-circle-check{% endif %}"></i>
-            {{ message }}
+<body class="bg-[#f8fafc] text-slate-900">
+
+    <header class="hidden lg:block glass-effect sticky top-0 z-50 border-b border-slate-100 px-8 py-4">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}" class="flex items-center gap-3 no-underline">
+                <img
+                    src="https://googleusercontent.com/image_generation_content/3"
+                    alt="KharchaGraph logo"
+                    class="h-10 w-auto"
+                    onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+                >
+                <span class="text-2xl font-black text-emerald-600 tracking-tighter italic" style="display:none;">KharchaGraph</span>
+            </a>
+            
+            <nav class="flex items-center gap-2">
+                {% if request.user.is_authenticated %}
+                <a href="{% url 'dashboard' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">Dashboard</a>
+                <a href="{% url 'search' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">History</a>
+                <a href="{% url 'report' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">Analytics</a>
+                <a href="{% url 'manage_categories' %}" class="px-4 py-2 text-sm font-bold {% if request.resolver_match.url_name == 'manage_categories' %}text-emerald-600 bg-emerald-50{% else %}text-slate-600 hover:bg-slate-50{% endif %} rounded-xl no-underline">Categories</a>
+                
+                <a href="{% url 'about_me' %}" class="px-4 py-2 text-sm font-bold {% if request.resolver_match.url_name == 'about_me' %}text-emerald-600 bg-emerald-50{% else %}text-slate-600 hover:bg-slate-50{% endif %} rounded-xl no-underline inline-flex items-center gap-2">
+                    <i class="fas fa-circle-info"></i>
+                    <span>About</span>
+                </a>
+
+                <div class="h-6 w-[1px] bg-slate-200 mx-2"></div>
+                <a href="{% url 'logout' %}" class="text-rose-500 font-bold text-sm no-underline">Logout</a>
+                {% else %}
+                <a href="{% url 'about_me' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline inline-flex items-center gap-2">
+                    <i class="fas fa-circle-info"></i>
+                    <span>About</span>
+                </a>
+                {% endif %}
+            </nav>
         </div>
-        {% endfor %}
-    </div>
-    {% endif %}
-    {% block content %}{% endblock %}
-</main>
+    </header>
 
-<!-- ══ MOBILE BOTTOM NAV ══════════════════════════════════ -->
-{% if request.user.is_authenticated %}
-<nav class="lg:hidden glass pb-safe" style="position:fixed;bottom:0;left:0;right:0;z-index:100;border-top:1px solid var(--border-soft);padding-top:0.6rem;">
-    <div style="display:flex;justify-content:space-around;align-items:flex-end;padding:0 0.5rem;">
-        <a href="{% url 'dashboard' %}" id="bn-home" class="bottom-nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-            <i class="fas fa-house-chimney"></i><span>Home</span>
+    <header class="lg:hidden glass-effect sticky top-0 z-50 border-b border-slate-100 px-5 py-4 flex justify-between items-center">
+        <a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}" class="no-underline flex items-center gap-2">
+            <img
+                src="https://googleusercontent.com/image_generation_content/3"
+                alt="KharchaBook logo"
+                class="h-8 w-auto"
+                onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+            >
+            <span class="text-xl font-black text-emerald-600 italic" style="display:none;">KharchaGraph</span>
         </a>
-        <a href="{% url 'search' %}" id="bn-hist" class="bottom-nav-link {% if request.resolver_match.url_name == 'search' %}active{% endif %}">
-            <i class="fas fa-receipt"></i><span>History</span>
-        </a>
-        <a href="{% url 'add_expense' %}" id="bn-add" class="bottom-nav-fab">
-            <i class="fas fa-plus"></i>
-        </a>
-        <a href="{% url 'report' %}" id="bn-stat" class="bottom-nav-link {% if request.resolver_match.url_name == 'report' %}active{% endif %}">
-            <i class="fas fa-chart-pie"></i><span>Stats</span>
-        </a>
-        <a href="{% url 'manage_categories' %}" id="bn-cat" class="bottom-nav-link {% if request.resolver_match.url_name == 'manage_categories' %}active{% endif %}">
-            <i class="fas fa-tags"></i><span>Category</span>
-        </a>
-    </div>
-</nav>
-{% endif %}
+        <div class="flex items-center gap-4">
+            <a href="{% url 'about_me' %}" class="{% if request.resolver_match.url_name == 'about_me' %}text-emerald-600{% else %}text-slate-600{% endif %} no-underline flex flex-col items-center leading-none gap-0.5">
+                <i class="fas fa-circle-info text-base"></i>
+                <span class="text-[10px] font-bold">About</span>
+            </a>
+            {% if request.user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="text-slate-400 text-lg"><i class="fas fa-sign-out-alt"></i></a>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-32 lg:pb-10">
+        {% if messages %}
+            <div class="mb-6 space-y-2">
+                {% for message in messages %}
+                    <div class="p-4 rounded-2xl border text-xs font-bold shadow-sm {% if message.tags == 'error' %}bg-rose-50 border-rose-100 text-rose-700{% else %}bg-emerald-50 border-emerald-100 text-emerald-700{% endif %}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    {% if request.user.is_authenticated %}
+    <nav class="lg:hidden fixed bottom-0 left-0 right-0 glass-effect border-t border-slate-100 px-1 py-3 z-[100] pb-safe">
+        <div class="flex justify-around items-end">
+            <a href="{% url 'dashboard' %}" class="flex flex-col items-center gap-1 w-12 transition-all {% if request.resolver_match.url_name == 'dashboard' %}text-emerald-600{% else %}text-slate-400{% endif %} no-underline">
+                <i class="fas fa-house-chimney text-xl"></i>
+                <span class="text-[8px] font-black uppercase tracking-tighter">Home</span>
+            </a>
+            
+            <a href="{% url 'search' %}" class="flex flex-col items-center gap-1 w-12 transition-all {% if request.resolver_match.url_name == 'search' %}text-emerald-600{% else %}text-slate-400{% endif %} no-underline">
+                <i class="fas fa-receipt text-xl"></i>
+                <span class="text-[8px] font-black uppercase tracking-tighter">History</span>
+            </a>
+
+            <a href="{% url 'add_expense' %}" class="relative -top-6">
+                <div class="bg-emerald-600 w-14 h-14 rounded-2xl shadow-xl shadow-emerald-100 flex items-center justify-center text-white text-xl border-[4px] border-[#f8fafc]">
+                    <i class="fas fa-plus"></i>
+                </div>
+            </a>
+
+            <a href="{% url 'report' %}" class="flex flex-col items-center gap-1 w-12 transition-all {% if request.resolver_match.url_name == 'report' %}text-emerald-600{% else %}text-slate-400{% endif %} no-underline">
+                <i class="fas fa-chart-pie text-xl"></i>
+                <span class="text-[8px] font-black uppercase tracking-tighter">Stats</span>
+            </a>
+
+            <a href="{% url 'manage_categories' %}" class="flex flex-col items-center gap-1 w-12 transition-all {% if request.resolver_match.url_name == 'manage_categories' %}text-emerald-600{% else %}text-slate-400{% endif %} no-underline">
+                <i class="fas fa-tags text-xl"></i>
+                <span class="text-[8px] font-black uppercase tracking-tighter">Category</span>
+            </a>
+        </div>
+    </nav>
+    {% endif %}
+
+    <style>
+        .pb-safe { padding-bottom: calc(0.75rem + env(safe-area-inset-bottom)); }
+        @media (max-width: 1024px) {
+            body { padding-bottom: 80px; }
+        }
+    </style>
 
 </body>
 </html>

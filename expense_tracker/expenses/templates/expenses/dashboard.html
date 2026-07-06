@@ -2,218 +2,161 @@
 {% load static %}
 
 {% block content %}
-<div class="animate-fade-up">
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
-    <!-- ── Page Header ─────────────────────────────────── -->
-    <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-        <div>
-            <p class="text-label mb-1">{{ current_month_label }}</p>
-            <h1 class="text-headline" style="color:var(--text-primary);">Dashboard</h1>
-        </div>
-        <div class="flex gap-3">
-            <a href="{% url 'add_expense' %}" class="btn btn-ghost">
-                <i class="fas fa-plus"></i> Add Expense
-            </a>
-            <a href="{% url 'set_budget' %}" class="btn btn-primary">
-                <i class="fas fa-wallet"></i> Set Budget
-            </a>
-        </div>
-    </div>
-
-    <!-- ── Hero Banner ─────────────────────────────────── -->
-    <div class="kc-hero mb-8 animate-scale-in">
-        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
-            <div class="max-w-2xl">
-                <span class="badge badge-primary" style="background:rgba(255,255,255,0.15);color:white;margin-bottom:1rem;display:inline-flex;">
-                    <i class="fas fa-bolt"></i> Live Tracking
-                </span>
-                <h2 style="font-size:clamp(1.5rem,4vw,2.5rem);font-weight:800;color:white;margin-bottom:0.75rem;line-height:1.15;">
-                    Smart Expense Control
-                </h2>
-                <p style="color:rgba(255,255,255,0.8);font-size:1rem;line-height:1.6;">
-                    {% if has_monthly_budget %}
-                        Daily tracking is live — stay within the green zone to save more! 🎯
-                    {% else %}
-                        Set a monthly budget to unlock advanced AI tracking insights.
-                    {% endif %}
-                </p>
-            </div>
-            <div style="border-top:1px solid rgba(255,255,255,0.15);padding-top:1.5rem;" class="lg:border-0 lg:pt-0 lg:text-right">
-                <p style="color:rgba(255,255,255,0.6);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.25rem;">Monthly Budget</p>
-                <p style="font-size:3rem;font-weight:900;color:white;letter-spacing:-0.04em;line-height:1;">₹{{ pocket_monthly_budget|floatformat:0 }}</p>
-            </div>
-        </div>
-    </div>
-
-    <!-- ── Stat Cards ───────────────────────────────────── -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-
-        <div class="kc-stat animate-fade-up" style="animation-delay:0.05s">
-            <div class="stat-icon" style="background:#ede9fe;color:var(--brand-primary);">
-                <i class="fas fa-gauge-high"></i>
-            </div>
-            <div class="stat-label">Daily Limit</div>
-            <div class="stat-value">₹{{ daily_limit|floatformat:0 }}</div>
-        </div>
-
-        <div class="kc-stat animate-fade-up" style="animation-delay:0.1s">
-            <div class="stat-icon" style="background:#fef3c7;color:#d97706;">
-                <i class="fas fa-arrow-up-right-dots"></i>
-            </div>
-            <div class="stat-label">Today Spent</div>
-            <div class="stat-value" style="color:#d97706;">₹{{ today_expense|floatformat:0 }}</div>
-        </div>
-
-        <div class="kc-stat animate-fade-up" style="animation-delay:0.15s">
-            <div class="stat-icon" {% if pocket_remaining < 0 %}style="background:#ffe4e6;color:var(--brand-danger);"{% else %}style="background:#d1fae5;color:var(--brand-accent-dark);"{% endif %}>
-                <i class="fas {% if pocket_remaining < 0 %}fa-circle-exclamation{% else %}fa-piggy-bank{% endif %}"></i>
-            </div>
-            <div class="stat-label">Remaining</div>
-            <div class="stat-value" {% if pocket_remaining < 0 %}style="color:var(--brand-danger);"{% else %}style="color:var(--brand-accent);"{% endif %}>
-                ₹{{ pocket_remaining|floatformat:0 }}
-            </div>
-        </div>
-
-        <div class="kc-stat animate-fade-up" style="animation-delay:0.2s">
-            <div class="stat-icon" style="background:#eff6ff;color:#3b82f6;">
-                <i class="fas fa-chart-column"></i>
-            </div>
-            <div class="stat-label">Total Spent</div>
-            <div class="stat-value" style="color:#3b82f6;">₹{{ total_expense|floatformat:0 }}</div>
-        </div>
-
-    </div>
-
-    <!-- ── Usage Analytics ─────────────────────────────── -->
-    <div class="kc-card p-6 md:p-8 mb-8 animate-fade-up" style="animation-delay:0.25s;">
-        <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
+<div class="min-h-screen bg-[#f8fafc] pb-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
             <div>
-                <h3 style="font-weight:700;font-size:1.05rem;color:var(--text-primary);margin-bottom:0.2rem;">Usage Analytics</h3>
-                <p style="font-size:0.85rem;color:var(--text-secondary);">{{ daily_status_message }}</p>
+                <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">KharchaGraph Dashboard</h1>
+                <p class="text-slate-500 text-sm font-medium">Welcome back, track your daily limits here.</p>
             </div>
-            <div style="background:var(--bg-muted);border:1px solid var(--border-light);border-radius:var(--radius-md);padding:0.5rem 1rem;text-align:center;">
-                <span style="font-size:1.75rem;font-weight:900;color:var(--text-primary);letter-spacing:-0.04em;">{{ daily_usage_percent|floatformat:0 }}%</span>
-                <span style="font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-muted);display:block;">Limit Used</span>
-            </div>
-        </div>
-
-        <div class="kc-progress mb-4">
-            <div class="kc-progress-bar {% if is_daily_over %}danger{% elif daily_usage_percent > 75 %}warn{% else %}safe{% endif %}"
-                 data-progress-width="{{ daily_usage_percent_capped|floatformat:0 }}">
+            <div class="flex gap-3">
+                <a href="{% url 'add_expense' %}" class="flex-1 md:flex-none inline-flex justify-center items-center px-4 py-2.5 bg-white border border-slate-200 text-slate-700 font-semibold rounded-xl hover:bg-slate-50 transition-all shadow-sm">
+                    <i class="fas fa-plus mr-2 text-xs"></i> Add Expense
+                </a>
+                <a href="{% url 'set_budget' %}" class="flex-1 md:flex-none inline-flex justify-center items-center px-4 py-2.5 bg-indigo-600 text-white font-semibold rounded-xl hover:bg-indigo-700 transition-all shadow-md shadow-indigo-200">
+                    <i class="fas fa-wallet mr-2 text-xs"></i> Set Budget
+                </a>
             </div>
         </div>
 
-        <!-- AI Tip -->
-        <div style="display:flex;align-items:flex-start;gap:0.75rem;background:linear-gradient(135deg,#ede9fe,#e0e7ff);border-radius:var(--radius-md);padding:1rem 1.25rem;">
-            <div style="width:36px;height:36px;background:var(--brand-primary);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;flex-shrink:0;">
-                <i class="fas fa-robot" style="color:white;font-size:0.9rem;"></i>
+        <div class="relative overflow-hidden bg-indigo-600 rounded-[2rem] p-8 md:p-12 shadow-2xl shadow-indigo-200 mb-8">
+            <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+                <div class="max-w-2xl">
+                    <span class="inline-block px-3 py-1 bg-white/20 backdrop-blur-md rounded-lg text-white text-xs font-bold uppercase tracking-widest mb-4">
+                        {{ current_month_label }} Overview
+                    </span>
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4 leading-tight">Smart Expense Control</h2>
+                    <p class="text-indigo-100 text-lg opacity-90">
+                        {% if has_monthly_budget %}
+                            Your daily tracking is live. Stay within the green zone to save more!
+                        {% else %}
+                            Please set a monthly budget to unlock advanced AI tracking.
+                        {% endif %}
+                    </p>
+                </div>
+                <div class="text-left lg:text-right border-t border-white/10 lg:border-0 pt-6 lg:pt-0">
+                    <p class="text-indigo-200 text-sm font-bold uppercase tracking-wider mb-1">Monthly Budget</p>
+                    <p class="text-5xl font-black text-white">₹{{ pocket_monthly_budget|floatformat:0 }}</p>
+                </div>
             </div>
-            <p style="font-size:0.875rem;color:#3730a3;font-weight:500;line-height:1.5;">
-                <strong>AI Tip:</strong> {{ pocket_ai_message }}
-            </p>
-        </div>
-    </div>
-
-    <!-- ── Grid: Transactions + Budget ─────────────────── -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 animate-fade-up" style="animation-delay:0.3s;">
-
-        <!-- Recent Transactions -->
-        <div class="lg:col-span-2 kc-card">
-            <div style="padding:1.5rem;border-bottom:1px solid var(--border-light);display:flex;justify-content:space-between;align-items:center;">
-                <h3 style="font-weight:700;font-size:1rem;color:var(--text-primary);">Recent Transactions</h3>
-                <a href="{% url 'search' %}" class="badge badge-primary" style="text-decoration:none;">View All</a>
-            </div>
-            <table class="kc-table">
-                <thead>
-                    <tr>
-                        <th>Transaction</th>
-                        <th>Category</th>
-                        <th style="text-align:right;">Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for expense in expenses %}
-                    <tr>
-                        <td>
-                            <p style="font-weight:700;color:var(--text-primary);font-size:0.9rem;">{{ expense.description|default:expense.note|default:'General'|truncatechars:22 }}</p>
-                            <p style="font-size:0.7rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-top:2px;">
-                                {{ expense.date|date:'d M, Y' }} &bull; {{ expense.get_payment_type_display }}
-                            </p>
-                        </td>
-                        <td>
-                            <span class="badge badge-muted">{{ expense.category }}</span>
-                        </td>
-                        <td style="text-align:right;">
-                            <span style="font-weight:800;font-size:1rem;color:var(--text-primary);">₹{{ expense.amount|floatformat:0 }}</span>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="3" style="text-align:center;padding:3rem;color:var(--text-muted);font-size:0.9rem;">
-                            <i class="fas fa-receipt" style="font-size:2rem;display:block;margin-bottom:0.75rem;opacity:0.3;"></i>
-                            No transactions yet.
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+            <div class="absolute top-[-20%] right-[-10%] w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-[-20%] left-[-5%] w-48 h-48 bg-indigo-400/20 rounded-full blur-2xl"></div>
         </div>
 
-        <!-- Category Budgets -->
-        <div class="kc-card">
-            <div style="padding:1.5rem;border-bottom:1px solid var(--border-light);">
-                <h3 style="font-weight:700;font-size:1rem;color:var(--text-primary);">Category Budgets</h3>
-                <p class="text-label" style="margin-top:4px;">{{ active_allocations_count }} Active This Month</p>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+            {% for title, value, color, icon in stats_list %}
+            {% endfor %}
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 text-center md:text-left">Daily Limit</p>
+                <p class="text-xl md:text-2xl font-bold text-slate-800 text-center md:text-left">₹{{ daily_limit|floatformat:0 }}</p>
             </div>
-            <div style="padding:1.5rem;display:flex;flex-direction:column;gap:1.5rem;">
-                {% for row in budget_vs_actual %}
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 text-center md:text-left">Today Spent</p>
+                <p class="text-xl md:text-2xl font-bold text-indigo-600 text-center md:text-left">₹{{ today_expense|floatformat:0 }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 text-center md:text-left">Remaining</p>
+                <p class="text-xl md:text-2xl font-bold {% if pocket_remaining < 0 %}text-rose-500{% else %}text-emerald-500{% endif %} text-center md:text-left">₹{{ pocket_remaining|floatformat:0 }}</p>
+            </div>
+            <div class="bg-white p-6 rounded-3xl border border-slate-100 shadow-sm">
+                <p class="text-slate-400 text-[10px] font-bold uppercase tracking-widest mb-2 text-center md:text-left">Total Spent</p>
+                <p class="text-xl md:text-2xl font-bold text-slate-800 text-center md:text-left">₹{{ total_expense|floatformat:0 }}</p>
+            </div>
+        </div>
+
+        <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-100 shadow-sm mb-8">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6">
                 <div>
-                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem;">
-                        <span style="font-weight:700;font-size:0.875rem;color:var(--text-primary);">
-                            {{ row.category.icon|default:'📁' }} {{ row.category.name }}
-                        </span>
-                        <span class="badge {% if row.is_overspent %}badge-danger{% else %}badge-success{% endif %}">
-                            {% if row.is_overspent %}Over{% else %}Safe{% endif %}
-                        </span>
-                    </div>
-                    <div class="kc-progress" style="margin-bottom:0.4rem;">
-                        <div class="kc-progress-bar {% if row.is_overspent %}danger{% else %}safe{% endif %}"
-                             data-progress-width="{% if row.budget > 0 %}{{ row.spent|floatformat:0 }}{% else %}0{% endif %}">
+                    <h3 class="text-lg font-bold text-slate-800">Usage Analytics</h3>
+                    <p class="text-sm text-slate-500 font-medium">{{ daily_status_message }}</p>
+                </div>
+                <div class="bg-slate-50 px-4 py-2 rounded-xl border border-slate-100">
+                    <span class="text-2xl font-black text-slate-800">{{ daily_usage_percent|floatformat:0 }}%</span>
+                    <span class="text-xs text-slate-400 font-bold uppercase ml-1">Limit used</span>
+                </div>
+            </div>
+            <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden mb-4">
+                <div class="h-full rounded-full transition-all duration-700 {% if is_daily_over %}bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]{% else %}bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]{% endif %}" 
+                     style="width: {{ daily_usage_percent_capped|floatformat:0 }}%"></div>
+            </div>
+            <div class="flex items-center gap-3 bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100/50">
+                <div class="flex-shrink-0 w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <p class="text-sm text-indigo-700 font-medium"><strong>AI Tip:</strong> {{ pocket_ai_message }}</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2 bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-slate-50 flex justify-between items-center">
+                    <h3 class="font-bold text-slate-800">Recent Transactions</h3>
+                    <a href="#" class="text-xs font-bold text-indigo-600 hover:text-indigo-700 transition-colors uppercase tracking-widest">History</a>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-slate-50/50">
+                                <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Transaction</th>
+                                <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest">Category</th>
+                                <th class="px-6 py-4 text-[10px] font-bold text-slate-400 uppercase tracking-widest text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-50">
+                            {% for expense in expenses %}
+                            <tr class="hover:bg-slate-50/50 transition-colors">
+                                <td class="px-6 py-4">
+                                    <p class="font-bold text-slate-700">{{ expense.description|default:expense.note|default:'General'|truncatechars:20 }}</p>
+                                    <p class="text-[10px] text-slate-400 font-medium uppercase tracking-tight">{{ expense.date|date:'d M, Y' }} • {{ expense.get_payment_type_display }}</p>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[10px] font-bold bg-slate-100 text-slate-600 uppercase">
+                                        {{ expense.category }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 text-right">
+                                    <p class="font-black text-slate-900">₹{{ expense.amount|floatformat:0 }}</p>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr><td colspan="3" class="p-12 text-center text-slate-400 text-sm font-medium">No transactions found.</td></tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-[2rem] border border-slate-100 shadow-sm overflow-hidden">
+                <div class="p-6 border-b border-slate-50">
+                    <h3 class="font-bold text-slate-800">Active Category Allocations</h3>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">{{ active_allocations_count }} Active This Month</p>
+                </div>
+                <div class="p-6 space-y-6">
+                    {% for row in budget_vs_actual %}
+                    <div class="group">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-bold text-slate-700">{{ row.category.name }}</span>
+                            <span class="text-[10px] font-bold {% if row.is_overspent %}text-rose-500{% else %}text-emerald-500{% endif %} uppercase tracking-widest bg-slate-50 px-2 py-1 rounded">
+                                {% if row.is_overspent %}Over{% else %}Safe{% endif %}
+                            </span>
+                        </div>
+                        <div class="w-full bg-slate-100 h-2 rounded-full mb-1">
+                            <div class="h-full rounded-full {% if row.is_overspent %}bg-rose-400{% else %}bg-indigo-400{% endif %}" 
+                                 style="width: 65%"></div> </div>
+                        <div class="flex justify-between text-[10px] font-bold text-slate-400 tracking-tighter uppercase">
+                            <span>Spent ₹{{ row.spent|floatformat:0 }}</span>
+                            <span>Limit ₹{{ row.budget|floatformat:0 }}</span>
                         </div>
                     </div>
-                    <div style="display:flex;justify-content:space-between;font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;">
-                        <span>Spent ₹{{ row.spent|floatformat:0 }}</span>
-                        <span>Limit ₹{{ row.budget|floatformat:0 }}</span>
-                    </div>
+                    {% empty %}
+                    <p class="text-center text-slate-400 text-sm py-12 font-medium">No budgets set.</p>
+                    {% endfor %}
                 </div>
-                {% empty %}
-                <div style="text-align:center;padding:2rem 0;color:var(--text-muted);">
-                    <i class="fas fa-wallet" style="font-size:1.75rem;margin-bottom:0.5rem;display:block;opacity:0.3;"></i>
-                    <p style="font-size:0.85rem;">No budgets set yet.</p>
-                    <a href="{% url 'set_budget' %}" class="btn btn-primary" style="margin-top:1rem;font-size:0.8rem;padding:0.5rem 1rem;">
-                        Set Budget
-                    </a>
-                </div>
-                {% endfor %}
             </div>
         </div>
-
     </div>
 </div>
-
-<script>
-(function() {
-    function applyWidths() {
-        document.querySelectorAll('[data-progress-width]').forEach(function(el) {
-            var w = el.getAttribute('data-progress-width');
-            el.style.width = w + '%';
-        });
-    }
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', applyWidths);
-    } else {
-        applyWidths();
-    }
-})();
-</script>
 {% endblock %}
