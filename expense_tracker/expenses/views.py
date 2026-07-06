@@ -15,7 +15,7 @@ import calendar
 import json
 import csv
 
-from .models import Expense, Budget, CustomCategory, MonthlyBudget, RecurringExpense
+from expenses.models import Expense, Budget, CustomCategory, MonthlyBudget, RecurringExpense
 
 
 DEFAULT_CATEGORIES = [

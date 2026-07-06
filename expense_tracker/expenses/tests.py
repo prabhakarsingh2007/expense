@@ -5,7 +5,7 @@ from django.db import IntegrityError
 from django.utils import timezone
 from decimal import Decimal
 
-from .models import Expense, Budget, MonthlyBudget, CustomCategory, RecurringExpense
+from expenses.models import Expense, Budget, MonthlyBudget, CustomCategory, RecurringExpense
 
 User = get_user_model()
 

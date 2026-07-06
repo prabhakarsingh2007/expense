@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Expense, CustomCategory, Budget, MonthlyBudget
+from expenses.models import Expense, CustomCategory, Budget, MonthlyBudget
 
 
 @admin.register(CustomCategory)

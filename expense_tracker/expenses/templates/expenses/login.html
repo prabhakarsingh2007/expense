@@ -2,90 +2,113 @@
 {% load static %}
 
 {% block content %}
-<div class="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-md w-full space-y-8">
-        
-        <div class="text-center">
-            <h2 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
-                Welcome Back
-            </h2>
-            <p class="text-slate-500 font-medium text-sm">
-                Login to manage your expenses and savings
-            </p>
+<div style="min-height:78vh;display:flex;align-items:center;justify-content:center;padding:1.5rem 1rem;">
+<div class="animate-in" style="width:100%;max-width:430px;">
+
+    <!-- Logo + Heading -->
+    <div style="text-align:center;margin-bottom:2rem;">
+        <img src="https://googleusercontent.com/image_generation_content/3"
+             alt="KharchaGraph"
+             style="height:60px;width:auto;margin:0 auto 1rem;display:block;"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+        <div style="display:none;width:60px;height:60px;background:var(--grad-brand);border-radius:18px;align-items:center;justify-content:center;margin:0 auto 1rem;box-shadow:var(--sh-brand);">
+            <i class="fas fa-chart-line" style="color:white;font-size:1.5rem;"></i>
         </div>
+        <h1 style="font-size:1.7rem;font-weight:800;color:var(--text-h);letter-spacing:-0.025em;margin-bottom:0.3rem;">Welcome Back 👋</h1>
+        <p style="color:var(--text-m);font-size:0.88rem;font-weight:500;">Login karke apna kharcha track karo</p>
+    </div>
 
-        <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-indigo-100 border border-slate-100 overflow-hidden relative">
-            <div class="h-1.5 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500"></div>
+    <!-- Card -->
+    <div style="background:var(--surface);border-radius:var(--r-2xl);border:1.5px solid var(--border-soft);box-shadow:var(--sh-xl);overflow:hidden;">
+        <!-- Accent top bar -->
+        <div style="height:4px;background:var(--grad-brand);"></div>
 
-            <div class="p-8 sm:p-10">
-                <form method="post" class="space-y-6">
-                    {% csrf_token %}
+        <div style="padding:2rem 2rem 1.75rem;">
 
-                    <div class="space-y-2">
-                        <label for="id_username" class="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
-                            Username or Email
-                        </label>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                                <i class="fas fa-user-circle"></i>
-                            </div>
-                            <input type="text" name="username" id="id_username" required
-                                   class="block w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-700 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all placeholder:text-slate-300"
-                                   placeholder="Your unique ID">
-                        </div>
+            {% if form.non_field_errors %}
+            <div class="kc-alert error" style="margin-bottom:1.25rem;">
+                <i class="fas fa-circle-xmark"></i>
+                {% for err in form.non_field_errors %}{{ err }}{% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="post" autocomplete="on">
+                {% csrf_token %}
+
+                <!-- Username -->
+                <div style="margin-bottom:1.1rem;">
+                    <label for="id_username" class="kc-label">
+                        <i class="fas fa-user" style="color:var(--p-500);margin-right:4px;"></i> Username
+                    </label>
+                    <div style="position:relative;">
+                        <i class="fas fa-user-circle" id="uicon" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--n-300);font-size:1rem;pointer-events:none;transition:color 0.18s;"></i>
+                        <input type="text" name="username" id="id_username" required autocomplete="username"
+                               placeholder="Apna username dalein"
+                               class="kc-input" style="padding-left:2.6rem;"
+                               onfocus="document.getElementById('uicon').style.color='var(--p-500)'"
+                               onblur="document.getElementById('uicon').style.color='var(--n-300)'">
                     </div>
+                    {% if form.username.errors %}<p style="color:var(--r-500);font-size:0.75rem;font-weight:600;margin-top:4px;"><i class="fas fa-triangle-exclamation"></i> {{ form.username.errors.0 }}</p>{% endif %}
+                </div>
 
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-center px-1">
-                            <label for="id_password" class="block text-xs font-bold text-slate-500 uppercase tracking-widest">
-                                Password
-                            </label>
-                            </div>
-                        <div class="relative group">
-                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
-                                <i class="fas fa-lock"></i>
-                            </div>
-                            <input type="password" name="password" id="id_password" required
-                                   class="block w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-2xl text-slate-700 font-semibold focus:ring-2 focus:ring-indigo-500 focus:bg-white outline-none transition-all placeholder:text-slate-300"
-                                   placeholder="••••••••">
-                        </div>
-                    </div>
-
-                    <div class="pt-2">
-                        <button type="submit" class="w-full bg-indigo-600 text-white text-sm font-black uppercase tracking-[0.2em] py-5 rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 hover:scale-[1.01] active:scale-[0.99] transition-all">
-                            Secure Login
+                <!-- Password -->
+                <div style="margin-bottom:1.5rem;">
+                    <label for="id_password" class="kc-label">
+                        <i class="fas fa-lock" style="color:var(--p-500);margin-right:4px;"></i> Password
+                    </label>
+                    <div style="position:relative;">
+                        <i class="fas fa-lock" id="picon" style="position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--n-300);font-size:0.95rem;pointer-events:none;transition:color 0.18s;"></i>
+                        <input type="password" name="password" id="id_password" required autocomplete="current-password"
+                               placeholder="••••••••"
+                               class="kc-input" style="padding-left:2.6rem;padding-right:3rem;"
+                               onfocus="document.getElementById('picon').style.color='var(--p-500)'"
+                               onblur="document.getElementById('picon').style.color='var(--n-300)'">
+                        <button type="button" onclick="togglePwd()" title="Show/hide"
+                            style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--n-400);cursor:pointer;font-size:0.95rem;padding:0;line-height:1;transition:color 0.18s;"
+                            onmouseover="this.style.color='var(--p-500)'" onmouseout="this.style.color='var(--n-400)'">
+                            <i class="fas fa-eye" id="eye"></i>
                         </button>
                     </div>
-                </form>
-
-                <div class="mt-10 text-center border-t border-slate-50 pt-8">
-                    <p class="text-slate-500 text-sm font-medium">
-                        Don't have an account? 
-                        <a href="{% url 'signup' %}" class="text-indigo-600 font-extrabold hover:text-indigo-800 transition-colors ml-1">
-                            Sign Up Now
-                        </a>
-                    </p>
+                    {% if form.password.errors %}<p style="color:var(--r-500);font-size:0.75rem;font-weight:600;margin-top:4px;"><i class="fas fa-triangle-exclamation"></i> {{ form.password.errors.0 }}</p>{% endif %}
                 </div>
-            </div>
-        </div>
 
-        <div class="flex items-center justify-center gap-2 opacity-30 select-none">
-            <span class="w-8 h-[1px] bg-slate-400"></span>
-            <span class="text-[10px] font-black uppercase tracking-[0.4em] text-slate-600">KharchaGraph</span>
-            <span class="w-8 h-[1px] bg-slate-400"></span>
+                <!-- Submit -->
+                <button type="submit"
+                    style="width:100%;padding:0.9rem;background:var(--grad-brand);color:white;font-weight:800;font-size:0.95rem;letter-spacing:0.03em;border:none;border-radius:var(--r-md);cursor:pointer;box-shadow:var(--sh-brand);transition:all var(--t-base) var(--ease);display:flex;align-items:center;justify-content:center;gap:0.5rem;"
+                    onmouseover="this.style.filter='brightness(1.1)';this.style.transform='translateY(-1px)';this.style.boxShadow='0 14px 36px rgba(99,102,241,0.45)';"
+                    onmouseout="this.style.filter='';this.style.transform='';this.style.boxShadow='var(--sh-brand)';"
+                    onmousedown="this.style.transform='scale(0.97)';"
+                    onmouseup="this.style.transform='translateY(-1px)';">
+                    <i class="fas fa-sign-in-alt"></i> Secure Login
+                </button>
+            </form>
+
+            <!-- Divider -->
+            <div style="display:flex;align-items:center;gap:0.75rem;margin:1.5rem 0 1.25rem;">
+                <div style="flex:1;height:1px;background:var(--border-soft);"></div>
+                <span style="font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-m);">ya</span>
+                <div style="flex:1;height:1px;background:var(--border-soft);"></div>
+            </div>
+
+            <p style="text-align:center;font-size:0.875rem;color:var(--text-s);">
+                Account nahi hai?&nbsp;
+                <a href="{% url 'signup' %}" style="color:var(--p-500);font-weight:700;text-decoration:none;" onmouseover="this.style.color='var(--p-700)'" onmouseout="this.style.color='var(--p-500)'">Sign Up karo →</a>
+            </p>
         </div>
     </div>
+
+    <p style="text-align:center;margin-top:1.25rem;font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:0.14em;color:var(--text-m);opacity:0.5;">
+        KharchaGraph &mdash; Smart Finance
+    </p>
+</div>
 </div>
 
-<style>
-    @keyframes gradientShift {
-        0% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
-        100% { background-position: 0% 50%; }
-    }
-    .bg-gradient-to-r {
-        background-size: 200% 200%;
-        animation: gradientShift 4s ease infinite;
-    }
-</style>
+<script>
+function togglePwd() {
+    const i = document.getElementById('id_password');
+    const e = document.getElementById('eye');
+    i.type = i.type === 'password' ? 'text' : 'password';
+    e.className = i.type === 'text' ? 'fas fa-eye-slash' : 'fas fa-eye';
+}
+</script>
 {% endblock %}

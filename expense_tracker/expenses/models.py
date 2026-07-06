@@ -96,15 +96,13 @@ class Expense(models.Model):
                 name='unique_generated_recurring_expense_per_day',
             )
         ]
-
-    def __str__(self):
-        return f"{self.category.name} - ₹{self.amount}"
-
-    class Meta:
         indexes = [
             models.Index(fields=["date"]),
             models.Index(fields=["user"]),
         ]
+
+    def __str__(self):
+        return f"{self.category.name} - ₹{self.amount}"
 
 
 class RecurringExpense(models.Model):

@@ -3,7 +3,7 @@ from decimal import Decimal
 from django.db.models import Sum
 from django.utils import timezone
 
-from .models import Budget, Expense
+from expenses.models import Budget, Expense
 
 
 def budget_alerts(request):
