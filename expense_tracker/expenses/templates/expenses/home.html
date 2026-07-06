@@ -2,159 +2,277 @@
 {% load static %}
 
 {% block content %}
+<style>
+    @keyframes float {
+        0% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+        100% { transform: translateY(0px); }
+    }
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+    @keyframes pulse-ring {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6); }
+        70% { box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+    .pulse-ring-dot {
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+        animation: pulse-ring 2s infinite;
+    }
+    .stat-card-premium {
+        background: var(--surface);
+        border-radius: var(--r-xl);
+        border: 1px solid var(--border-soft);
+        padding: 1.75rem 1.25rem;
+        box-shadow: var(--sh-sm);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    .stat-card-premium:hover {
+        transform: translateY(-5px);
+        box-shadow: var(--sh-lg);
+        border-color: var(--p-200);
+    }
+    .premium-feature-card {
+        background: var(--surface);
+        border-radius: var(--r-xl);
+        border: 1px solid var(--border-soft);
+        padding: 2rem;
+        box-shadow: var(--sh-sm);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .premium-feature-card:hover {
+        transform: translateY(-6px);
+        box-shadow: var(--sh-xl);
+        border-color: var(--p-200);
+    }
+    .gradient-icon-box {
+        width: 48px;
+        height: 48px;
+        border-radius: var(--r-md);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 1.25rem;
+        transition: transform 0.3s var(--ease);
+    }
+    .premium-feature-card:hover .gradient-icon-box {
+        transform: scale(1.1) rotate(4deg);
+    }
+</style>
+
 <div class="animate-fade-up">
 
     <!-- ── Hero ─────────────────────────────────────────── -->
-    <section style="position:relative;overflow:hidden;background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 60%,#312e81 100%);border-radius:var(--radius-2xl);padding:clamp(2.5rem,6vw,4rem);margin-bottom:2rem;color:white;">
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center" style="position:relative;overflow:hidden;background:linear-gradient(135deg,#070a13 0%,#0f172a 50%,#1e1b4b 100%);border-radius:var(--r-3xl);padding:clamp(2rem,5vw,4.5rem);margin-bottom:3rem;color:white;box-shadow:0 24px 64px rgba(15,23,42,0.3);">
         <!-- Background blobs -->
-        <div style="position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.25),transparent 70%);top:-100px;right:-80px;pointer-events:none;"></div>
-        <div style="position:absolute;width:250px;height:250px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,0.2),transparent 70%);bottom:-80px;left:-40px;pointer-events:none;"></div>
+        <div style="position:absolute;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.15),transparent 70%);top:-200px;right:-100px;pointer-events:none;"></div>
+        <div style="position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(139,92,246,0.12),transparent 70%);bottom:-150px;left:-100px;pointer-events:none;"></div>
 
-        <div style="position:relative;z-index:1;max-width:680px;">
+        <!-- Left Column: Content -->
+        <div class="lg:col-span-7 relative z-10">
             <!-- Badge -->
-            <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);border-radius:999px;padding:0.35rem 1rem;margin-bottom:1.5rem;">
-                <span style="width:8px;height:8px;border-radius:50%;background:#10b981;display:inline-block;animation:pulse-ring 2s ease infinite;"></span>
-                <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.85);">KharchaGraph Platform</span>
+            <div style="display:inline-flex;align-items:center;gap:0.5rem;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:999px;padding:0.4rem 1rem;margin-bottom:1.5rem;">
+                <span class="pulse-ring-dot" style="width:8px;height:8px;border-radius:50%;background:#10b981;display:inline-block;"></span>
+                <span style="font-size:0.75rem;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:rgba(255,255,255,0.9);">KharchaGraph Platform v2.0</span>
             </div>
 
-            <h1 class="text-display" style="color:white;margin-bottom:1.25rem;">
-                Smart Expense Tracker for Daily Kharcha &amp; Savings
+            <h1 class="t-display" style="color:white;margin-bottom:1.25rem;line-height:1.2;font-weight:800;letter-spacing:-0.03em;font-size:clamp(2rem,4.5vw,3rem);">
+                Smart Personal Finance for <span style="background:linear-gradient(135deg,#a78bfa,#818cf8);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;">Daily Kharcha &amp; Savings</span>
             </h1>
-            <p style="font-size:1.05rem;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:2rem;">
-                Daily expenses add karo, monthly budget set karo, recurring bills manage karo, aur reports ke through spending habits samajho — sab ek jagah.
+            <p style="font-size:1.05rem;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:2.25rem;">
+                Apne daily expenses add karo, category-wise monthly budget set karo, recurring bills track karo, aur AI-powered insights aur analytics se paise bachao. Sab kuch ek secure dashboard par.
             </p>
 
-            <div style="display:flex;flex-wrap:wrap;gap:0.75rem;">
-                <a href="{% url 'signup' %}" class="btn btn-success" style="font-size:1rem;padding:0.85rem 2rem;">
+            <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
+                <a href="{% url 'signup' %}" class="btn btn-success btn-lg" style="box-shadow: 0 8px 24px rgba(16,185,129,0.3);">
                     <i class="fas fa-rocket"></i> Get Started Free
                 </a>
-                <a href="{% url 'login' %}" class="btn btn-ghost" style="font-size:1rem;padding:0.85rem 1.75rem;border-color:rgba(255,255,255,0.25);color:white;background:rgba(255,255,255,0.08);">
+                <a href="{% url 'login' %}" class="btn btn-ghost btn-lg" style="border-color:rgba(255,255,255,0.15);color:white;background:rgba(255,255,255,0.06);backdrop-filter:blur(8px);">
                     <i class="fas fa-sign-in-alt"></i> Login
                 </a>
-                <a href="{% url 'about_me' %}" style="display:inline-flex;align-items:center;gap:0.5rem;padding:0.85rem 1.5rem;color:rgba(255,255,255,0.55);font-weight:600;font-size:0.9rem;text-decoration:none;transition:color 0.2s;">
-                    Learn More <i class="fas fa-arrow-right" style="font-size:0.75rem;"></i>
-                </a>
+            </div>
+            
+            <!-- Trust badges/Checkmarks -->
+            <div style="display:flex;flex-wrap:wrap;gap:1.5rem;margin-top:2.5rem;border-top:1px solid rgba(255,255,255,0.08);padding-top:1.5rem;">
+                <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:rgba(255,255,255,0.6);font-weight:600;">
+                    <i class="fas fa-circle-check" style="color:#10b981;"></i> Zero Setup Fee
+                </div>
+                <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:rgba(255,255,255,0.6);font-weight:600;">
+                    <i class="fas fa-circle-check" style="color:#10b981;"></i> 100% Private Data
+                </div>
+                <div style="display:flex;align-items:center;gap:0.5rem;font-size:0.8rem;color:rgba(255,255,255,0.6);font-weight:600;">
+                    <i class="fas fa-circle-check" style="color:#10b981;"></i> AI Smart Tips
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column: Interactive Mockup -->
+        <div class="lg:col-span-5 relative z-10 flex justify-center">
+            <div class="mockup-wrapper animate-float" style="width:100%;max-width:440px;position:relative;">
+                <!-- Glowing backdrop -->
+                <div style="position:absolute;inset:-20px;background:linear-gradient(135deg,rgba(99,102,241,0.25),rgba(139,92,246,0.25));border-radius:var(--r-xl);filter:blur(30px);z-index:0;opacity:0.6;"></div>
+                
+                <!-- Mockup container -->
+                <div style="position:relative;z-index:1;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.12);border-radius:var(--r-xl);padding:0.75rem;backdrop-filter:blur(10px);box-shadow:0 30px 60px rgba(0,0,0,0.4);">
+                    <!-- Header dots -->
+                    <div style="display:flex;gap:6px;margin-bottom:0.75rem;padding-left:0.5rem;">
+                        <span style="width:9px;height:9px;border-radius:50%;background:#ef4444;display:inline-block;"></span>
+                        <span style="width:9px;height:9px;border-radius:50%;background:#f59e0b;display:inline-block;"></span>
+                        <span style="width:9px;height:9px;border-radius:50%;background:#10b981;display:inline-block;"></span>
+                    </div>
+                    <img src="{% static 'images/dashboard_preview.png' %}" alt="Dashboard Mockup" style="width:100%;height:auto;border-radius:var(--r-md);object-fit:cover;">
+                </div>
             </div>
         </div>
     </section>
 
     <!-- ── Trust Stats ──────────────────────────────────── -->
-    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1rem;margin-bottom:2rem;">
+    <section style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.5rem;margin-bottom:4rem;">
         {% for icon, val, lbl, clr in stats %}
-        <div class="kc-stat" style="text-align:center;padding:1.5rem 1rem;">
-            <div class="stat-icon" data-bg-color="{{ clr }}22" data-color="{{ clr }}" style="margin:0 auto 0.75rem;">
+        <div class="stat-card-premium">
+            <div style="position:absolute;top:0;left:0;right:0;height:4px;background:{{ clr }};"></div>
+            <div class="stat-icon" data-bg-color="{{ clr }}22" data-color="{{ clr }}" style="margin:0 auto 1rem;">
                 <i class="{{ icon }}"></i>
             </div>
-            <div class="stat-value" data-color="{{ clr }}" style="font-size:1.5rem;">{{ val }}</div>
-            <div class="stat-label">{{ lbl }}</div>
+            <div class="stat-value" data-color="{{ clr }}" style="font-size:1.8rem;font-weight:800;margin-bottom:4px;">{{ val }}</div>
+            <div class="stat-label" style="font-size:0.75rem;font-weight:700;color:var(--text-s);">{{ lbl }}</div>
         </div>
         {% empty %}
         <!-- Static fallback stats -->
-        <div class="kc-stat" style="text-align:center;padding:1.5rem 1rem;">
-            <div class="stat-icon" style="background:#ede9fe;color:#6366f1;margin:0 auto 0.75rem;"><i class="fas fa-users"></i></div>
-            <div class="stat-value" style="font-size:1.5rem;">100%</div>
-            <div class="stat-label">Free to Use</div>
+        <div class="stat-card-premium">
+            <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#6366f1;"></div>
+            <div class="stat-icon" style="background:#ede9fe;color:#6366f1;margin:0 auto 1rem;"><i class="fas fa-users"></i></div>
+            <div class="stat-value" style="font-size:1.8rem;font-weight:800;color:var(--text-h);margin-bottom:4px;">100%</div>
+            <div class="stat-label" style="font-size:0.75rem;font-weight:700;color:var(--text-s);">Free to Use</div>
         </div>
-        <div class="kc-stat" style="text-align:center;padding:1.5rem 1rem;">
-            <div class="stat-icon" style="background:#d1fae5;color:#10b981;margin:0 auto 0.75rem;"><i class="fas fa-shield-halved"></i></div>
-            <div class="stat-value" style="font-size:1.5rem;">Secure</div>
-            <div class="stat-label">Private Data</div>
+        <div class="stat-card-premium">
+            <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#10b981;"></div>
+            <div class="stat-icon" style="background:#d1fae5;color:#10b981;margin:0 auto 1rem;"><i class="fas fa-shield-halved"></i></div>
+            <div class="stat-value" style="font-size:1.8rem;font-weight:800;color:var(--text-h);margin-bottom:4px;">Secure</div>
+            <div class="stat-label" style="font-size:0.75rem;font-weight:700;color:var(--text-s);">Private Data</div>
         </div>
-        <div class="kc-stat" style="text-align:center;padding:1.5rem 1rem;">
-            <div class="stat-icon" style="background:#fef3c7;color:#f59e0b;margin:0 auto 0.75rem;"><i class="fas fa-chart-pie"></i></div>
-            <div class="stat-value" style="font-size:1.5rem;">Smart</div>
-            <div class="stat-label">AI Tips Included</div>
+        <div class="stat-card-premium">
+            <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#f59e0b;"></div>
+            <div class="stat-icon" style="background:#fef3c7;color:#f59e0b;margin:0 auto 1rem;"><i class="fas fa-chart-pie"></i></div>
+            <div class="stat-value" style="font-size:1.8rem;font-weight:800;color:var(--text-h);margin-bottom:4px;">Smart</div>
+            <div class="stat-label" style="font-size:0.75rem;font-weight:700;color:var(--text-s);">AI Tips Included</div>
         </div>
-        <div class="kc-stat" style="text-align:center;padding:1.5rem 1rem;">
-            <div class="stat-icon" style="background:#ffe4e6;color:#f43f5e;margin:0 auto 0.75rem;"><i class="fas fa-mobile-screen"></i></div>
-            <div class="stat-value" style="font-size:1.5rem;">Mobile</div>
-            <div class="stat-label">Fully Responsive</div>
+        <div class="stat-card-premium">
+            <div style="position:absolute;top:0;left:0;right:0;height:4px;background:#f43f5e;"></div>
+            <div class="stat-icon" style="background:#ffe4e6;color:#f43f5e;margin:0 auto 1rem;"><i class="fas fa-mobile-screen"></i></div>
+            <div class="stat-value" style="font-size:1.8rem;font-weight:800;color:var(--text-h);margin-bottom:4px;">Mobile</div>
+            <div class="stat-label" style="font-size:0.75rem;font-weight:700;color:var(--text-s);">Fully Responsive</div>
         </div>
         {% endfor %}
     </section>
 
     <!-- ── Feature Grid ─────────────────────────────────── -->
-    <section style="margin-bottom:2rem;">
-        <div style="text-align:center;margin-bottom:2rem;">
-            <p class="text-label" style="margin-bottom:0.5rem;">Everything You Need</p>
-            <h2 class="text-headline">Powerful Features, Simple Interface</h2>
+    <section style="margin-bottom:4rem;">
+        <div style="text-align:center;margin-bottom:3rem;">
+            <p class="t-label" style="margin-bottom:0.5rem;color:var(--p-500);font-size:0.75rem;">Everything You Need</p>
+            <h2 class="t-hero" style="color:var(--text-h);font-weight:800;">Powerful Features, Simple Interface</h2>
         </div>
 
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.25rem;">
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;">
 
-            <article class="kc-card" style="padding:1.75rem;">
-                <div style="width:48px;height:48px;background:linear-gradient(135deg,#6366f1,#8b5cf6);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                    <i class="fas fa-pen-to-square" style="color:white;font-size:1.1rem;"></i>
+            <article class="premium-feature-card">
+                <div class="gradient-icon-box" style="background:linear-gradient(135deg,#6366f1,#8b5cf6);">
+                    <i class="fas fa-pen-to-square" style="color:white;font-size:1.15rem;"></i>
                 </div>
-                <h3 style="font-weight:700;font-size:1rem;color:var(--text-primary);margin-bottom:0.5rem;">Expense Entry</h3>
-                <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Date, category, payment type, note ke saath fast entry. Daily tracking easy aur clear hota hai.</p>
+                <h3 style="font-weight:700;font-size:1.1rem;color:var(--text-h);margin-bottom:0.75rem;">Expense Entry</h3>
+                <p style="font-size:0.875rem;color:var(--text-s);line-height:1.65;">Date, category, payment type, note ke saath fast entry. Daily tracking easy aur clear hota hai.</p>
             </article>
 
-            <article class="kc-card" style="padding:1.75rem;">
-                <div style="width:48px;height:48px;background:linear-gradient(135deg,#10b981,#34d399);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                    <i class="fas fa-wallet" style="color:white;font-size:1.1rem;"></i>
+            <article class="premium-feature-card">
+                <div class="gradient-icon-box" style="background:linear-gradient(135deg,#10b981,#34d399);">
+                    <i class="fas fa-wallet" style="color:white;font-size:1.15rem;"></i>
                 </div>
-                <h3 style="font-weight:700;font-size:1rem;color:var(--text-primary);margin-bottom:0.5rem;">Monthly Budget</h3>
-                <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Category-wise budget aur monthly cap set karke overspending alerts ke saath control maintain karo.</p>
+                <h3 style="font-weight:700;font-size:1.1rem;color:var(--text-h);margin-bottom:0.75rem;">Monthly Budget</h3>
+                <p style="font-size:0.875rem;color:var(--text-s);line-height:1.65;">Category-wise budget aur monthly cap set karke overspending alerts ke saath control maintain karo.</p>
             </article>
 
-            <article class="kc-card" style="padding:1.75rem;">
-                <div style="width:48px;height:48px;background:linear-gradient(135deg,#f59e0b,#fbbf24);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                    <i class="fas fa-rotate" style="color:white;font-size:1.1rem;"></i>
+            <article class="premium-feature-card">
+                <div class="gradient-icon-box" style="background:linear-gradient(135deg,#f59e0b,#fbbf24);">
+                    <i class="fas fa-rotate" style="color:white;font-size:1.15rem;"></i>
                 </div>
-                <h3 style="font-weight:700;font-size:1rem;color:var(--text-primary);margin-bottom:0.5rem;">Recurring Expenses</h3>
-                <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Rent, EMI, subscriptions jaise recurring kharch auto-manage karo taaki koi payment miss na ho.</p>
+                <h3 style="font-weight:700;font-size:1.1rem;color:var(--text-h);margin-bottom:0.75rem;">Recurring Expenses</h3>
+                <p style="font-size:0.875rem;color:var(--text-s);line-height:1.65;">Rent, EMI, subscriptions jaise recurring kharch auto-manage karo taaki koi payment miss na ho.</p>
             </article>
 
-            <article class="kc-card" style="padding:1.75rem;">
-                <div style="width:48px;height:48px;background:linear-gradient(135deg,#3b82f6,#60a5fa);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                    <i class="fas fa-chart-line" style="color:white;font-size:1.1rem;"></i>
+            <article class="premium-feature-card">
+                <div class="gradient-icon-box" style="background:linear-gradient(135deg,#3b82f6,#60a5fa);">
+                    <i class="fas fa-chart-line" style="color:white;font-size:1.15rem;"></i>
                 </div>
-                <h3 style="font-weight:700;font-size:1rem;color:var(--text-primary);margin-bottom:0.5rem;">Reports & Analytics</h3>
-                <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Charts, monthly summaries, aur category trends ke through smart financial decisions lo.</p>
+                <h3 style="font-weight:700;font-size:1.1rem;color:var(--text-h);margin-bottom:0.75rem;">Reports & Analytics</h3>
+                <p style="font-size:0.875rem;color:var(--text-s);line-height:1.65;">Charts, monthly summaries, aur category trends ke through smart financial decisions lo.</p>
             </article>
 
-            <article class="kc-card" style="padding:1.75rem;">
-                <div style="width:48px;height:48px;background:linear-gradient(135deg,#8b5cf6,#a78bfa);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                    <i class="fas fa-magnifying-glass" style="color:white;font-size:1.1rem;"></i>
+            <article class="premium-feature-card">
+                <div class="gradient-icon-box" style="background:linear-gradient(135deg,#8b5cf6,#a78bfa);">
+                    <i class="fas fa-magnifying-glass" style="color:white;font-size:1.15rem;"></i>
                 </div>
-                <h3 style="font-weight:700;font-size:1rem;color:var(--text-primary);margin-bottom:0.5rem;">Search & History</h3>
-                <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Past transactions ko filter, search, aur verify karke accurate spending record maintain karo.</p>
+                <h3 style="font-weight:700;font-size:1.1rem;color:var(--text-h);margin-bottom:0.75rem;">Search & History</h3>
+                <p style="font-size:0.875rem;color:var(--text-s);line-height:1.65;">Past transactions ko filter, search, aur verify karke accurate spending record maintain karo.</p>
             </article>
 
-            <article class="kc-card" style="padding:1.75rem;">
-                <div style="width:48px;height:48px;background:linear-gradient(135deg,#f43f5e,#fb7185);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;margin-bottom:1rem;">
-                    <i class="fas fa-file-csv" style="color:white;font-size:1.1rem;"></i>
+            <article class="premium-feature-card">
+                <div class="gradient-icon-box" style="background:linear-gradient(135deg,#f43f5e,#fb7185);">
+                    <i class="fas fa-file-csv" style="color:white;font-size:1.15rem;"></i>
                 </div>
-                <h3 style="font-weight:700;font-size:1rem;color:var(--text-primary);margin-bottom:0.5rem;">CSV Export</h3>
-                <p style="font-size:0.875rem;color:var(--text-secondary);line-height:1.6;">Expense data ko export karke backup, sharing, aur external analysis ke liye use kar sakte ho.</p>
+                <h3 style="font-weight:700;font-size:1.1rem;color:var(--text-h);margin-bottom:0.75rem;">CSV Export</h3>
+                <p style="font-size:0.875rem;color:var(--text-s);line-height:1.65;">Expense data ko export karke backup, sharing, aur external analysis ke liye use kar sakte ho.</p>
             </article>
 
         </div>
     </section>
 
+    <!-- ── Call to Action Banner ────────────────────────── -->
+    {% if not request.user.is_authenticated %}
+    <section style="position:relative;overflow:hidden;background:linear-gradient(135deg,#4f46e5,#8b5cf6);border-radius:var(--r-3xl);padding:4rem 2rem;text-align:center;color:white;margin-bottom:4rem;box-shadow:var(--sh-brand);">
+        <div style="position:absolute;width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,0.15),transparent 70%);top:-150px;left:-50px;pointer-events:none;"></div>
+        <div style="position:relative;z-index:1;max-width:580px;margin:0 auto;">
+            <h2 style="font-size:clamp(1.5rem,4vw,2.2rem);font-weight:800;letter-spacing:-0.03em;margin-bottom:1rem;color:white;line-height:1.2;">Take Control of Your Money Today</h2>
+            <p style="color:rgba(255,255,255,0.85);font-size:1.05rem;line-height:1.6;margin-bottom:2.25rem;">
+                Join thousands of users tracking their daily expenses, cutting out unnecessary bills, and growing their savings safely.
+            </p>
+            <a href="{% url 'signup' %}" class="btn btn-success btn-lg" style="background:#ffffff;color:var(--p-600);box-shadow:0 8px 24px rgba(0,0,0,0.15);padding:1rem 2.5rem;font-size:1.05rem;transition:all 0.3s;">
+                Create Your Free Account <i class="fas fa-arrow-right" style="margin-left:0.5rem;"></i>
+            </a>
+        </div>
+    </section>
+    {% endif %}
+
     <!-- ── Tech Snapshot ────────────────────────────────── -->
-    <section style="background:linear-gradient(135deg,#0f172a,#1e1b4b);border-radius:var(--radius-2xl);padding:2.5rem;color:white;margin-bottom:1rem;">
-        <h2 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:1.5rem;">
-            <i class="fas fa-info-circle" style="color:#6366f1;margin-right:0.5rem;"></i>
-            Website Snapshot
+    <section style="position:relative;overflow:hidden;background:linear-gradient(135deg,#070a13 0%,#0f172a 100%);border-radius:var(--r-3xl);padding:3rem;color:white;margin-bottom:2rem;box-shadow:0 20px 48px rgba(15,23,42,0.25);">
+        <!-- Background accents -->
+        <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,0.08),transparent 75%);bottom:-50px;right:-50px;pointer-events:none;"></div>
+        
+        <h2 style="font-size:1.5rem;font-weight:800;letter-spacing:-0.02em;margin-bottom:2rem;display:flex;align-items:center;gap:0.75rem;">
+            <span style="width:36px;height:36px;background:var(--grad-brand);border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:0.9rem;">
+                <i class="fas fa-code-fork" style="color:white;"></i>
+            </span>
+            Platform &amp; Architecture Snapshot
         </h2>
-        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;">
-            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:1.25rem;">
-                <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-bottom:0.3rem;">Platform</p>
-                <p style="font-weight:700;color:white;">Python + Django Web App</p>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1.25rem;">
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:var(--r-lg);padding:1.5rem;transition:background 0.3s;backdrop-filter:blur(8px);">
+                <p style="color:rgba(255,255,255,0.45);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Core Platform</p>
+                <p style="font-weight:700;color:white;font-size:1.05rem;display:flex;align-items:center;gap:0.5rem;"><i class="fa-brands fa-python" style="color:#38bdf8;"></i> Python &amp; Django</p>
             </div>
-            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:1.25rem;">
-                <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-bottom:0.3rem;">Target Users</p>
-                <p style="font-weight:700;color:white;">Students, Professionals, Families</p>
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:var(--r-lg);padding:1.5rem;transition:background 0.3s;backdrop-filter:blur(8px);">
+                <p style="color:rgba(255,255,255,0.45);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Database Engine</p>
+                <p style="font-weight:700;color:white;font-size:1.05rem;display:flex;align-items:center;gap:0.5rem;"><i class="fa-solid fa-database" style="color:#34d399;"></i> Neon PostgreSQL</p>
             </div>
-            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:1.25rem;">
-                <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-bottom:0.3rem;">Main Goal</p>
-                <p style="font-weight:700;color:white;">Track spending, improve savings</p>
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:var(--r-lg);padding:1.5rem;transition:background 0.3s;backdrop-filter:blur(8px);">
+                <p style="color:rgba(255,255,255,0.45);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Security Standard</p>
+                <p style="font-weight:700;color:white;font-size:1.05rem;display:flex;align-items:center;gap:0.5rem;"><i class="fa-solid fa-lock" style="color:#fb7185;"></i> Account-Level Sandbox</p>
             </div>
-            <div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.08);border-radius:var(--radius-lg);padding:1.25rem;">
-                <p style="color:rgba(255,255,255,0.5);font-size:0.75rem;margin-bottom:0.3rem;">Security</p>
-                <p style="font-weight:700;color:white;">Account-based private data isolation</p>
+            <div style="background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:var(--r-lg);padding:1.5rem;transition:background 0.3s;backdrop-filter:blur(8px);">
+                <p style="color:rgba(255,255,255,0.45);font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:0.5rem;">Infrastructure</p>
+                <p style="font-weight:700;color:white;font-size:1.05rem;display:flex;align-items:center;gap:0.5rem;"><i class="fa-solid fa-cloud" style="color:#a78bfa;"></i> Docker + Render Cloud</p>
             </div>
         </div>
     </section>
