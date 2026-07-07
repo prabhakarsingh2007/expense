@@ -2,24 +2,22 @@
 {% load static %}
 
 {% block content %}
-<div class="min-h-[85vh] flex items-center justify-center px-4 py-12">
-    <div class="w-full max-w-[480px] relative group">
+<div class="min-h-[80vh] flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
         
-        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-sky-500 rounded-[3rem] blur opacity-15 group-hover:opacity-30 transition duration-1000"></div>
-        
-        <div class="relative bg-white border border-slate-100 rounded-[2.5rem] shadow-2xl shadow-indigo-100/50 overflow-hidden">
-            
-            <div class="h-2 bg-gradient-to-r from-indigo-600 via-violet-600 to-sky-400"></div>
+        <div class="text-center">
+            <h2 class="text-4xl font-extrabold text-slate-900 tracking-tight mb-2">
+                Create Account
+            </h2>
+            <p class="text-slate-500 font-medium text-sm">
+                Join us to manage your expenses and budget smarter
+            </p>
+        </div>
 
-            <div class="p-8 md:p-12">
-                <div class="text-center mb-10">
-                    <div class="inline-flex items-center justify-center w-20 h-20 bg-slate-50 text-indigo-600 rounded-3xl mb-6 shadow-inner border border-slate-100/50">
-                        <i class="fas fa-user-plus text-3xl"></i>
-                    </div>
-                    <h3 class="text-3xl font-black text-slate-800 tracking-tight">Create Account</h3>
-                    <p class="text-slate-400 text-[10px] font-black uppercase tracking-[0.2em] mt-3">Join the Budget Studio</p>
-                </div>
+        <div class="bg-white rounded-[2.5rem] shadow-2xl shadow-indigo-100 border border-slate-100 overflow-hidden relative">
+            <div class="h-1.5 w-full bg-gradient-to-r from-indigo-500 via-purple-500 to-indigo-500"></div>
 
+            <div class="p-8 sm:p-10">
                 {% if form.non_field_errors %}
                 <div class="mb-6 p-4 bg-rose-50 border border-rose-100 rounded-2xl">
                     {% for error in form.non_field_errors %}
@@ -30,80 +28,133 @@
                 </div>
                 {% endif %}
 
-                <form method="post" class="space-y-5">
+                <form method="post" class="space-y-6">
                     {% csrf_token %}
-                    
-                    <div class="space-y-4 auth-form-custom">
-                        {% for field in form %}
-                            <div class="relative">
-                                <label class="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2 ml-1">
-                                    {{ field.label }}
-                                </label>
-                                
-                                {{ field }}
-                                
-                                {% if field.errors %}
-                                    <div class="flex items-center gap-1.5 mt-2 ml-1 text-rose-500">
-                                        <i class="fas fa-circle-exclamation text-[10px]"></i>
-                                        <p class="text-[10px] font-bold">{{ field.errors.0 }}</p>
-                                    </div>
-                                {% endif %}
 
-                                {% if field.help_text %}
-                                    <div class="mt-2 px-1 text-slate-400 text-[9px] leading-relaxed italic font-medium opacity-80">
-                                        {{ field.help_text|safe }}
-                                    </div>
-                                {% endif %}
+                    <!-- Username Field -->
+                    <div class="space-y-2">
+                        <label for="id_username" class="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
+                            Username
+                        </label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                                <i class="fas fa-user-circle"></i>
                             </div>
-                        {% endfor %}
+                            <input type="text" name="username" id="id_username" required
+                                   value="{{ form.username.value|default_if_none:'' }}"
+                                   class="block w-full pl-11 pr-4 py-4 bg-slate-50 border {% if form.username.errors %}border-rose-300 focus:ring-rose-500{% else %}border-slate-200 focus:ring-indigo-500{% endif %} rounded-2xl text-slate-700 font-semibold focus:ring-2 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                                   placeholder="Choose a username">
+                        </div>
+                        {% if form.username.errors %}
+                            <div class="flex items-center gap-1.5 mt-1 ml-1 text-rose-500">
+                                <i class="fas fa-circle-exclamation text-[10px]"></i>
+                                <p class="text-[10px] font-bold">{{ form.username.errors.0 }}</p>
+                            </div>
+                        {% endif %}
                     </div>
 
-                    <button type="submit" class="w-full py-4 bg-slate-900 text-white rounded-2xl font-black text-xs uppercase tracking-[0.2em] shadow-xl shadow-slate-200 hover:bg-black transition-all transform active:scale-[0.97] mt-6">
-                        Start Your Journey
-                    </button>
+                    <!-- Password Field -->
+                    <div class="space-y-2">
+                        <label for="id_password1" class="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
+                            Password
+                        </label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                                <i class="fas fa-lock"></i>
+                            </div>
+                            <input type="password" name="password1" id="id_password1" required
+                                   class="block w-full pl-11 pr-12 py-4 bg-slate-50 border {% if form.password1.errors %}border-rose-300 focus:ring-rose-500{% else %}border-slate-200 focus:ring-indigo-500{% endif %} rounded-2xl text-slate-700 font-semibold focus:ring-2 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                                   placeholder="••••••••">
+                            <button type="button" onclick="togglePassword('id_password1', 'toggle_password1')" 
+                                    class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none transition-colors">
+                                <i id="toggle_password1" class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        {% if form.password1.errors %}
+                            <div class="flex items-center gap-1.5 mt-1 ml-1 text-rose-500">
+                                <i class="fas fa-circle-exclamation text-[10px]"></i>
+                                <p class="text-[10px] font-bold">{{ form.password1.errors.0 }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Confirm Password Field -->
+                    <div class="space-y-2">
+                        <label for="id_password2" class="block text-xs font-bold text-slate-500 uppercase tracking-widest ml-1">
+                            Confirm Password
+                        </label>
+                        <div class="relative group">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+                                <i class="fas fa-shield-halved"></i>
+                            </div>
+                            <input type="password" name="password2" id="id_password2" required
+                                   class="block w-full pl-11 pr-12 py-4 bg-slate-50 border {% if form.password2.errors %}border-rose-300 focus:ring-rose-500{% else %}border-slate-200 focus:ring-indigo-500{% endif %} rounded-2xl text-slate-700 font-semibold focus:ring-2 focus:bg-white outline-none transition-all placeholder:text-slate-300"
+                                   placeholder="••••••••">
+                            <button type="button" onclick="togglePassword('id_password2', 'toggle_password2')" 
+                                    class="absolute inset-y-0 right-0 pr-4 flex items-center text-slate-400 hover:text-slate-600 focus:outline-none transition-colors">
+                                <i id="toggle_password2" class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        {% if form.password2.errors %}
+                            <div class="flex items-center gap-1.5 mt-1 ml-1 text-rose-500">
+                                <i class="fas fa-circle-exclamation text-[10px]"></i>
+                                <p class="text-[10px] font-bold">{{ form.password2.errors.0 }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Centered Button -->
+                    <div class="pt-4 flex justify-center">
+                        <button type="submit" class="w-full bg-indigo-600 text-white text-sm font-black uppercase tracking-[0.2em] py-5 rounded-2xl shadow-xl shadow-indigo-100 hover:bg-indigo-700 hover:scale-[1.01] active:scale-[0.99] transition-all">
+                            Create Account
+                        </button>
+                    </div>
                 </form>
 
-                <div class="mt-10 pt-8 border-t border-slate-50 text-center">
-                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wide">
+                <div class="mt-10 text-center border-t border-slate-50 pt-8">
+                    <p class="text-slate-500 text-sm font-medium">
                         Already have an account? 
-                        <a href="{% url 'login' %}" class="text-indigo-600 hover:text-indigo-800 transition-all ml-1 underline underline-offset-4 decoration-2 decoration-indigo-100 hover:decoration-indigo-500">
-                            Login here
+                        <a href="{% url 'login' %}" class="text-indigo-600 font-extrabold hover:text-indigo-800 transition-colors ml-1">
+                            Log In
                         </a>
                     </p>
                 </div>
             </div>
         </div>
+
+        <div class="flex items-center justify-center gap-2 opacity-30 select-none">
+            <span class="w-8 h-[1px] bg-slate-400"></span>
+            <span class="text-[10px] font-black uppercase tracking-[0.4em] text-slate-600">KharchaGraph</span>
+            <span class="w-8 h-[1px] bg-slate-400"></span>
+        </div>
     </div>
 </div>
 
+<script>
+    function togglePassword(inputId, iconId) {
+        const passwordInput = document.getElementById(inputId);
+        const toggleIcon = document.getElementById(iconId);
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            toggleIcon.classList.remove('fa-eye');
+            toggleIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            toggleIcon.classList.remove('fa-eye-slash');
+            toggleIcon.classList.add('fa-eye');
+        }
+    }
+</script>
+
 <style>
-    /* Premium Input Styling for Django Form Fields */
-    .auth-form-custom input, 
-    .auth-form-custom select, 
-    .auth-form-custom textarea {
-        width: 100% !important;
-        padding: 1rem 1.25rem !important;
-        background-color: #f8fafc !important; /* slate-50 */
-        border: 2px solid #f1f5f9 !important; /* slate-100 */
-        border-radius: 1.25rem !important;
-        font-size: 0.875rem !important;
-        font-weight: 700 !important;
-        color: #1e293b !important;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    @keyframes gradientShift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
     }
-
-    .auth-form-custom input:focus {
-        background-color: #ffffff !important;
-        border-color: #e0e7ff !important; /* indigo-100 */
-        outline: none !important;
-        box-shadow: 0 0 0 4px rgba(238, 242, 255, 0.8) !important;
-    }
-
-    /* Clean up Django help text lists if they appear */
-    .auth-form-custom ul {
-        margin-top: 0.5rem;
-        padding-left: 0.5rem;
-        list-style-type: none;
+    .bg-gradient-to-r {
+        background-size: 200% 200%;
+        animation: gradientShift 4s ease infinite;
     }
 </style>
 {% endblock %}
