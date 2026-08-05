@@ -88,6 +88,15 @@
             backdrop-filter: blur(12px); 
             -webkit-backdrop-filter: blur(12px);
         }
+        @keyframes shimmer {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .shimmer-bg {
+            background: linear-gradient(90deg, #e2e8f0 25%, #f1f5f9 50%, #e2e8f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite linear;
+        }
     </style>
 </head>
 
@@ -166,7 +175,52 @@
         </div>
     </header>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-32 lg:pb-10">
+    <!-- Global Page Loader (Center Spinner) -->
+    <div id="page-loader" class="fixed inset-0 z-[9999] flex items-center justify-center bg-[#f8fafc]/90 backdrop-blur-md transition-opacity duration-300">
+        <div class="flex flex-col items-center gap-4">
+            <!-- Spinner -->
+            <div class="relative w-16 h-16">
+                <div class="absolute inset-0 rounded-full border-4 border-slate-200"></div>
+                <div class="absolute inset-0 rounded-full border-4 border-indigo-600 border-t-transparent animate-spin"></div>
+            </div>
+            <p class="text-xs font-bold text-slate-600 uppercase tracking-widest animate-pulse">Loading KharchaGraph...</p>
+        </div>
+    </div>
+
+    <!-- Shimmering Skeleton Loader -->
+    <div id="page-skeleton" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-32 lg:pb-10">
+        <div class="space-y-8">
+            <!-- Skeleton Header -->
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                <div class="space-y-3 w-1/3">
+                    <div class="h-8 shimmer-bg rounded-xl"></div>
+                    <div class="h-4 shimmer-bg rounded-lg w-2/3"></div>
+                </div>
+                <div class="flex gap-3 w-full md:w-auto">
+                    <div class="h-10 shimmer-bg rounded-xl w-28"></div>
+                    <div class="h-10 shimmer-bg rounded-xl w-28"></div>
+                </div>
+            </div>
+            <!-- Skeleton Cards -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                <div class="h-24 shimmer-bg rounded-3xl"></div>
+                <div class="h-24 shimmer-bg rounded-3xl"></div>
+                <div class="h-24 shimmer-bg rounded-3xl"></div>
+                <div class="h-24 shimmer-bg rounded-3xl"></div>
+            </div>
+            <!-- Skeleton Block -->
+            <div class="bg-white border border-slate-100 rounded-3xl p-8 space-y-6">
+                <div class="h-6 shimmer-bg rounded-xl w-1/4"></div>
+                <div class="space-y-3">
+                    <div class="h-4 shimmer-bg rounded-lg"></div>
+                    <div class="h-4 shimmer-bg rounded-lg w-5/6"></div>
+                    <div class="h-4 shimmer-bg rounded-lg w-2/3"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main id="main-content" class="hidden opacity-0 transition-opacity duration-300 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 pb-32 lg:pb-10">
         {% if messages %}
             <div class="mb-6 space-y-2">
                 {% for message in messages %}
@@ -267,6 +321,75 @@
             body { padding-bottom: 80px; }
         }
     </style>
+
+    <script>
+        // Transition loader hide when page finishes loading
+        window.addEventListener('load', function() {
+            const loader = document.getElementById('page-loader');
+            const skeleton = document.getElementById('page-skeleton');
+            const mainContent = document.getElementById('main-content');
+            
+            if (skeleton) {
+                skeleton.style.display = 'none';
+            }
+            if (mainContent) {
+                mainContent.classList.remove('hidden');
+                // Brief delay to allow browser to trigger CSS transition smoothly
+                setTimeout(function() {
+                    mainContent.classList.remove('opacity-0');
+                }, 50);
+            }
+            if (loader) {
+                loader.classList.add('opacity-0');
+                setTimeout(function() {
+                    loader.style.display = 'none';
+                }, 300);
+            }
+        });
+
+        // Event listeners to trigger loading overlay on page navigation or submit
+        document.addEventListener('DOMContentLoaded', function() {
+            const loader = document.getElementById('page-loader');
+            
+            // Show loader when links are clicked
+            document.querySelectorAll('a').forEach(function(link) {
+                const href = link.getAttribute('href');
+                const target = link.getAttribute('target');
+                
+                if (href && !href.startsWith('#') && !href.startsWith('javascript:') && target !== '_blank') {
+                    link.addEventListener('click', function() {
+                        if (loader) {
+                            loader.style.display = 'flex';
+                            loader.offsetHeight; // Force browser reflow
+                            loader.classList.remove('opacity-0');
+                        }
+                    });
+                }
+            });
+
+            // Show loader on form submits
+            document.querySelectorAll('form').forEach(function(form) {
+                form.addEventListener('submit', function() {
+                    if (loader) {
+                        loader.style.display = 'flex';
+                        loader.offsetHeight;
+                        loader.classList.remove('opacity-0');
+                    }
+                });
+            });
+        });
+
+        // Fix back-forward browser cache loading state hang
+        window.addEventListener('pageshow', function(event) {
+            const loader = document.getElementById('page-loader');
+            if (loader && event.persisted) {
+                loader.classList.add('opacity-0');
+                setTimeout(function() {
+                    loader.style.display = 'none';
+                }, 300);
+            }
+        });
+    </script>
 
 </body>
 </html>
