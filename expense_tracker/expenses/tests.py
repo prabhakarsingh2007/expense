@@ -47,3 +47,43 @@ class AddExpenseViewTests(TestCase):
         self.assertEqual(expense.amount, Decimal('150.75'))
         self.assertEqual(expense.category, self.category)
         self.assertEqual(expense.date, today)
+
+
+class SEORoutesTests(TestCase):
+    def setUp(self):
+        self.client = Client()
+
+    def test_features_view_unauthenticated(self):
+        response = self.client.get(reverse('features'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Take Control of Your Money")
+        self.assertContains(response, "Instant Expense Entry")
+
+    def test_faq_view_unauthenticated(self):
+        response = self.client.get(reverse('faq'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Frequently Asked Questions")
+        self.assertContains(response, "Is KharchaGraph completely free to use?")
+
+    def test_contact_view_unauthenticated(self):
+        response = self.client.get(reverse('contact'))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Get In Touch")
+        self.assertContains(response, "kharchagraph@gmail.com")
+
+    def test_robots_txt(self):
+        response = self.client.get(reverse('robots_txt'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers['Content-Type'], 'text/plain')
+        self.assertContains(response, "User-agent: *")
+        self.assertContains(response, "Disallow: /admin/")
+        self.assertContains(response, "Sitemap:")
+
+    def test_sitemap_xml(self):
+        response = self.client.get(reverse('sitemap_xml'))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.headers['Content-Type'], 'text/xml')
+        self.assertContains(response, "<?xml version=")
+        self.assertContains(response, "<urlset")
+        self.assertContains(response, "<loc>")
+

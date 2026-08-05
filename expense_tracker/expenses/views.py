@@ -797,3 +797,59 @@ def analyze_expense(expenses):
 
 def about_me(request):
     return render(request, 'expenses/about_me.html')
+
+
+def features(request):
+    return render(request, 'expenses/features.html')
+
+
+def faq(request):
+    return render(request, 'expenses/faq.html')
+
+
+def contact(request):
+    return render(request, 'expenses/contact.html')
+
+
+def robots_txt(request):
+    lines = [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /admin/",
+        "Disallow: /dashboard/",
+        "Disallow: /add/",
+        "Disallow: /edit/",
+        "Disallow: /delete/",
+        "Disallow: /recurring/",
+        "Disallow: /categories/",
+        "Disallow: /budget/",
+        "Disallow: /search/",
+        "Disallow: /export/",
+        f"Sitemap: {request.scheme}://{request.get_host()}/sitemap.xml",
+    ]
+    return HttpResponse("\n".join(lines), content_type="text/plain")
+
+
+def sitemap_xml(request):
+    host = f"{request.scheme}://{request.get_host()}"
+    urls = [
+        {"loc": f"{host}/", "changefreq": "daily", "priority": "1.0"},
+        {"loc": f"{host}/about/", "changefreq": "monthly", "priority": "0.8"},
+        {"loc": f"{host}/features/", "changefreq": "monthly", "priority": "0.8"},
+        {"loc": f"{host}/faq/", "changefreq": "monthly", "priority": "0.7"},
+        {"loc": f"{host}/contact/", "changefreq": "monthly", "priority": "0.7"},
+        {"loc": f"{host}/login/", "changefreq": "monthly", "priority": "0.6"},
+        {"loc": f"{host}/signup/", "changefreq": "monthly", "priority": "0.6"},
+    ]
+    
+    xml_content = ['<?xml version="1.0" encoding="UTF-8"?>']
+    xml_content.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
+    for url in urls:
+        xml_content.append('  <url>')
+        xml_content.append(f'    <loc>{url["loc"]}</loc>')
+        xml_content.append(f'    <changefreq>{url["changefreq"]}</changefreq>')
+        xml_content.append(f'    <priority>{url["priority"]}</priority>')
+        xml_content.append('  </url>')
+    xml_content.append('</urlset>')
+    
+    return HttpResponse("\n".join(xml_content), content_type="text/xml")

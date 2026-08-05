@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from expenses import views
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -22,6 +22,11 @@ urlpatterns = [
 
     path('categories/', views.manage_categories, name='manage_categories'),
     path('categories/delete/<int:id>/', views.delete_category, name='delete_category'),
+    path('features/', views.features, name='features'),
+    path('faq/', views.faq, name='faq'),
+    path('contact/', views.contact, name='contact'),
+    path('robots.txt', views.robots_txt, name='robots_txt'),
+    path('sitemap.xml', views.sitemap_xml, name='sitemap_xml'),
 ]
 
 

@@ -6,7 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>
         {% block meta_title %}
-            {% if request.resolver_match.url_name == 'home' %}KharchaGraph | Smart Expense Tracker
+            {% if request.resolver_match.url_name == 'home' %}KharchaGraph - Best Personal Expense Tracker | Daily Budget Manager
+            {% elif request.resolver_match.url_name == 'features' %}Platform Features | KharchaGraph
+            {% elif request.resolver_match.url_name == 'faq' %}FAQ & Help Center | KharchaGraph
+            {% elif request.resolver_match.url_name == 'contact' %}Contact Support | KharchaGraph
             {% elif request.resolver_match.url_name == 'dashboard' %}Dashboard | KharchaGraph
             {% elif request.resolver_match.url_name == 'add_expense' %}Add Expense | KharchaGraph
             {% elif request.resolver_match.url_name == 'edit_expense' %}Edit Expense | KharchaGraph
@@ -15,14 +18,60 @@
             {% elif request.resolver_match.url_name == 'set_budget' %}Set Monthly Budget | KharchaGraph
             {% elif request.resolver_match.url_name == 'manage_categories' %}Manage Categories | KharchaGraph
             {% elif request.resolver_match.url_name == 'recurring_expenses' %}Recurring Expenses | KharchaGraph
-            {% elif request.resolver_match.url_name == 'about_me' %}About KharchaGraph
-            {% elif request.resolver_match.url_name == 'login' %}Login | KharchaGraph
-            {% elif request.resolver_match.url_name == 'signup' %}Sign Up | KharchaGraph
-            {% else %}KharchaGraph | Budget & Spending Manager
+            {% elif request.resolver_match.url_name == 'about_me' %}About KharchaGraph | Developed by Prabhakar Kr Singh
+            {% elif request.resolver_match.url_name == 'login' %}Secure Login | KharchaGraph
+            {% elif request.resolver_match.url_name == 'signup' %}Start Free Account | KharchaGraph
+            {% else %}KharchaGraph | Smart Personal Finance & Budget Manager
             {% endif %}
         {% endblock %}
     </title>
-    <meta name="description" content="{% block meta_description %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph is a smart expense tracker to manage daily kharcha, monthly budgets, recurring bills, and spending insights in one place.{% elif request.resolver_match.url_name == 'dashboard' %}Track daily spending, view monthly summaries, and stay in control of your budget with KharchaGraph dashboard.{% elif request.resolver_match.url_name == 'add_expense' %}Add your daily expenses quickly with category and payment details in KharchaGraph to improve money management.{% elif request.resolver_match.url_name == 'edit_expense' %}Update your expense records anytime to keep your personal finance data accurate in KharchaGraph.{% elif request.resolver_match.url_name == 'search' %}Search and filter expense history by date, category, and amount to understand where your money goes.{% elif request.resolver_match.url_name == 'report' %}Analyze spending trends with smart charts and reports to plan savings and improve financial habits.{% elif request.resolver_match.url_name == 'set_budget' %}Set a monthly budget and monitor progress so you can avoid overspending and save more every month.{% elif request.resolver_match.url_name == 'manage_categories' %}Create and manage expense categories for better organization and faster tracking of personal and family spending.{% elif request.resolver_match.url_name == 'recurring_expenses' %}Manage recurring expenses like rent, subscriptions, and bills so no important payment is missed.{% elif request.resolver_match.url_name == 'about_me' %}Learn about KharchaGraph and how it helps users track expenses, plan budgets, and improve savings.{% elif request.resolver_match.url_name == 'login' %}Login to your KharchaGraph account to manage your budget, expenses, and reports securely.{% elif request.resolver_match.url_name == 'signup' %}Create a free KharchaGraph account and start tracking expenses, budgets, and savings goals today.{% else %}KharchaGraph helps you manage expenses, track budgets, and analyze spending with simple personal finance tools.{% endif %}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph is the best personal expense tracker to manage daily kharcha, monthly budgets, recurring bills, and spending insights in one place.{% elif request.resolver_match.url_name == 'features' %}Explore the powerful tools and functionalities of KharchaGraph to manage and plan your daily expenses, monthly budgets, and personal savings.{% elif request.resolver_match.url_name == 'faq' %}Find answers to frequently asked questions about KharchaGraph's personal finance tracker, privacy, exports, and daily usage limits.{% elif request.resolver_match.url_name == 'contact' %}Get in touch with the KharchaGraph engineering team. Send queries, report bugs, or share feedback for a better personal finance tool.{% elif request.resolver_match.url_name == 'dashboard' %}Track daily spending, view monthly summaries, and stay in control of your budget with KharchaGraph dashboard.{% elif request.resolver_match.url_name == 'add_expense' %}Add your daily expenses quickly with category and payment details in KharchaGraph to improve money management.{% elif request.resolver_match.url_name == 'edit_expense' %}Update your expense records anytime to keep your personal finance data accurate in KharchaGraph.{% elif request.resolver_match.url_name == 'search' %}Search and filter expense history by date, category, and amount to understand where your money goes.{% elif request.resolver_match.url_name == 'report' %}Analyze spending trends with smart charts and reports to plan savings and improve financial habits.{% elif request.resolver_match.url_name == 'set_budget' %}Set a monthly budget and monitor progress so you can avoid overspending and save more every month.{% elif request.resolver_match.url_name == 'manage_categories' %}Create and manage expense categories for better organization and faster tracking of personal and family spending.{% elif request.resolver_match.url_name == 'recurring_expenses' %}Manage recurring expenses like rent, subscriptions, and bills so no important payment is missed.{% elif request.resolver_match.url_name == 'about_me' %}Learn about KharchaGraph and how it helps users track expenses, plan budgets, and improve savings.{% elif request.resolver_match.url_name == 'login' %}Login to your KharchaGraph account to manage your budget, expenses, and reports securely.{% elif request.resolver_match.url_name == 'signup' %}Create a free KharchaGraph account and start tracking expenses, budgets, and savings goals today.{% else %}KharchaGraph helps you manage expenses, track budgets, and analyze spending with simple personal finance tools.{% endif %}{% endblock %}">
+    <meta name="keywords" content="{% block meta_keywords %}expense tracker, personal finance manager, monthly budget planner, budget app, spending logs, recurring bills, money management, track daily kharcha, savings planning, KharchaGraph{% endblock %}">
+    <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="{{ request.build_absolute_uri }}">
+    <meta property="og:title" content="{% block og_title %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph - Best Personal Expense Tracker & Budget Manager{% else %}KharchaGraph | Smart Personal Finance{% endif %}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}KharchaGraph is a modern expense tracker designed to help you track spending, set budgets, and plan recurring bills securely.{% endblock %}">
+    <meta property="og:image" content="https://googleusercontent.com/image_generation_content/3">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta property="twitter:title" content="{% block twitter_title %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph - Best Personal Expense Tracker & Budget Manager{% else %}KharchaGraph | Smart Personal Finance{% endif %}{% endblock %}">
+    <meta property="twitter:description" content="{% block twitter_description %}KharchaGraph helps you track daily expenses, set category-wise budgets, manage recurring bill payments, and analyze spending habits.{% endblock %}">
+    <meta property="twitter:image" content="https://googleusercontent.com/image_generation_content/3">
+
+    <!-- Schema.org Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "KharchaGraph",
+      "url": "{{ request.scheme }}://{{ request.get_host }}/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ request.scheme }}://{{ request.get_host }}/search/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "KharchaGraph",
+      "url": "{{ request.scheme }}://{{ request.get_host }}/",
+      "logo": "https://googleusercontent.com/image_generation_content/3",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "kharchagraph@gmail.com",
+        "contactType": "customer service"
+      }
+    }
+    </script>
+
     
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -71,10 +120,16 @@
                 <div class="h-6 w-[1px] bg-slate-200 mx-2"></div>
                 <a href="{% url 'logout' %}" class="text-rose-500 font-bold text-sm no-underline">Logout</a>
                 {% else %}
-                <a href="{% url 'about_me' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline inline-flex items-center gap-2">
+                <a href="{% url 'features' %}" class="px-4 py-2 text-sm font-bold {% if request.resolver_match.url_name == 'features' %}text-emerald-600 bg-emerald-50{% else %}text-slate-600 hover:bg-slate-50{% endif %} rounded-xl no-underline">Features</a>
+                <a href="{% url 'faq' %}" class="px-4 py-2 text-sm font-bold {% if request.resolver_match.url_name == 'faq' %}text-emerald-600 bg-emerald-50{% else %}text-slate-600 hover:bg-slate-50{% endif %} rounded-xl no-underline">FAQ</a>
+                <a href="{% url 'contact' %}" class="px-4 py-2 text-sm font-bold {% if request.resolver_match.url_name == 'contact' %}text-emerald-600 bg-emerald-50{% else %}text-slate-600 hover:bg-slate-50{% endif %} rounded-xl no-underline">Contact</a>
+                <a href="{% url 'about_me' %}" class="px-4 py-2 text-sm font-bold {% if request.resolver_match.url_name == 'about_me' %}text-emerald-600 bg-emerald-50{% else %}text-slate-600 hover:bg-slate-50{% endif %} rounded-xl no-underline inline-flex items-center gap-2">
                     <i class="fas fa-circle-info"></i>
                     <span>About</span>
                 </a>
+                <div class="h-6 w-[1px] bg-slate-200 mx-2"></div>
+                <a href="{% url 'login' %}" class="px-4 py-2 text-sm font-bold text-slate-600 hover:bg-slate-50 rounded-xl no-underline">Login</a>
+                <a href="{% url 'signup' %}" class="px-4 py-2.5 text-sm font-bold bg-indigo-600 text-white rounded-xl no-underline hover:bg-indigo-500 shadow-md shadow-indigo-100">Sign Up</a>
                 {% endif %}
             </nav>
         </div>
@@ -91,6 +146,16 @@
             <span class="text-xl font-black text-emerald-600 italic" style="display:none;">KharchaGraph</span>
         </a>
         <div class="flex items-center gap-4">
+            {% if not request.user.is_authenticated %}
+            <a href="{% url 'features' %}" class="{% if request.resolver_match.url_name == 'features' %}text-emerald-600{% else %}text-slate-600{% endif %} no-underline flex flex-col items-center leading-none gap-0.5">
+                <i class="fas fa-layer-group text-base"></i>
+                <span class="text-[10px] font-bold">Features</span>
+            </a>
+            <a href="{% url 'faq' %}" class="{% if request.resolver_match.url_name == 'faq' %}text-emerald-600{% else %}text-slate-600{% endif %} no-underline flex flex-col items-center leading-none gap-0.5">
+                <i class="fas fa-question-circle text-base"></i>
+                <span class="text-[10px] font-bold">FAQ</span>
+            </a>
+            {% endif %}
             <a href="{% url 'about_me' %}" class="{% if request.resolver_match.url_name == 'about_me' %}text-emerald-600{% else %}text-slate-600{% endif %} no-underline flex flex-col items-center leading-none gap-0.5">
                 <i class="fas fa-circle-info text-base"></i>
                 <span class="text-[10px] font-bold">About</span>
@@ -114,6 +179,55 @@
 
         {% block content %}{% endblock %}
     </main>
+
+    <footer class="bg-white border-t border-slate-100 py-12 mt-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <img
+                            src="https://googleusercontent.com/image_generation_content/3"
+                            alt="KharchaGraph logo"
+                            class="h-8 w-auto"
+                            onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+                        >
+                        <span class="text-xl font-black text-emerald-600 italic" style="display:none;">KharchaGraph</span>
+                    </div>
+                    <p class="text-slate-500 text-sm leading-relaxed">
+                        Smart Expense Tracker for Daily Kharcha, Budget, and Savings Planning. Manage your money efficiently.
+                    </p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4">Platform</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'features' %}" class="text-slate-500 hover:text-emerald-600 no-underline">Features</a></li>
+                        <li><a href="{% url 'about_me' %}" class="text-slate-500 hover:text-emerald-600 no-underline">About Us</a></li>
+                        <li><a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'login' %}{% endif %}" class="text-slate-500 hover:text-emerald-600 no-underline">Dashboard</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4">Support & Help</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{% url 'faq' %}" class="text-slate-500 hover:text-emerald-600 no-underline">FAQ / Help Center</a></li>
+                        <li><a href="{% url 'contact' %}" class="text-slate-500 hover:text-emerald-600 no-underline">Contact Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 uppercase tracking-wider mb-4">Developer</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li class="text-slate-500">Prabhakar Kr Singh</li>
+                        <li><a href="https://github.com/prabhakarsingh2007" target="_blank" class="text-slate-500 hover:text-emerald-600 no-underline"><i class="fab fa-github mr-1"></i> GitHub</a></li>
+                        <li><a href="https://in.linkedin.com/in/prabhakar-singh-7880b9323" target="_blank" class="text-slate-500 hover:text-emerald-600 no-underline"><i class="fab fa-linkedin mr-1"></i> LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="mt-8 pt-8 border-t border-slate-100 text-center">
+                <p class="text-slate-400 text-xs">
+                    © 2026 KharchaGraph. All rights reserved. Designed & Developed by Prabhakar Kr Singh. Guided by Sadique Hussain.
+                </p>
+            </div>
+        </div>
+    </footer>
 
     {% if request.user.is_authenticated %}
     <nav class="lg:hidden fixed bottom-0 left-0 right-0 glass-effect border-t border-slate-100 px-1 py-3 z-[100] pb-safe">

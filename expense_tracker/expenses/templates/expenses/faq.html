@@ -1,0 +1,143 @@
+{% extends 'expenses/base.html' %}
+{% load static %}
+
+{% block meta_title %}FAQ & Help Center | KharchaGraph{% endblock %}
+{% block meta_description %}Find answers to frequently asked questions about KharchaGraph's personal finance tracker, privacy, exports, and daily usage limits.{% endblock %}
+{% block meta_keywords %}kharchagraph faq, budget app help, finance tracker privacy, expense limits calculation, export transactions, recurring bill questions{% endblock %}
+
+{% block content %}
+<section class="relative overflow-hidden rounded-3xl border border-slate-100 bg-gradient-to-br from-indigo-50 via-white to-cyan-50 p-8 md:p-12 mb-12">
+    <div class="absolute -top-14 -right-10 w-48 h-48 rounded-full bg-indigo-100/60 blur-3xl"></div>
+    <div class="absolute -bottom-14 -left-10 w-48 h-48 rounded-full bg-cyan-100/60 blur-3xl"></div>
+
+    <div class="relative max-w-3xl mx-auto text-center">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-4">Support & FAQ</span>
+        <h1 class="text-4xl md:text-5xl font-black tracking-tight text-slate-900 leading-tight">
+            Frequently Asked Questions
+        </h1>
+        <p class="mt-4 text-slate-600 text-base md:text-lg leading-relaxed">
+            Got queries? We have answers. Find everything you need to know about managing your budget and keeping your finances secure.
+        </p>
+    </div>
+</section>
+
+<!-- FAQ Accordion List -->
+<section class="max-w-4xl mx-auto px-4 py-6 space-y-4 mb-12">
+    
+    <!-- Question 1 -->
+    <details class="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm [&_summary::-webkit-details-marker]:hidden" open>
+        <summary class="flex items-center justify-between cursor-pointer focus:outline-none">
+            <h2 class="text-lg font-extrabold text-slate-900 pr-4">Is KharchaGraph completely free to use?</h2>
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 group-open:rotate-180 transition-transform">
+                <i class="fas fa-chevron-down text-xs"></i>
+            </span>
+        </summary>
+        <div class="mt-4 text-slate-600 text-sm leading-relaxed border-t border-slate-50 pt-4">
+            Yes, KharchaGraph is completely free to use. You can track unlimited daily expenses, manage categories, set monthly budget caps, configure recurring bill reminders, and export data without paying anything.
+        </div>
+    </details>
+
+    <!-- Question 2 -->
+    <details class="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex items-center justify-between cursor-pointer focus:outline-none">
+            <h2 class="text-lg font-extrabold text-slate-900 pr-4">Is my personal financial data secure?</h2>
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 group-open:rotate-180 transition-transform">
+                <i class="fas fa-chevron-down text-xs"></i>
+            </span>
+        </summary>
+        <div class="mt-4 text-slate-600 text-sm leading-relaxed border-t border-slate-50 pt-4">
+            Security is our highest priority. Your transaction logs and monthly budgets are tied strictly to your password-protected user account. Only you can view, add, modify, or delete your transaction data.
+        </div>
+    </details>
+
+    <!-- Question 3 -->
+    <details class="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex items-center justify-between cursor-pointer focus:outline-none">
+            <h2 class="text-lg font-extrabold text-slate-900 pr-4">How does the daily spending limit work?</h2>
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 group-open:rotate-180 transition-transform">
+                <i class="fas fa-chevron-down text-xs"></i>
+            </span>
+        </summary>
+        <div class="mt-4 text-slate-600 text-sm leading-relaxed border-t border-slate-50 pt-4">
+            Your daily spending limit is automatically calculated by dividing your total monthly budget by 30 (the average days in a month). The system monitors your real-time spend and alerts you if you approach or exceed this budget on a given day.
+        </div>
+    </details>
+
+    <!-- Question 4 -->
+    <details class="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex items-center justify-between cursor-pointer focus:outline-none">
+            <h2 class="text-lg font-extrabold text-slate-900 pr-4">What happens to my past entries if I stop a recurring bill?</h2>
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 group-open:rotate-180 transition-transform">
+                <i class="fas fa-chevron-down text-xs"></i>
+            </span>
+        </summary>
+        <div class="mt-4 text-slate-600 text-sm leading-relaxed border-t border-slate-50 pt-4">
+            When you stop or delete a recurring expense schedule, all your past expenses generated by that recurring rule remain securely saved in your database history. Only future automated additions are suspended.
+        </div>
+    </details>
+
+    <!-- Question 5 -->
+    <details class="group bg-white border border-slate-100 rounded-2xl p-6 shadow-sm [&_summary::-webkit-details-marker]:hidden">
+        <summary class="flex items-center justify-between cursor-pointer focus:outline-none">
+            <h2 class="text-lg font-extrabold text-slate-900 pr-4">Can I export my expense data?</h2>
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-slate-50 flex items-center justify-center text-slate-500 group-open:rotate-180 transition-transform">
+                <i class="fas fa-chevron-down text-xs"></i>
+            </span>
+        </summary>
+        <div class="mt-4 text-slate-600 text-sm leading-relaxed border-t border-slate-50 pt-4">
+            Absolutely! You can download your entire transaction history as a CSV file with one click from the history page or dashboard. The CSV format is fully compatible with Excel, Google Sheets, or other money management applications.
+        </div>
+    </details>
+
+</section>
+
+<!-- JSON-LD FAQ Schema for Search Engine Sitelinks -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Is KharchaGraph completely free to use?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, KharchaGraph is completely free to use. You can track unlimited daily expenses, manage categories, set monthly budget caps, configure recurring bill reminders, and export data without paying anything."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Is my personal financial data secure?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Security is our highest priority. Your transaction logs and monthly budgets are tied strictly to your password-protected user account. Only you can view, add, modify, or delete your transaction data."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How does the daily spending limit work?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Your daily spending limit is automatically calculated by dividing your total monthly budget by 30 (the average days in a month). The system monitors your real-time spend and alerts you if you approach or exceed this budget on a given day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What happens to my past entries if I stop a recurring bill?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "When you stop or delete a recurring expense schedule, all your past expenses generated by that recurring rule remain securely saved in your database history. Only future automated additions are suspended."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I export my expense data?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Absolutely! You can download your entire transaction history as a CSV file with one click from the history page or dashboard. The CSV format is fully compatible with Excel, Google Sheets, or other money management applications."
+      }
+    }
+  ]
+}
+</script>
+{% endblock %}

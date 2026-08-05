@@ -1,6 +1,10 @@
 {% extends 'expenses/base.html' %}
 {% load static %}
 
+{% block meta_title %}Dashboard | KharchaGraph{% endblock %}
+{% block meta_description %}Track daily spending, view monthly summaries, and stay in control of your budget with KharchaGraph dashboard.{% endblock %}
+{% block meta_keywords %}kharchagraph dashboard, spending metrics, daily limit tracking, budget status overview{% endblock %}
+
 {% block content %}
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -79,8 +83,7 @@
                 </div>
             </div>
             <div class="w-full bg-slate-100 h-4 rounded-full overflow-hidden mb-4">
-                <div class="h-full rounded-full transition-all duration-700 {% if is_daily_over %}bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]{% else %}bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]{% endif %}" 
-                     style="width: {{ daily_usage_percent_capped|floatformat:0 }}%"></div>
+                <div id="daily-usage-bar" class="h-full rounded-full transition-all duration-700 {% if is_daily_over %}bg-rose-500 shadow-[0_0_15px_rgba(244,63,94,0.4)]{% else %}bg-emerald-500 shadow-[0_0_15px_rgba(16,185,129,0.4)]{% endif %}"></div>
             </div>
             <div class="flex items-center gap-3 bg-indigo-50/50 p-4 rounded-2xl border border-indigo-100/50">
                 <div class="flex-shrink-0 w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center text-indigo-600">
@@ -159,4 +162,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const usagePercent = parseInt('{{ daily_usage_percent_capped|default:0|floatformat:0 }}') || 0;
+        const usageBar = document.getElementById('daily-usage-bar');
+        if (usageBar) {
+            usageBar.style.width = usagePercent + '%';
+        }
+    });
+</script>
 {% endblock %}
