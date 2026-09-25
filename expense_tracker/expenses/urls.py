@@ -25,6 +25,10 @@ urlpatterns = [
     path('features/', views.features, name='features'),
     path('faq/', views.faq, name='faq'),
     path('contact/', views.contact, name='contact'),
+    path('terms/', views.terms, name='terms'),
+    path('privacy/', views.privacy, name='privacy'),
+    path('googleaf6e80428ae4c3fe.html', views.google_verification, name='google_verification'),
+    path('favicon.ico', views.favicon_ico, name='favicon_ico'),
     path('robots.txt', views.robots_txt, name='robots_txt'),
     path('sitemap.xml', views.sitemap_xml, name='sitemap_xml'),
 ]

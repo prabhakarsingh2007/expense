@@ -7,9 +7,11 @@
     <title>
         {% block meta_title %}
             {% if request.resolver_match.url_name == 'home' %}KharchaGraph - Best Personal Expense Tracker | Daily Budget Manager
-            {% elif request.resolver_match.url_name == 'features' %}Platform Features | KharchaGraph
+            {% elif request.resolver_match.url_name == 'features' %}Platform Features & Tools | KharchaGraph
             {% elif request.resolver_match.url_name == 'faq' %}FAQ & Help Center | KharchaGraph
-            {% elif request.resolver_match.url_name == 'contact' %}Contact Support | KharchaGraph
+            {% elif request.resolver_match.url_name == 'contact' %}Contact Support & Feedback | KharchaGraph
+            {% elif request.resolver_match.url_name == 'terms' %}Terms of Service | KharchaGraph
+            {% elif request.resolver_match.url_name == 'privacy' %}Privacy Policy | KharchaGraph
             {% elif request.resolver_match.url_name == 'dashboard' %}Dashboard | KharchaGraph
             {% elif request.resolver_match.url_name == 'add_expense' %}Add Expense | KharchaGraph
             {% elif request.resolver_match.url_name == 'edit_expense' %}Edit Expense | KharchaGraph
@@ -25,52 +27,144 @@
             {% endif %}
         {% endblock %}
     </title>
-    <meta name="description" content="{% block meta_description %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph is the best personal expense tracker to manage daily kharcha, monthly budgets, recurring bills, and spending insights in one place.{% elif request.resolver_match.url_name == 'features' %}Explore the powerful tools and functionalities of KharchaGraph to manage and plan your daily expenses, monthly budgets, and personal savings.{% elif request.resolver_match.url_name == 'faq' %}Find answers to frequently asked questions about KharchaGraph's personal finance tracker, privacy, exports, and daily usage limits.{% elif request.resolver_match.url_name == 'contact' %}Get in touch with the KharchaGraph engineering team. Send queries, report bugs, or share feedback for a better personal finance tool.{% elif request.resolver_match.url_name == 'dashboard' %}Track daily spending, view monthly summaries, and stay in control of your budget with KharchaGraph dashboard.{% elif request.resolver_match.url_name == 'add_expense' %}Add your daily expenses quickly with category and payment details in KharchaGraph to improve money management.{% elif request.resolver_match.url_name == 'edit_expense' %}Update your expense records anytime to keep your personal finance data accurate in KharchaGraph.{% elif request.resolver_match.url_name == 'search' %}Search and filter expense history by date, category, and amount to understand where your money goes.{% elif request.resolver_match.url_name == 'report' %}Analyze spending trends with smart charts and reports to plan savings and improve financial habits.{% elif request.resolver_match.url_name == 'set_budget' %}Set a monthly budget and monitor progress so you can avoid overspending and save more every month.{% elif request.resolver_match.url_name == 'manage_categories' %}Create and manage expense categories for better organization and faster tracking of personal and family spending.{% elif request.resolver_match.url_name == 'recurring_expenses' %}Manage recurring expenses like rent, subscriptions, and bills so no important payment is missed.{% elif request.resolver_match.url_name == 'about_me' %}Learn about KharchaGraph and how it helps users track expenses, plan budgets, and improve savings.{% elif request.resolver_match.url_name == 'login' %}Login to your KharchaGraph account to manage your budget, expenses, and reports securely.{% elif request.resolver_match.url_name == 'signup' %}Create a free KharchaGraph account and start tracking expenses, budgets, and savings goals today.{% else %}KharchaGraph helps you manage expenses, track budgets, and analyze spending with simple personal finance tools.{% endif %}{% endblock %}">
+    <meta name="description" content="{% block meta_description %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph is a 100% free personal expense tracker to master daily kharcha, category budgets, recurring bills, and smart savings analytics.{% elif request.resolver_match.url_name == 'features' %}Discover powerful money management features on KharchaGraph: instant daily spending logs, category budgets, recurring bill automation, and CSV exports.{% elif request.resolver_match.url_name == 'faq' %}Find answers to frequently asked questions about KharchaGraph's personal finance tracker, privacy, exports, and daily usage limits.{% elif request.resolver_match.url_name == 'contact' %}Get in touch with the KharchaGraph engineering team. Send queries, report bugs, or share feedback for a better personal finance tool.{% elif request.resolver_match.url_name == 'terms' %}Read the Terms of Service for KharchaGraph personal expense tracker and budget management platform.{% elif request.resolver_match.url_name == 'privacy' %}Learn how KharchaGraph protects your personal expense and financial data with bank-grade privacy, encrypted sessions, and zero data selling.{% elif request.resolver_match.url_name == 'dashboard' %}Track daily spending, view monthly summaries, and stay in control of your budget with KharchaGraph dashboard.{% elif request.resolver_match.url_name == 'add_expense' %}Add your daily expenses quickly with category and payment details in KharchaGraph to improve money management.{% elif request.resolver_match.url_name == 'edit_expense' %}Update your expense records anytime to keep your personal finance data accurate in KharchaGraph.{% elif request.resolver_match.url_name == 'search' %}Search and filter expense history by date, category, and amount to understand where your money goes.{% elif request.resolver_match.url_name == 'report' %}Analyze spending trends with smart charts and reports to plan savings and improve financial habits.{% elif request.resolver_match.url_name == 'set_budget' %}Set a monthly budget and monitor progress so you can avoid overspending and save more every month.{% elif request.resolver_match.url_name == 'manage_categories' %}Create and manage expense categories for better organization and faster tracking of personal and family spending.{% elif request.resolver_match.url_name == 'recurring_expenses' %}Manage recurring expenses like rent, subscriptions, and bills so no important payment is missed.{% elif request.resolver_match.url_name == 'about_me' %}Learn about KharchaGraph and how it helps users track expenses, plan budgets, and improve savings.{% elif request.resolver_match.url_name == 'login' %}Login to your KharchaGraph account to manage your budget, expenses, and reports securely.{% elif request.resolver_match.url_name == 'signup' %}Create a free KharchaGraph account and start tracking expenses, budgets, and savings goals today.{% else %}KharchaGraph helps you manage expenses, track budgets, and analyze spending with simple personal finance tools.{% endif %}{% endblock %}">
     <meta name="keywords" content="{% block meta_keywords %}expense tracker, personal finance manager, monthly budget planner, budget app, spending logs, recurring bills, money management, track daily kharcha, savings planning, KharchaGraph{% endblock %}">
+    {% block meta_robots %}
+        {% if request.resolver_match.url_name in 'dashboard add_expense edit_expense delete_expense search report set_budget manage_categories recurring_expenses delete_recurring_expense delete_category export_csv' %}
+            <meta name="robots" content="noindex, nofollow">
+        {% else %}
+            <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+        {% endif %}
+    {% endblock %}
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+    <!-- Google Search Console Verification -->
+    <meta name="google-site-verification" content="googleaf6e80428ae4c3fe">
+
+    <!-- Favicon and App Icons -->
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static 'images/favicon-16x16.png' %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static 'images/apple-touch-icon.png' %}">
+    <link rel="manifest" href="{% static 'site.webmanifest' %}">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="apple-mobile-web-app-title" content="KharchaGraph">
+    <meta name="application-name" content="KharchaGraph">
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
+    <meta property="og:site_name" content="KharchaGraph">
     <meta property="og:url" content="{{ request.build_absolute_uri }}">
-    <meta property="og:title" content="{% block og_title %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph - Best Personal Expense Tracker & Budget Manager{% else %}KharchaGraph | Smart Personal Finance{% endif %}{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}KharchaGraph is a modern expense tracker designed to help you track spending, set budgets, and plan recurring bills securely.{% endblock %}">
-    <meta property="og:image" content="https://googleusercontent.com/image_generation_content/3">
+    <meta property="og:title" content="{% block og_title %}KharchaGraph - Best Personal Expense Tracker | Daily Budget Manager{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}KharchaGraph is a 100% free personal expense tracker to master daily kharcha, category budgets, recurring bills, and smart savings analytics.{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-image.jpg' %}{% endblock %}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="KharchaGraph - Personal Expense Tracker & Smart Budget Manager">
 
     <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="{{ request.build_absolute_uri }}">
-    <meta property="twitter:title" content="{% block twitter_title %}{% if request.resolver_match.url_name == 'home' %}KharchaGraph - Best Personal Expense Tracker & Budget Manager{% else %}KharchaGraph | Smart Personal Finance{% endif %}{% endblock %}">
-    <meta property="twitter:description" content="{% block twitter_description %}KharchaGraph helps you track daily expenses, set category-wise budgets, manage recurring bill payments, and analyze spending habits.{% endblock %}">
-    <meta property="twitter:image" content="https://googleusercontent.com/image_generation_content/3">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@KharchaGraph">
+    <meta name="twitter:creator" content="@prabhakarsingh">
+    <meta name="twitter:url" content="{{ request.build_absolute_uri }}">
+    <meta name="twitter:title" content="{% block twitter_title %}KharchaGraph - Best Personal Expense Tracker | Daily Budget Manager{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}KharchaGraph is a 100% free personal expense tracker to master daily kharcha, category budgets, recurring bills, and smart savings analytics.{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-image.jpg' %}{% endblock %}">
 
     <!-- Schema.org Structured Data (JSON-LD) -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "KharchaGraph",
-      "url": "{{ request.scheme }}://{{ request.get_host }}/",
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": "{{ request.scheme }}://{{ request.get_host }}/search/?q={search_term_string}",
-        "query-input": "required name=search_term_string"
-      }
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": "{{ request.scheme }}://{{ request.get_host }}/#website",
+          "name": "KharchaGraph",
+          "url": "{{ request.scheme }}://{{ request.get_host }}/",
+          "description": "Smart Personal Expense Tracker, Daily Budget Manager, and Savings Insights.",
+          "publisher": {
+            "@id": "{{ request.scheme }}://{{ request.get_host }}/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ request.scheme }}://{{ request.get_host }}/search/?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "Organization",
+          "@id": "{{ request.scheme }}://{{ request.get_host }}/#organization",
+          "name": "KharchaGraph",
+          "url": "{{ request.scheme }}://{{ request.get_host }}/",
+          "logo": "{{ request.scheme }}://{{ request.get_host }}{% static 'expenses_tracker/images/logo.png' %}",
+          "image": "{{ request.scheme }}://{{ request.get_host }}{% static 'images/og-image.jpg' %}",
+          "founder": {
+            "@type": "Person",
+            "name": "Prabhakar Kr Singh"
+          },
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "email": "kharchagraph@gmail.com",
+            "contactType": "Customer Support"
+          },
+          "sameAs": [
+            "https://github.com/prabhakarsingh2007",
+            "https://in.linkedin.com/in/prabhakar-singh-7880b9323"
+          ]
+        },
+        {
+          "@type": "ItemList",
+          "name": "Main Navigation",
+          "itemListElement": [
+            {
+              "@type": "SiteNavigationElement",
+              "position": 1,
+              "name": "Home",
+              "url": "{{ request.scheme }}://{{ request.get_host }}/"
+            },
+            {
+              "@type": "SiteNavigationElement",
+              "position": 2,
+              "name": "Features",
+              "url": "{{ request.scheme }}://{{ request.get_host }}/features/"
+            },
+            {
+              "@type": "SiteNavigationElement",
+              "position": 3,
+              "name": "FAQ",
+              "url": "{{ request.scheme }}://{{ request.get_host }}/faq/"
+            },
+            {
+              "@type": "SiteNavigationElement",
+              "position": 4,
+              "name": "About Us",
+              "url": "{{ request.scheme }}://{{ request.get_host }}/about/"
+            },
+            {
+              "@type": "SiteNavigationElement",
+              "position": 5,
+              "name": "Contact",
+              "url": "{{ request.scheme }}://{{ request.get_host }}/contact/"
+            },
+            {
+              "@type": "SiteNavigationElement",
+              "position": 6,
+              "name": "Terms of Service",
+              "url": "{{ request.scheme }}://{{ request.get_host }}/terms/"
+            },
+            {
+              "@type": "SiteNavigationElement",
+              "position": 7,
+              "name": "Privacy Policy",
+              "url": "{{ request.scheme }}://{{ request.get_host }}/privacy/"
+            }
+          ]
+        }
+      ]
     }
     </script>
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "KharchaGraph",
-      "url": "{{ request.scheme }}://{{ request.get_host }}/",
-      "logo": "https://googleusercontent.com/image_generation_content/3",
-      "contactPoint": {
-        "@type": "ContactPoint",
-        "email": "kharchagraph@gmail.com",
-        "contactType": "customer service"
-      }
-    }
-    </script>
+    {% block extra_schema %}{% endblock %}
+
 
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -106,12 +200,11 @@
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}" class="flex items-center gap-3 no-underline">
                 <img
-                    src="https://googleusercontent.com/image_generation_content/3"
+                    src="{% static 'images/symbol_transparent.png' %}"
                     alt="KharchaGraph logo"
-                    class="h-10 w-auto"
-                    onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+                    class="h-10 w-auto object-contain"
                 >
-                <span class="text-2xl font-black text-emerald-600 tracking-tighter italic" style="display:none;">KharchaGraph</span>
+                <span class="text-2xl font-black text-slate-900 tracking-tight">Kharcha<span class="text-indigo-600 italic">Graph</span></span>
             </a>
             
             <nav class="flex items-center gap-2">
@@ -147,12 +240,11 @@
     <header class="lg:hidden glass-effect sticky top-0 z-50 border-b border-slate-100 px-5 py-4 flex justify-between items-center">
         <a href="{% if request.user.is_authenticated %}{% url 'dashboard' %}{% else %}{% url 'home' %}{% endif %}" class="no-underline flex items-center gap-2">
             <img
-                src="https://googleusercontent.com/image_generation_content/3"
-                alt="KharchaBook logo"
-                class="h-8 w-auto"
-                onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+                src="{% static 'images/symbol_transparent.png' %}"
+                alt="KharchaGraph logo"
+                class="h-8 w-auto object-contain"
             >
-            <span class="text-xl font-black text-emerald-600 italic" style="display:none;">KharchaGraph</span>
+            <span class="text-xl font-black text-slate-900 tracking-tight">Kharcha<span class="text-indigo-600 italic">Graph</span></span>
         </a>
         <div class="flex items-center gap-4">
             {% if not request.user.is_authenticated %}
@@ -238,14 +330,13 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <div class="space-y-4">
-                    <div class="flex items-center gap-3">
+                    <div class="flex items-center gap-2.5">
                         <img
-                            src="https://googleusercontent.com/image_generation_content/3"
+                            src="{% static 'images/symbol_transparent.png' %}"
                             alt="KharchaGraph logo"
-                            class="h-8 w-auto"
-                            onerror="this.style.display='none';this.nextElementSibling.style.display='inline';"
+                            class="h-8 w-auto object-contain"
                         >
-                        <span class="text-xl font-black text-emerald-600 italic" style="display:none;">KharchaGraph</span>
+                        <span class="text-xl font-black text-slate-900 tracking-tight">Kharcha<span class="text-indigo-600 italic">Graph</span></span>
                     </div>
                     <p class="text-slate-500 text-sm leading-relaxed">
                         Smart Expense Tracker for Daily Kharcha, Budget, and Savings Planning. Manage your money efficiently.
@@ -264,6 +355,8 @@
                     <ul class="space-y-2 text-sm">
                         <li><a href="{% url 'faq' %}" class="text-slate-500 hover:text-emerald-600 no-underline">FAQ / Help Center</a></li>
                         <li><a href="{% url 'contact' %}" class="text-slate-500 hover:text-emerald-600 no-underline">Contact Support</a></li>
+                        <li><a href="{% url 'terms' %}" class="text-slate-500 hover:text-emerald-600 no-underline">Terms of Service</a></li>
+                        <li><a href="{% url 'privacy' %}" class="text-slate-500 hover:text-emerald-600 no-underline">Privacy Policy</a></li>
                     </ul>
                 </div>
                 <div>

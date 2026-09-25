@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none">
+  <defs>
+    <linearGradient id="emeraldGrad" x1="0" y1="0" x2="100" y2="100" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#10B981"/>
+      <stop offset="100%" stop-color="#047857"/>
+    </linearGradient>
+  </defs>
+  <!-- Rounded Emerald Squircle Background -->
+  <rect x="4" y="4" width="92" height="92" rx="22" fill="url(#emeraldGrad)"/>
+  
+  <!-- Clean Flat Geometric Graph Bars -->
+  <rect x="22" y="56" width="12" height="26" rx="6" fill="#FFFFFF" fill-opacity="0.7"/>
+  <rect x="42" y="42" width="12" height="40" rx="6" fill="#FFFFFF" fill-opacity="0.85"/>
+  <rect x="62" y="26" width="12" height="56" rx="6" fill="#FFFFFF"/>
+  
+  <!-- Dynamic Growth Trendline & Arrow -->
+  <path d="M22 62L42 44L58 48L78 24" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M66 24H78V36" stroke="#FFFFFF" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

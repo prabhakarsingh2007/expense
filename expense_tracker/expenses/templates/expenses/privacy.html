@@ -1,0 +1,60 @@
+{% extends 'expenses/base.html' %}
+{% load static %}
+
+{% block meta_title %}Privacy Policy | KharchaGraph{% endblock %}
+{% block meta_description %}Learn how KharchaGraph protects your personal expense and financial data with bank-grade privacy, encrypted sessions, and zero data selling.{% endblock %}
+{% block meta_keywords %}kharchagraph privacy policy, user data protection, financial record encryption, personal budget privacy{% endblock %}
+
+{% block content %}
+<section class="relative overflow-hidden rounded-3xl border border-slate-100 bg-gradient-to-br from-indigo-50 via-white to-cyan-50 p-8 md:p-12 mb-10">
+    <div class="absolute -top-14 -right-10 w-48 h-48 rounded-full bg-indigo-100/60 blur-3xl"></div>
+    <div class="absolute -bottom-14 -left-10 w-48 h-48 rounded-full bg-cyan-100/60 blur-3xl"></div>
+
+    <div class="relative max-w-3xl mx-auto text-center">
+        <span class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-wider mb-4">Data Transparency</span>
+        <h1 class="text-3xl md:text-5xl font-black tracking-tight text-slate-900 leading-tight">
+            Privacy Policy
+        </h1>
+        <p class="mt-4 text-slate-600 text-base md:text-lg leading-relaxed">
+            Your financial privacy is our utmost priority. Learn how we safeguard your data.
+        </p>
+    </div>
+</section>
+
+<div class="max-w-4xl mx-auto bg-white border border-slate-100 rounded-3xl p-8 md:p-12 shadow-sm space-y-8 text-slate-700 leading-relaxed mb-12">
+    <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-3">1. Information We Collect</h2>
+        <p class="text-sm">
+            We only collect information necessary to provide you with seamless expense tracking services. This includes account credentials (username, email, encrypted password hash) and transaction details entered voluntarily by you (date, amount, category, note, payment type).
+        </p>
+    </div>
+
+    <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-3">2. How We Use Your Information</h2>
+        <p class="text-sm">
+            Your expense data is used exclusively to generate your personal dashboard, track category budgets, calculate daily spending alerts, and produce CSV export files. We never sell, rent, monetize, or disclose your financial records to any third party.
+        </p>
+    </div>
+
+    <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-3">3. Data Security & Storage</h2>
+        <p class="text-sm">
+            All database connections are secured via SSL/TLS encryption. Sensitive session cookies and CSRF tokens are enforced across all authenticated endpoints to prevent unauthorized access and data tampering.
+        </p>
+    </div>
+
+    <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-3">4. Data Export & Account Deletion</h2>
+        <p class="text-sm">
+            You maintain 100% control of your personal records. You can download a complete CSV copy of your transactions at any time or request account and data removal by contacting us.
+        </p>
+    </div>
+
+    <div>
+        <h2 class="text-xl font-bold text-slate-900 mb-3">5. Contact Our Privacy Team</h2>
+        <p class="text-sm">
+            For privacy inquiries or data rights requests, email us directly at <a href="mailto:kharchagraph@gmail.com" class="text-indigo-600 font-semibold hover:underline">kharchagraph@gmail.com</a>.
+        </p>
+    </div>
+</div>
+{% endblock %}

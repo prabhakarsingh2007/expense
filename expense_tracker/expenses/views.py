@@ -14,6 +14,8 @@ import calendar
 
 import json
 import csv
+import os
+from django.conf import settings
 
 from expenses.models import Expense, Budget, CustomCategory, MonthlyBudget, RecurringExpense
 
@@ -811,10 +813,32 @@ def contact(request):
     return render(request, 'expenses/contact.html')
 
 
+def terms(request):
+    return render(request, 'expenses/terms.html')
+
+
+def privacy(request):
+    return render(request, 'expenses/privacy.html')
+
+
+def google_verification(request):
+    return HttpResponse("google-site-verification: googleaf6e80428ae4c3fe.html", content_type="text/html; charset=utf-8")
+
+
+def favicon_ico(request):
+    favicon_path = os.path.join(settings.BASE_DIR, 'static', 'images', 'favicon.ico')
+    if os.path.exists(favicon_path):
+        with open(favicon_path, 'rb') as f:
+            return HttpResponse(f.read(), content_type='image/x-icon')
+    return HttpResponse(status=204)
+
+
 def robots_txt(request):
+    host = f"{request.scheme}://{request.get_host()}"
     lines = [
         "User-agent: *",
         "Allow: /",
+        "Allow: /static/",
         "Disallow: /admin/",
         "Disallow: /dashboard/",
         "Disallow: /add/",
@@ -825,31 +849,37 @@ def robots_txt(request):
         "Disallow: /budget/",
         "Disallow: /search/",
         "Disallow: /export/",
-        f"Sitemap: {request.scheme}://{request.get_host()}/sitemap.xml",
+        "Disallow: /logout/",
+        f"Sitemap: {host}/sitemap.xml",
     ]
-    return HttpResponse("\n".join(lines), content_type="text/plain")
+    return HttpResponse("\n".join(lines), content_type="text/plain; charset=utf-8")
 
 
 def sitemap_xml(request):
+    today = timezone.localdate().isoformat()
     host = f"{request.scheme}://{request.get_host()}"
     urls = [
-        {"loc": f"{host}/", "changefreq": "daily", "priority": "1.0"},
-        {"loc": f"{host}/about/", "changefreq": "monthly", "priority": "0.8"},
-        {"loc": f"{host}/features/", "changefreq": "monthly", "priority": "0.8"},
-        {"loc": f"{host}/faq/", "changefreq": "monthly", "priority": "0.7"},
-        {"loc": f"{host}/contact/", "changefreq": "monthly", "priority": "0.7"},
-        {"loc": f"{host}/login/", "changefreq": "monthly", "priority": "0.6"},
-        {"loc": f"{host}/signup/", "changefreq": "monthly", "priority": "0.6"},
+        {"loc": f"{host}/", "changefreq": "daily", "priority": "1.0", "lastmod": today},
+        {"loc": f"{host}/features/", "changefreq": "weekly", "priority": "0.9", "lastmod": today},
+        {"loc": f"{host}/faq/", "changefreq": "weekly", "priority": "0.8", "lastmod": today},
+        {"loc": f"{host}/about/", "changefreq": "monthly", "priority": "0.8", "lastmod": today},
+        {"loc": f"{host}/contact/", "changefreq": "monthly", "priority": "0.7", "lastmod": today},
+        {"loc": f"{host}/terms/", "changefreq": "yearly", "priority": "0.5", "lastmod": today},
+        {"loc": f"{host}/privacy/", "changefreq": "yearly", "priority": "0.5", "lastmod": today},
+        {"loc": f"{host}/signup/", "changefreq": "monthly", "priority": "0.7", "lastmod": today},
+        {"loc": f"{host}/login/", "changefreq": "monthly", "priority": "0.6", "lastmod": today},
     ]
     
     xml_content = ['<?xml version="1.0" encoding="UTF-8"?>']
     xml_content.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
-    for url in urls:
+    for u in urls:
         xml_content.append('  <url>')
-        xml_content.append(f'    <loc>{url["loc"]}</loc>')
-        xml_content.append(f'    <changefreq>{url["changefreq"]}</changefreq>')
-        xml_content.append(f'    <priority>{url["priority"]}</priority>')
+        xml_content.append(f'    <loc>{u["loc"]}</loc>')
+        xml_content.append(f'    <lastmod>{u["lastmod"]}</lastmod>')
+        xml_content.append(f'    <changefreq>{u["changefreq"]}</changefreq>')
+        xml_content.append(f'    <priority>{u["priority"]}</priority>')
         xml_content.append('  </url>')
     xml_content.append('</urlset>')
     
-    return HttpResponse("\n".join(xml_content), content_type="text/xml")
+    return HttpResponse("\n".join(xml_content), content_type="application/xml; charset=utf-8")
+
